@@ -1,6 +1,6 @@
 # Rockman_project
 
-L'obbiettivo di questo progetto e quello di eseguire le collections utilizzando la libreria Newman 
+L'obbiettivo di questo progetto e quello di eseguire le collections di Nexi utilizzando la libreria Newman 
 
 
 Per poter eseguire correttamenet dovete effettuare questi seguenti passaggi preliminari:
