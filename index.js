@@ -29,10 +29,32 @@ inquirer
                 '[K6] [INT] [STG] - Lock K6',
                 '[MASSIVE] [STG] - Get PAN Alias, ABI, POSI and User details']
 
+    },
+    /*scelta in quale ambiente vuoi eseguire */
+    {
+      type: 'list',
+      name: 'second-list-questions',
+      messagge: 'Che operazione vuoi eseguire ?',
+      choices: ['INT_NEXI', 
+                'INT_CA_DEBIT',
+                'INT_CHB',
+                'INT_DB',
+                'INT_MPS',
+                'INT_BPER',
+                'INT_BPM',
+                'STG_NEXI',
+                'STG_CA_DEBIT',
+                'STG_CHB',
+                'STG_DB',
+                'STG_MPS',
+                'STG_BPER',
+                'STG_BPM'
+              ]
+
     }
   ])
   .then((answers) => {
     // Use user feedback for... whatever!!
   
-    console.log(answers);
+    console.info(answers);
   })
