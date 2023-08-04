@@ -9,8 +9,8 @@ inquirer
     /*scelta quale operazione vuoi eseguire */
     {
       type: 'list',
-      name: 'Quale collection vuoi eseguire ?',
-      messagge: 'first-list-questions',
+      name: 'first-list-questions',
+      messagge: 'Quale collection vuoi eseguire ?',
       choices: ['[ACCOUNT] [INT] [STG] - Delete Devices',
                 '[ACCOUNT] [STG] - Account password update custom password',
                 '[API] [INT] [STG] - API primitive utili',
@@ -32,9 +32,9 @@ inquirer
     },
     /*scelta in quale ambiente vuoi eseguire */
     {
-      type: 'list',
-      name: 'In quale ambiente vuoi eseguire la collection ?',
-      messagge: 'second-list-questions',
+      type: 'list',  
+      name: 'second-list-questions',
+      messagge: 'In quale ambiente vuoi eseguire la collection ?',
       choices: ['INT_NEXI', 
                 'INT_CA_DEBIT',
                 'INT_CHB',
@@ -54,8 +54,8 @@ inquirer
     /*scelta quali dati di input */
     {
       type:'list',
-      name:'Indica che tipo di dati vuoi inserire ?',
-      messagge: 'data',
+      name:'data',
+      messagge: 'Indica che tipo di dati vuoi inserire ?',
       choices: ['INPUT_fcList', 
                 'INPUT_panList',
                 'INPUT_fc',
@@ -76,4 +76,42 @@ inquirer
        const collectionName = answers['first-list-questions'];
        const environmentName = answers['second-list-questions'];
        const inputDataChoice = answers['data'];
+
+        // Ottenere i dati in base alla scelta dell'utente
+    let inputData = [];
+
+    if (inputDataChoice === 'INPUT_fcList') {
+      inputData = promptForPANsOrCFs('PAN');
+    } else if (inputDataChoice === 'INPUT_panList') {
+      inputData = promptForPANsOrCFs('CF');
+    }
+
   })
+
+  // eseguio di nuovo il prompt che accetta o PAN o il CF
+  function promptForPANsOrCFs(type) {
+    const panOrCFQuestions = [
+      {
+        type: 'input',
+        name: 'data',
+        message: `Inserisci un ${type}: (Premi Invio per uscire)`,
+      },
+    ];
+  
+    const inputData = [];
+  
+    while (true) {
+      const { data } = inquirer.prompt(panOrCFQuestions);
+  
+      if (!data) {
+        break;
+      }
+  
+      inputData.push(data);
+    }
+  
+    return inputData;
+  }
+ 
+
+
