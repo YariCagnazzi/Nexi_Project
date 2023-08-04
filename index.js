@@ -1,5 +1,5 @@
 const newman = require('newman');
-var inquirer = require('inquirer');
+const inquirer = require('inquirer');
 
 console.info('Benvenuto su Rockman!!! ');
 
@@ -81,12 +81,24 @@ inquirer
     let inputData = [];
 
     if (inputDataChoice === 'INPUT_fcList') {
-      inputData = promptForPANsOrCFs('PAN');
-    } else if (inputDataChoice === 'INPUT_panList') {
       inputData = promptForPANsOrCFs('CF');
+    } else if (inputDataChoice === 'INPUT_panList') {
+      inputData = promptForPANsOrCFs('PAN');
     }
 
   })
+
+  // Funzione per validare PAN o CF
+function validatePANorCF(value) {
+  // Qui puoi inserire la tua logica di validazione per PAN o CF
+  // Ad esempio, potresti verificare la lunghezza o utilizzare espressioni regolari
+
+  if (/^\d{16}$/.test(value) || /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/.test(value)) {
+    return true;
+  }
+
+  return 'Inserisci un PAN valido (16 cifre) o un Codice Fiscale valido';
+}
 
   // eseguio di nuovo il prompt che accetta o PAN o il CF
   function promptForPANsOrCFs(type) {
@@ -95,6 +107,7 @@ inquirer
         type: 'input',
         name: 'data',
         message: `Inserisci un ${type}: (Premi Invio per uscire)`,
+        validate: validatePANorCF, // Aggiungo la validazione
       },
     ];
   
