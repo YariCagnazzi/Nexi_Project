@@ -9,8 +9,8 @@ inquirer
     /*scelta quale operazione vuoi eseguire */
     {
       type: 'list',
-      name: 'first-list-questions',
-      messagge: 'Quale collection vuoi eseguire ?',
+      name: 'Quale collection vuoi eseguire ?',
+      messagge: 'first-list-questions',
       choices: ['[ACCOUNT] [INT] [STG] - Delete Devices',
                 '[ACCOUNT] [STG] - Account password update custom password',
                 '[API] [INT] [STG] - API primitive utili',
@@ -33,8 +33,8 @@ inquirer
     /*scelta in quale ambiente vuoi eseguire */
     {
       type: 'list',
-      name: 'second-list-questions',
-      messagge: 'In quale ambiente vuoi eseguire la collection ?',
+      name: 'In quale ambiente vuoi eseguire la collection ?',
+      messagge: 'second-list-questions',
       choices: ['INT_NEXI', 
                 'INT_CA_DEBIT',
                 'INT_CHB',
@@ -54,8 +54,8 @@ inquirer
     /*scelta quali dati di input */
     {
       type:'list',
-      name:'data',
-      messagge: 'Indica che tipo di dati vuoi inserire ?',
+      name:'Indica che tipo di dati vuoi inserire ?',
+      messagge: 'data',
       choices: ['INPUT_fcList', 
                 'INPUT_panList',
                 'INPUT_fc',
@@ -71,4 +71,9 @@ inquirer
     // Use user feedback for... whatever!!
    
     console.info('Risposte inserite:', answers);
+
+        // Esegui l'operazione corrispondente alla scelta dell'utente
+       const collectionName = answers['first-list-questions'];
+       const environmentName = answers['second-list-questions'];
+       const inputDataChoice = answers['data'];
   })
