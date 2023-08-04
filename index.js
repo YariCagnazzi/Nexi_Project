@@ -10,7 +10,7 @@ inquirer
     {
       type: 'list',
       name: 'first-list-questions',
-      messagge: 'Che operazione vuoi eseguire ?',
+      messagge: 'Quale collection vuoi eseguire ?',
       choices: ['[ACCOUNT] [INT] [STG] - Delete Devices',
                 '[ACCOUNT] [STG] - Account password update custom password',
                 '[API] [INT] [STG] - API primitive utili',
@@ -34,7 +34,7 @@ inquirer
     {
       type: 'list',
       name: 'second-list-questions',
-      messagge: 'Che operazione vuoi eseguire ?',
+      messagge: 'In quale ambiente vuoi eseguire la collection ?',
       choices: ['INT_NEXI', 
                 'INT_CA_DEBIT',
                 'INT_CHB',
@@ -50,11 +50,25 @@ inquirer
                 'STG_BPER',
                 'STG_BPM'
               ]
+    },
+    /*scelta quali dati di input */
+    {
+      type:'list',
+      name:'data',
+      messagge: 'Indica che tipo di dati vuoi inserire ?',
+      choices: ['INPUT_fcList', 
+                'INPUT_panList',
+                'INPUT_fc',
+                'INPUT_pan', 
+                'INPUT_dataList', 
+                'INPUT_pivaList',
+                'INPUT_mfaIdList'] 
 
     }
+
   ])
   .then((answers) => {
     // Use user feedback for... whatever!!
-  
-    console.info(answers);
+   
+    console.info('Risposte inserite:', answers);
   })
