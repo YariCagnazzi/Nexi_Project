@@ -1,6 +1,7 @@
 const newman = require('newman');
 const inquirer = require('inquirer');
 
+
 console.info('Benvenuto su Rockman!!! ');
 
 inquirer
@@ -77,17 +78,18 @@ inquirer
        const environmentName = answers['second-list-questions'];
        const inputDataChoice = answers['data'];
 
-        // Ottenere i dati in base alla scelta dell'utente
-    let inputData = [];
 
     if (inputDataChoice === 'INPUT_fcList') {
       inputData = promptForPANsOrCFs('CF');
     } else if (inputDataChoice === 'INPUT_panList') {
       inputData = promptForPANsOrCFs('PAN');
-    }
+    }  else if (inputDataChoice === 'INPUT_pivaList') {
+      inputData = promptForPANsOrCFs('PIVA');
+    } 
+      
 
   })
-
+/*
   // Funzione per validare PAN o CF
 function validatePANorCF(value) {
   // Qui puoi inserire la tua logica di validazione per PAN o CF
@@ -99,32 +101,65 @@ function validatePANorCF(value) {
 
   return 'Inserisci un PAN valido (16 cifre) o un Codice Fiscale valido';
 }
-
+*/
   // eseguio di nuovo il prompt che accetta o PAN o il CF
+ 
+  
   function promptForPANsOrCFs(type) {
+
+ 
+  if(type==='CF') {  
     const panOrCFQuestions = [
       {
-        type: 'input',
-        name: 'data',
-        message: `Inserisci un ${type}: (Premi Invio per uscire)`,
-        validate: validatePANorCF, // Aggiungo la validazione
+        type: 'checkbox',
+        name: 'Select data (CF)',
+        message: `Inserisci uno o più ${type}`,
+        choices: ['FRNCHR63L48H501V','TRVVNT80P63H501A', 'CRCLSS62S28F496A' ],
+       // validate: validatePANorCF, // Aggiungo la validazione
       },
     ];
+
+    inquirer
+    .prompt(panOrCFQuestions)
+    .then((answers) => {
+            // Use user feedback for... whatever!!
+            console.info('Risposte:', answers['Select data (CF)']);
+            // recupero le risposte e le memorizzo 
+            const datachoices = answers['Select data (CF)'];
+            console.info('dati inseriti:'+ datachoices);
+
+            return datachoices;
+         
+      })
+    } else if (type==='PAN') {
+
+      const panOrCFQuestions = [
+        {
+          type: 'checkbox',
+          name: 'Select data (PAN)',
+          message: `Inserisci uno o più ${type}`,
+          choices: ['4970199002897286', '4532200022110725', '4539970045339062'],
+         // validate: validatePANorCF, // Aggiungo la validazione
+        },
+      ];
   
-    const inputData = [];
-  
-    while (true) {
-      const { data } = inquirer.prompt(panOrCFQuestions);
-  
-      if (!data) {
-        break;
-      }
-  
-      inputData.push(data);
+      inquirer
+      .prompt(panOrCFQuestions)
+      .then((answers) => {
+              // Use user feedback for... whatever!!
+              console.info('Risposte:', answers['Select data (PAN)']);
+              // recupero le risposte e le memorizzo 
+              const datachoices = answers['Select data (PAN)'];
+              console.info('dati inseriti:'+ datachoices);
+
+              return datachoices;
+           
+        })
     }
   
-    return inputData;
+    
   }
+  
  
 
 
