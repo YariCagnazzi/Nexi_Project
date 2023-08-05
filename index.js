@@ -78,7 +78,7 @@ inquirer
        const environmentName = answers['second-list-questions'];
        const inputDataChoice = answers['data'];
 
-
+    
     if (inputDataChoice === 'INPUT_fcList') {
       inputData = promptForPANsOrCFs('CF');
     } else if (inputDataChoice === 'INPUT_panList') {
@@ -86,8 +86,98 @@ inquirer
     }  else if (inputDataChoice === 'INPUT_pivaList') {
       inputData = promptForPANsOrCFs('PIVA');
     } 
-      
 
+  
+    function promptForPANsOrCFs(type) {
+      // eseguio di nuovo il prompt che accetta  CF
+      if(type==='CF') {  
+        const panOrCFQuestions = [
+          {
+            type: 'checkbox',
+            name: 'Select data (CF)',
+            message: `Inserisci uno o più ${type}`,
+            choices: ['FRNCHR63L48H501V','TRVVNT80P63H501A', 'CRCLSS62S28F496A' ],
+           // validate: validatePANorCF, // Aggiungo la validazione
+          },
+        ];
+    
+        inquirer
+        .prompt(panOrCFQuestions)
+        .then((answers) => {
+                // Use user feedback for... whatever!!
+                console.info('Risposte:', answers['Select data (CF)']);
+                // recupero le risposte e le memorizzo 
+                const datachoices = answers['Select data (CF)'];
+                console.info('dati inseriti:'+ datachoices);
+                console.info(collectionName);
+                console.info(environmentName);
+    
+                return datachoices;
+             
+          })
+        } else if (type==='PAN') {
+         // eseguio di nuovo il prompt che accetta  PAN
+          const panOrCFQuestions = [
+            {
+              type: 'checkbox',
+              name: 'Select data (PAN)',
+              message: `Inserisci uno o più ${type}`,
+              choices: ['4970199002897286', '4532200022110725', '4539970045339062'],
+             // validate: validatePANorCF, // Aggiungo la validazione
+            },
+          ];
+      
+          inquirer
+          .prompt(panOrCFQuestions)
+          .then((answers) => {
+                  // Use user feedback for... whatever!!
+                  console.info('Risposte:', answers['Select data (PAN)']);
+                  // recupero le risposte e le memorizzo 
+                  const datachoices = answers['Select data (PAN)'];
+                  console.info('dati inseriti:'+ datachoices);
+                  console.info(collectionName);
+                  console.info(environmentName);
+    
+                  return datachoices;
+               
+            }) 
+        } else if (type==='PIVA') {
+          // eseguio di nuovo il prompt che accetta  PAN
+           const panOrCFQuestions = [
+             {
+               type: 'checkbox',
+               name: 'Select data (PIVA)',
+               message: `Inserisci uno o più ${type}`,
+               choices: ['01328240054', '02333970014', '15061221469', '00000000018', '00051830529', '02333970014'],
+              // validate: validatePANorCF, // Aggiungo la validazione
+             },
+           ];
+       
+           inquirer
+           .prompt(panOrCFQuestions)
+           .then((answers) => {
+                   // Use user feedback for... whatever!!
+                   console.info('Risposte:', answers['Select data (PIVA)']);
+                   // recupero le risposte e le memorizzo 
+                   const datachoices = answers['Select data (PIVA)'];
+                   console.info('dati inseriti:'+ datachoices);
+                   console.info(collectionName);
+                   console.info(environmentName);
+     
+                   return datachoices;
+                
+             }) 
+         }
+         
+    
+      };
+
+
+
+
+
+
+    
   })
 /*
   // Funzione per validare PAN o CF
@@ -104,61 +194,6 @@ function validatePANorCF(value) {
 */
   // eseguio di nuovo il prompt che accetta o PAN o il CF
  
-  
-  function promptForPANsOrCFs(type) {
-
- 
-  if(type==='CF') {  
-    const panOrCFQuestions = [
-      {
-        type: 'checkbox',
-        name: 'Select data (CF)',
-        message: `Inserisci uno o più ${type}`,
-        choices: ['FRNCHR63L48H501V','TRVVNT80P63H501A', 'CRCLSS62S28F496A' ],
-       // validate: validatePANorCF, // Aggiungo la validazione
-      },
-    ];
-
-    inquirer
-    .prompt(panOrCFQuestions)
-    .then((answers) => {
-            // Use user feedback for... whatever!!
-            console.info('Risposte:', answers['Select data (CF)']);
-            // recupero le risposte e le memorizzo 
-            const datachoices = answers['Select data (CF)'];
-            console.info('dati inseriti:'+ datachoices);
-
-            return datachoices;
-         
-      })
-    } else if (type==='PAN') {
-
-      const panOrCFQuestions = [
-        {
-          type: 'checkbox',
-          name: 'Select data (PAN)',
-          message: `Inserisci uno o più ${type}`,
-          choices: ['4970199002897286', '4532200022110725', '4539970045339062'],
-         // validate: validatePANorCF, // Aggiungo la validazione
-        },
-      ];
-  
-      inquirer
-      .prompt(panOrCFQuestions)
-      .then((answers) => {
-              // Use user feedback for... whatever!!
-              console.info('Risposte:', answers['Select data (PAN)']);
-              // recupero le risposte e le memorizzo 
-              const datachoices = answers['Select data (PAN)'];
-              console.info('dati inseriti:'+ datachoices);
-
-              return datachoices;
-           
-        })
-    }
-  
-    
-  }
   
  
 
