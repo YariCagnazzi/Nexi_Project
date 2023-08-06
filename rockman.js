@@ -69,7 +69,7 @@ const basePathcoll='./collections/';
 const prostfixcoll='.postman_collection.json';
 const baseEnv='./environment/';
 const postEnv='.postman_environment.json';
-const name_coll='[INQPAC] [INT] - Check PAN is registered on SIA.postman_collection';
+const name_coll='[K6] [INT] [STG] - Lock K6';
 const name_Env='INT_NEXI';
 
 

@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "abf7da60-e6ea-4b26-a0cc-432ccf68a88c",
+		"_postman_id": "9bd8601d-b846-4d68-9c7a-7735b7b3a669",
 		"name": "[K6] [INT] [STG] - Lock K6",
 		"description": "Works on both INT and STG environments.\n\nNote: further NEXI documentation available here:\n\n[https://icbpijira.atlassian.net/wiki/spaces/SER/pages/3786014730/mte-issuing-k6]()\n\nThis collection is needed to lock PAN K6s given a list of PANs and/or CFs.\n\nIn input you can use FCs e/o PANs\n\nIn the case of FC, this collection proceeds to the unsubscription of all PANs linked to the FC.\n\nLock K6 means moving both cardDateLockLogin and cardDateLockPay to 'B' state.\n\nThis collection depends on a number of INPUT fields:\n\n- INPUT_fcList: a list on FCs comma or newline separated\n- INPUT_panList: a list on PANs comma or newline separated\n- INPUT_password: valid values are: \\['1'\\], \\['4'\\] or \\['1', '4'\\] (mandatory)\n    \n\nThis collection depends on some other JS scripts needed to validate the correctness of FC and PAN:\n\n- FUN_diacritic-remover\n- FUN_codice-fiscale-utils\n- FUN_validator\n- FUN_validateInputAsRule\n- FUN_logDetails\n- FUN_extConsole\n    \n\nUsage:\n\n- Reset collection variables;\n- Set \"INPUT_\" prefixed parameters as your needs;\n- Run the collection.\n    \n\nThis colection will store the result into the variable RESULT in JSON format:\n\nE.g.:\n\n``` json\n[\n  {\n    \"fc\": \"BFFSMN73H49F704E\",\n    \"pan\": \"5321319730828477\",\n    \"processor\": \"E\",\n    \"cardStatusPay\": \"B\",\n    \"cardStatusLogin\": \"B\",\n    \"cardDateLockPay\": \"2023-07-27T18:33:06+02:00\",\n    \"cardDateLockLogin\": \"2023-07-27T18:33:06+02:00\"\n  }\n]\n\n ```",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18019665",
-		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Team-Workspace~d73c1392-e276-429a-830d-648e8e808912/collection/18019665-abf7da60-e6ea-4b26-a0cc-432ccf68a88c?action=share&creator=18019665&source=collection_link"
+		"_exporter_id": "18258051",
+		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Rockman_player~d1db713b-f91b-41cf-8eef-7af1d78fa8bb/collection/18258051-9bd8601d-b846-4d68-9c7a-7735b7b3a669?action=share&creator=18258051&source=collection_link"
 	},
 	"item": [
 		{
@@ -903,7 +903,7 @@
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"header": null,
+							"header": [],
 							"cookie": [],
 							"body": "{\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"card\": {\n        \"card\": {\n            \"cardId\": {\n                \"value\": \"4532200085801459\",\n                \"type\": \"PAN\",\n                \"processor\": \"S\",\n                \"bin\": \"453220\",\n                \"tail\": \"1459\"\n            },\n            \"productKey\": {\n                \"abi\": \"03395\",\n                \"affinity\": \"40\",\n                \"plastic\": \"00\",\n                \"productType\": \"CRE\",\n                \"circuitCode\": \"V\"\n            },\n            \"bankName\": \"BANCA INTERPROVINCIALE\",\n            \"productId\": \"033954000VC\",\n            \"productCode\": \"4000\",\n            \"productDescription\": \"BUSINESS CARTA BUSINESS\",\n            \"prepaidVendor\": null,\n            \"circuitDetail\": \"VISA\",\n            \"emissionTypeCode\": \"NU\",\n            \"emissionTypeDescription\": \"NUOVA\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"offlineBlockDescription\": null,\n            \"validityStartDate\": \"2018-12-21\",\n            \"expiringDate\": \"2026-03-31\",\n            \"validityState\": \"V\",\n            \"expenseLimit\": {\n                \"value\": 10000,\n                \"currency\": \"EUR\"\n            },\n            \"expenseLimit2ndLine\": null,\n            \"expenseLimit3ndLine\": null,\n            \"ibanDebit\": null,\n            \"downOptionMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"downOptionDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"flagBancomat\": \"N\",\n            \"flagChip\": \"S\",\n            \"flagContactless\": \"S\",\n            \"flagDebit\": \"N\",\n            \"flagFamiliar\": \"N\",\n            \"flagHCE\": \"N\",\n            \"flagIndividualBilling\": \"N\",\n            \"flagDirectIssuing\": \"N\",\n            \"flagMultifunction\": \"N\",\n            \"flagNFC\": \"N\",\n            \"flagPrepaid\": \"N\",\n            \"flagPrepaidNameless\": \"N\",\n            \"flagPrepaidVirtual\": \"N\",\n            \"paymentType\": \"S\",\n            \"cardIdHCE\": null,\n            \"cardIncremental\": \"1\",\n            \"anagraphicIncremental\": \"1\",\n            \"distributorBank\": null,\n            \"flagActivationRequired\": \"N\",\n            \"prepaidRechargeIBAN\": null,\n            \"contractType\": \"C\",\n            \"equensAccountId\": null,\n            \"cardRelationType\": null,\n            \"flagAnonymous\": \"N\",\n            \"tags\": [],\n            \"renewalPresent\": \"N\",\n            \"renewalShipped\": \"N\"\n        },\n        \"customerData\": {\n            \"name\": \"BRAMBILLA\",\n            \"surname\": \"ABIBO\",\n            \"heading\": \"ABIBO BRAMBILLA\",\n            \"fiscalCode\": \"BRMBBA85S01F205R\",\n            \"flagPositionOwner\": \"S\",\n            \"sex\": \"M\",\n            \"birthDate\": \"1985-11-01\",\n            \"birthPlace\": \"MILANO\",\n            \"birthCity\": \"MI\",\n            \"birthNation\": \"ITALIA\",\n            \"cardSubjectId\": \"117975817\"\n        },\n        \"position\": {\n            \"typeCode\": \"1\",\n            \"typeDescription\": \"I\",\n            \"positionId\": \"9000008\",\n            \"positionAbi\": \"03395\",\n            \"positionKeySION\": \"033959000008\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"validityState\": \"V\",\n            \"conditionTypeCode\": \"0\",\n            \"conditionTypeDescription\": \"ORDINARIO\",\n            \"flagExtendendCredit\": \"N\",\n            \"iban\": \"IT11E0339512900123456789012\",\n            \"bankAccountId\": \"123456789012\",\n            \"bankAccountType\": \"CO\",\n            \"sourceSubsystem\": \"C\",\n            \"homeAddressPostalCode\": \"20145\",\n            \"homeAddressStreet\": \"GIARDINI GUASTALLA 8\",\n            \"homeAddressCountryCode\": null,\n            \"homeAddressCity\": \"MILANO\",\n            \"homeAddressAdministrativeArea\": \"MI\",\n            \"accountholderName\": \"ABIBO BRAMBILLA\",\n            \"vatNumber\": null,\n            \"positionSubjectId\": \"117975817\",\n            \"agencyCode\": \"00001\"\n        }\n    }\n}"
 						},
@@ -1178,7 +1178,7 @@
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"header": null,
+							"header": [],
 							"cookie": [],
 							"body": "{\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"card\": {\n        \"card\": {\n            \"cardId\": {\n                \"value\": \"4532200085801459\",\n                \"type\": \"PAN\",\n                \"processor\": \"S\",\n                \"bin\": \"453220\",\n                \"tail\": \"1459\"\n            },\n            \"productKey\": {\n                \"abi\": \"03395\",\n                \"affinity\": \"40\",\n                \"plastic\": \"00\",\n                \"productType\": \"CRE\",\n                \"circuitCode\": \"V\"\n            },\n            \"bankName\": \"BANCA INTERPROVINCIALE\",\n            \"productId\": \"033954000VC\",\n            \"productCode\": \"4000\",\n            \"productDescription\": \"BUSINESS CARTA BUSINESS\",\n            \"prepaidVendor\": null,\n            \"circuitDetail\": \"VISA\",\n            \"emissionTypeCode\": \"NU\",\n            \"emissionTypeDescription\": \"NUOVA\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"offlineBlockDescription\": null,\n            \"validityStartDate\": \"2018-12-21\",\n            \"expiringDate\": \"2026-03-31\",\n            \"validityState\": \"V\",\n            \"expenseLimit\": {\n                \"value\": 10000,\n                \"currency\": \"EUR\"\n            },\n            \"expenseLimit2ndLine\": null,\n            \"expenseLimit3ndLine\": null,\n            \"ibanDebit\": null,\n            \"downOptionMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"downOptionDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"flagBancomat\": \"N\",\n            \"flagChip\": \"S\",\n            \"flagContactless\": \"S\",\n            \"flagDebit\": \"N\",\n            \"flagFamiliar\": \"N\",\n            \"flagHCE\": \"N\",\n            \"flagIndividualBilling\": \"N\",\n            \"flagDirectIssuing\": \"N\",\n            \"flagMultifunction\": \"N\",\n            \"flagNFC\": \"N\",\n            \"flagPrepaid\": \"N\",\n            \"flagPrepaidNameless\": \"N\",\n            \"flagPrepaidVirtual\": \"N\",\n            \"paymentType\": \"S\",\n            \"cardIdHCE\": null,\n            \"cardIncremental\": \"1\",\n            \"anagraphicIncremental\": \"1\",\n            \"distributorBank\": null,\n            \"flagActivationRequired\": \"N\",\n            \"prepaidRechargeIBAN\": null,\n            \"contractType\": \"C\",\n            \"equensAccountId\": null,\n            \"cardRelationType\": null,\n            \"flagAnonymous\": \"N\",\n            \"tags\": [],\n            \"renewalPresent\": \"N\",\n            \"renewalShipped\": \"N\"\n        },\n        \"customerData\": {\n            \"name\": \"BRAMBILLA\",\n            \"surname\": \"ABIBO\",\n            \"heading\": \"ABIBO BRAMBILLA\",\n            \"fiscalCode\": \"BRMBBA85S01F205R\",\n            \"flagPositionOwner\": \"S\",\n            \"sex\": \"M\",\n            \"birthDate\": \"1985-11-01\",\n            \"birthPlace\": \"MILANO\",\n            \"birthCity\": \"MI\",\n            \"birthNation\": \"ITALIA\",\n            \"cardSubjectId\": \"117975817\"\n        },\n        \"position\": {\n            \"typeCode\": \"1\",\n            \"typeDescription\": \"I\",\n            \"positionId\": \"9000008\",\n            \"positionAbi\": \"03395\",\n            \"positionKeySION\": \"033959000008\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"validityState\": \"V\",\n            \"conditionTypeCode\": \"0\",\n            \"conditionTypeDescription\": \"ORDINARIO\",\n            \"flagExtendendCredit\": \"N\",\n            \"iban\": \"IT11E0339512900123456789012\",\n            \"bankAccountId\": \"123456789012\",\n            \"bankAccountType\": \"CO\",\n            \"sourceSubsystem\": \"C\",\n            \"homeAddressPostalCode\": \"20145\",\n            \"homeAddressStreet\": \"GIARDINI GUASTALLA 8\",\n            \"homeAddressCountryCode\": null,\n            \"homeAddressCity\": \"MILANO\",\n            \"homeAddressAdministrativeArea\": \"MI\",\n            \"accountholderName\": \"ABIBO BRAMBILLA\",\n            \"vatNumber\": null,\n            \"positionSubjectId\": \"117975817\",\n            \"agencyCode\": \"00001\"\n        }\n    }\n}"
 						},
@@ -2528,7 +2528,7 @@
 								"exec": [
 									"console.info(\"Update Result\")",
 									"",
-									"const result = JSON.parse(pm.collectionVariables.get(\"RESULT\"))",
+									"const result = JSON.parse(pm.environment.get(\"RESULT\"))",
 									"",
 									"const updateResult = {}",
 									"updateResult[\"fc\"] = pm.collectionVariables.get(\"fc\")",
@@ -2541,7 +2541,7 @@
 									"",
 									"result.push(updateResult)",
 									"",
-									"pm.collectionVariables.set(\"RESULT\", JSON.stringify(result, null, 2))"
+									"pm.environment.set(\"RESULT\", JSON.stringify(result, null, 2))"
 								],
 								"type": "text/javascript"
 							}
@@ -2660,7 +2660,7 @@
 	"variable": [
 		{
 			"key": "INPUT_fcList",
-			"value": "",
+			"value": "FRNCHR63L48H501V, TRVVNT80P63H501A",
 			"type": "string"
 		},
 		{
@@ -2671,6 +2671,11 @@
 		{
 			"key": "INPUT_positionType",
 			"value": "[1,4]",
+			"type": "string"
+		},
+		{
+			"key": "RESULT",
+			"value": "[]",
 			"type": "string"
 		},
 		{

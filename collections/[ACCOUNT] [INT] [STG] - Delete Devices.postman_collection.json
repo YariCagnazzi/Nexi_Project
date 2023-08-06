@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "1f335bee-929e-4aa3-b480-6aae2ba023de",
+		"_postman_id": "11553790-6193-4fd4-af25-f83cea19b36c",
 		"name": "[ACCOUNT] [INT] [STG] - Delete Devices",
 		"description": "Works on both INT and STG environments.\n\nThe official documentation can be found here:\n\n[https://intmt.private.nexicloud.it:4003/mt-services/issuing/orch/mfa/v1/swagger-ui.html#!/Device/deleteDevices]()\n\nThis collection should delete all user devices.\n\nThis collection depends on a number of INPUT fields:\n\n- INPUT_mfaIdList (mandatory) – This parameter also handles email lists, with newline separator character\n- INPUT_organization (mandatory)\n- INPUT_profileType (mandatory)\n\n\nThe result of the collection is saved in the RESULT collection variable. An example of a result is the following\n    \n\nUsage:\n\n- Reset collection variables;\n- Set \"INPUT_\" prefixed parameters as your needs;\n- Run the collection.\n    \n\nE.g.:\n\n``` json\n[\n  {\n    \"userEmail\": \"insta.f@yopmail.com\",\n    \"isSuccessfull\": \"true\",\n    \"message\": \"Operation completed\"\n  }\n]\n\n ```\n\nLinked to the collection are also available a few response examples from deleteDevices in the cases of: success, failure and device not enrolled.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18019665",
-		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Team-Workspace~d73c1392-e276-429a-830d-648e8e808912/collection/18019665-1f335bee-929e-4aa3-b480-6aae2ba023de?action=share&creator=18019665&source=collection_link"
+		"_exporter_id": "18258051",
+		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Rockman_player~d1db713b-f91b-41cf-8eef-7af1d78fa8bb/collection/18258051-11553790-6193-4fd4-af25-f83cea19b36c?action=share&creator=18258051&source=collection_link"
 	},
 	"item": [
 		{
@@ -185,7 +185,7 @@
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"header": null,
+							"header": [],
 							"cookie": [],
 							"body": "{\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"card\": {\n        \"card\": {\n            \"cardId\": {\n                \"value\": \"4532200085801459\",\n                \"type\": \"PAN\",\n                \"processor\": \"S\",\n                \"bin\": \"453220\",\n                \"tail\": \"1459\"\n            },\n            \"productKey\": {\n                \"abi\": \"03395\",\n                \"affinity\": \"40\",\n                \"plastic\": \"00\",\n                \"productType\": \"CRE\",\n                \"circuitCode\": \"V\"\n            },\n            \"bankName\": \"BANCA INTERPROVINCIALE\",\n            \"productId\": \"033954000VC\",\n            \"productCode\": \"4000\",\n            \"productDescription\": \"BUSINESS CARTA BUSINESS\",\n            \"prepaidVendor\": null,\n            \"circuitDetail\": \"VISA\",\n            \"emissionTypeCode\": \"NU\",\n            \"emissionTypeDescription\": \"NUOVA\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"offlineBlockDescription\": null,\n            \"validityStartDate\": \"2018-12-21\",\n            \"expiringDate\": \"2026-03-31\",\n            \"validityState\": \"V\",\n            \"expenseLimit\": {\n                \"value\": 10000,\n                \"currency\": \"EUR\"\n            },\n            \"expenseLimit2ndLine\": null,\n            \"expenseLimit3ndLine\": null,\n            \"ibanDebit\": null,\n            \"downOptionMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"downOptionDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"flagBancomat\": \"N\",\n            \"flagChip\": \"S\",\n            \"flagContactless\": \"S\",\n            \"flagDebit\": \"N\",\n            \"flagFamiliar\": \"N\",\n            \"flagHCE\": \"N\",\n            \"flagIndividualBilling\": \"N\",\n            \"flagDirectIssuing\": \"N\",\n            \"flagMultifunction\": \"N\",\n            \"flagNFC\": \"N\",\n            \"flagPrepaid\": \"N\",\n            \"flagPrepaidNameless\": \"N\",\n            \"flagPrepaidVirtual\": \"N\",\n            \"paymentType\": \"S\",\n            \"cardIdHCE\": null,\n            \"cardIncremental\": \"1\",\n            \"anagraphicIncremental\": \"1\",\n            \"distributorBank\": null,\n            \"flagActivationRequired\": \"N\",\n            \"prepaidRechargeIBAN\": null,\n            \"contractType\": \"C\",\n            \"equensAccountId\": null,\n            \"cardRelationType\": null,\n            \"flagAnonymous\": \"N\",\n            \"tags\": [],\n            \"renewalPresent\": \"N\",\n            \"renewalShipped\": \"N\"\n        },\n        \"customerData\": {\n            \"name\": \"BRAMBILLA\",\n            \"surname\": \"ABIBO\",\n            \"heading\": \"ABIBO BRAMBILLA\",\n            \"fiscalCode\": \"BRMBBA85S01F205R\",\n            \"flagPositionOwner\": \"S\",\n            \"sex\": \"M\",\n            \"birthDate\": \"1985-11-01\",\n            \"birthPlace\": \"MILANO\",\n            \"birthCity\": \"MI\",\n            \"birthNation\": \"ITALIA\",\n            \"cardSubjectId\": \"117975817\"\n        },\n        \"position\": {\n            \"typeCode\": \"1\",\n            \"typeDescription\": \"I\",\n            \"positionId\": \"9000008\",\n            \"positionAbi\": \"03395\",\n            \"positionKeySION\": \"033959000008\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"validityState\": \"V\",\n            \"conditionTypeCode\": \"0\",\n            \"conditionTypeDescription\": \"ORDINARIO\",\n            \"flagExtendendCredit\": \"N\",\n            \"iban\": \"IT11E0339512900123456789012\",\n            \"bankAccountId\": \"123456789012\",\n            \"bankAccountType\": \"CO\",\n            \"sourceSubsystem\": \"C\",\n            \"homeAddressPostalCode\": \"20145\",\n            \"homeAddressStreet\": \"GIARDINI GUASTALLA 8\",\n            \"homeAddressCountryCode\": null,\n            \"homeAddressCity\": \"MILANO\",\n            \"homeAddressAdministrativeArea\": \"MI\",\n            \"accountholderName\": \"ABIBO BRAMBILLA\",\n            \"vatNumber\": null,\n            \"positionSubjectId\": \"117975817\",\n            \"agencyCode\": \"00001\"\n        }\n    }\n}"
 						},
@@ -747,7 +747,7 @@
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"header": null,
+							"header": [],
 							"cookie": [],
 							"body": "{\n    \"cardContextRefreshRequired\": false,\n    \"skipContextRefresh\": false,\n    \"client\": {\n        \"application\": \"pt\",\n        \"channel\": \"web\",\n        \"locale\": \"it\",\n        \"version\": \"[object Object]\"\n    },\n    \"commercialCardContextRefreshRequired\": false,\n    \"commercialSkipContextRefresh\": false,\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"status\": \"200\",\n    \"message\": \"Operation completed\"\n}"
 						},
@@ -1071,7 +1071,7 @@
 							"status": "Unauthorized",
 							"code": 401,
 							"_postman_previewlanguage": "json",
-							"header": null,
+							"header": [],
 							"cookie": [],
 							"body": "{\n    \"errmsg\": \"Unauthorized\",\n    \"errcode\": \"Unauthorized\"\n}"
 						},
@@ -1158,7 +1158,7 @@
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"header": null,
+							"header": [],
 							"cookie": [],
 							"body": "{\n  \"result\": {\n    \"code\": \"-8100\",\n    \"description\": \"Risk Engine error.\",\n    \"infos\": [\n      {\n        \"source\": \"deleteDevice\",\n        \"code\": \"-8103\",\n        \"description\": \"Bad request.\"\n      },\n      {\n        \"code\": \"-8110\",\n        \"description\": \"No enrolled profile for user.\"\n      }\n    ]\n  },\n  \"status\": \"5712\",\n  \"message\": \"No enrolled profile for user UTENZA_CHB_21@YOPMAIL.COM\"\n}"
 						}
@@ -1196,14 +1196,14 @@
 									"}",
 									"",
 									"// Get the existing result from collection variables and parse it",
-									"const existingResultJSON = pm.collectionVariables.get(\"RESULT\")",
+									"const existingResultJSON = pm.environment.get(\"RESULT\")",
 									"const existingResult = JSON.parse(existingResultJSON)",
 									"",
 									"// Push the updateResult into the existing result array",
 									"existingResult.push(updateResult)",
 									"",
 									"// Set the updated result back to collection variables",
-									"pm.collectionVariables.set(\"RESULT\", JSON.stringify(existingResult, null, 2))"
+									"pm.environment.set(\"RESULT\", JSON.stringify(existingResult, null, 2))"
 								],
 								"type": "text/javascript"
 							}
@@ -1370,6 +1370,11 @@
 		{
 			"key": "INPUT_profileType",
 			"value": "NEXI",
+			"type": "string"
+		},
+		{
+			"key": "RESULT",
+			"value": "[]",
 			"type": "string"
 		},
 		{

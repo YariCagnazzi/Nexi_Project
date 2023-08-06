@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "5c26d060-cc38-4a6a-8847-789dca76ae70",
+		"_postman_id": "a71a48a1-17a8-4339-9882-b3f7fbf9ca67",
 		"name": "[CONTACT CENTER] [INT] [STG] - Get Access token portale titolari",
 		"description": "Works on both INT and STG environments\n\nIt is a reference collection that allows you to generate an Access Token to access the Portale Titolari portal.\n\nThis collection depends on a number of INPUT fields:\n\n- INPUT_username: a valid NEXI username (mandatory)\n- INPUT_password: a valid NEXI password (mandatory)\n    \n\nE.g.:\n\nINPUT_username: CO07886\n\nINPUT_password: iotv5)N$98c34r\n\nUsage:\n\n- Reset collection variables;\n- Set \"INPUT_\" prefixed parameters as your needs;\n- Run the collection.\n    \n\nThis collection produces an output in text format (the Access Token), stored into the RESULT collection variable.\n\nE.g.:\n\neyJlbmMiOiJBMTI4R0NNIiwiYWxnIjoiZGlyIn0..w-zqVJQh86exclKs.LiZVYp6Q_0Vs-1ut2H7Fwz5TMZ4K9Vd1K6R6YzrO-U9t67AQwleUGTYRHIZU1SjZZKahlWITdOYshDs3Fva0SYK8FtjWZ9yDWI-CHKxrrFc_vQLlfZXs8WkZJ-GNLr92r7vTof4ijID1KEhf4dKXuPg3rNkaz3vnJVVdBB2qn5SV1eWtdx9bXSo7g2Qupf-VxPvtUV-dz7Pu0nb7-nPW67oW97yIMe3HyJc5fLqQURDVhrf_Su6JVXO1VQ.FlLsH-jF_4QZ-GedyWoPAA",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18019665",
-		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Team-Workspace~d73c1392-e276-429a-830d-648e8e808912/collection/18019665-5c26d060-cc38-4a6a-8847-789dca76ae70?action=share&creator=18019665&source=collection_link"
+		"_exporter_id": "18258051",
+		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Rockman_player~d1db713b-f91b-41cf-8eef-7af1d78fa8bb/collection/18258051-a71a48a1-17a8-4339-9882-b3f7fbf9ca67?action=share&creator=18258051&source=collection_link"
 	},
 	"item": [
 		{
@@ -18,7 +18,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"//console.clear()",
+									"console.clear()",
 									"const c = pm.collectionVariables.replaceIn('retryCounter')",
 									"const retry = pm.collectionVariables.get('retryCounter')",
 									"pm.collectionVariables.set('retry', retry)"
@@ -1302,7 +1302,7 @@
 									"",
 									"if (accessToken) {",
 									"    // Token is present in the response, set the collection variable and log success",
-									"    pm.collectionVariables.set('RESULT', accessToken)",
+									"    pm.environment.set('RESULT', accessToken)",
 									"    console.info(message['success'])",
 									"} else if (count > 0) {",
 									"    // Token not generated, retry with decreased attempts",
@@ -1314,7 +1314,7 @@
 									"    // Token not generated after all retries, log error and stop the collection run",
 									"    const fail = message['fail']",
 									"    console.error(`FATAL ${fail}`)",
-									"    pm.collectionVariables.set('RESULT', fail)",
+									"    pm.environment.set('RESULT', fail)",
 									"    postman.setNextRequest(null)",
 									"}"
 								],
@@ -1759,13 +1759,17 @@
 	"variable": [
 		{
 			"key": "INPUT_username",
-			"value": "CO07886",
+			"value": "CO07991",
 			"type": "string"
 		},
 		{
 			"key": "INPUT_password",
-			"value": "",
+			"value": "8X8@7FU4x8",
 			"type": "string"
+		},
+		{
+			"key": "RESULT",
+			"value": ""
 		},
 		{
 			"key": "FUN_unsetAllColectionVariables",

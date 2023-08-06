@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "46b2439e-c22c-444b-9b64-2cd8374eb2f2",
+		"_postman_id": "d5febba9-4d82-4147-971e-c87c6a50b73f",
 		"name": "[COMMERCIAL] [INT] - Get account commercial roles Given PIVA",
 		"description": "Works on INT environment\n\nThis collection retrieves the list of accounts (administrator, administrator ad interim, analyst), given a PIVA.\n\n- INPUT_fcList: a list on FCs comma or newline separated\n- INPUT_panList: a list on PANs comma or newline separated\n- INPUT_pivaList: a list on PIVAs comma or newline separated\n    \n\nThis collection depends on some other JS scripts needed to validate the correctness of FCs, PANs and PIVAs:\n\n- FUN_diacritic-remover\n- FUN_codice-fiscale-utils\n- FUN_validator\n- FUN_validateInputAsRule\n- CLASS_PartitaIVA\n    \n\nUsage:\n\n- Reset collection variables;\n- Set \"INPUT_\" prefixed parameters as your needs;\n- Run the collection.\n    \n\nThis colection will store the result into the variable RESULT in JSON format:\n\nE.g.:\n\n``` json\n[\n  {\n    \"active\": true,\n    \"email\": \"barbara.langoni@yopmail.com\",\n    \"role\": \"ADMIN\",\n    \"fiscalCode\": \"LNGBBR80C41F205X\",\n    \"pan\": \"5350453306139094\",\n    \"expiringDate\": \"2023-06-30\",\n    \"userId\": \"70611\",\n    \"vatNumber\": \"04297950018\",\n    \"accountId\": 10054672\n  },\n  {\n    \"active\": true,\n    \"email\": \"giovanni.digirolamo@yopmail.com\",\n    \"role\": \"ANALYST\",\n    \"fiscalCode\": \"BNCBRC80B41F205X\",\n    \"pan\": \"4598073756699275\",\n    \"expiringDate\": \"2025-12-31\",\n    \"userId\": \"70937\",\n    \"vatNumber\": \"04297950018\",\n    \"accountId\": 10055399\n  },\n  {\n    \"active\": true,\n    \"email\": \"giovanni.digirolamo@yopmail.com\",\n    \"role\": \"ANALYST\",\n    \"fiscalCode\": \"BNCBRC80B41F205X\",\n    \"pan\": \"4598073756699275\",\n    \"expiringDate\": \"2025-12-31\",\n    \"userId\": \"70937\",\n    \"vatNumber\": \"04297950018\",\n    \"accountId\": 10055399\n  },\n  {\n    \"active\": true,\n    \"email\": \"giovanni.digirolamo@yopmail.com\",\n    \"role\": \"ANALYST\",\n    \"fiscalCode\": \"BNCBRC80B41F205X\",\n    \"pan\": \"4598073756699275\",\n    \"expiringDate\": \"2025-12-31\",\n    \"userId\": \"70937\",\n    \"vatNumber\": \"04297950018\",\n    \"accountId\": 10055399\n  }\n]\n\n ```",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18019665",
-		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Team-Workspace~d73c1392-e276-429a-830d-648e8e808912/collection/18019665-46b2439e-c22c-444b-9b64-2cd8374eb2f2?action=share&creator=18019665&source=collection_link"
+		"_exporter_id": "18258051",
+		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Rockman_player~d1db713b-f91b-41cf-8eef-7af1d78fa8bb/collection/18258051-d5febba9-4d82-4147-971e-c87c6a50b73f?action=share&creator=18258051&source=collection_link"
 	},
 	"item": [
 		{
@@ -27,7 +27,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"//console.clear()",
+									"console.clear()",
 									"console.info('Reset environment variables')",
 									"",
 									"const resetAll = (value, ...args) => {",
@@ -1468,7 +1468,7 @@
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"header": null,
+							"header": [],
 							"cookie": [],
 							"body": "[\n    {\n        \"nexiAccountUid\": \"10054672\"\n    },\n    {\n        \"nexiAccountUid\": \"10055395\"\n    },\n    {\n        \"nexiAccountUid\": \"10055399\"\n    }\n]"
 						}
@@ -1625,7 +1625,7 @@
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"header": null,
+							"header": [],
 							"cookie": [],
 							"body": "{\n    \"account_id\": 10054672,\n    \"uid\": \"barbara.langoni@yopmail.com\",\n    \"change_password\": false,\n    \"identity_id\": 10508183,\n    \"type\": \"PORTALE_AZIENDE\",\n    \"active\": true,\n    \"is_shared_account\": false,\n    \"mfa_id\": [\n        \"null\"\n    ],\n    \"member_of\": null,\n    \"email\": \"barbara.langoni@yopmail.com\",\n    \"type_specific_attributes\": {\n        \"user_piva\": \"04297950018\",\n        \"user_type\": \"ADMIN\",\n        \"confirmed_user\": \"true\",\n        \"is_migrated\": \"true\",\n        \"user_suspended\": \"false\",\n        \"user_codicefiscale\": \"LNGBBR80C41F205X\",\n        \"user_userid\": \"70611\"\n    }\n}"
 						},
@@ -1695,7 +1695,7 @@
 								"exec": [
 									"console.info(\"Update Result\")",
 									"",
-									"const result = JSON.parse(pm.collectionVariables.get(\"RESULT\"))",
+									"const result = JSON.parse(pm.environment.get(\"RESULT\"))",
 									"",
 									"const piva = pm.collectionVariables.get(\"piva\")",
 									"const updateResult = {}",
@@ -1712,7 +1712,7 @@
 									"",
 									"result.push(updateResult)",
 									"",
-									"pm.collectionVariables.set(\"RESULT\", JSON.stringify(result, null, 2))"
+									"pm.environment.set(\"RESULT\", JSON.stringify(result, null, 2))"
 								],
 								"type": "text/javascript"
 							}
@@ -1838,6 +1838,10 @@
 			"key": "INPUT_pivaList",
 			"value": "12967420204",
 			"type": "string"
+		},
+		{
+			"key": "RESULT",
+			"value": "[]"
 		},
 		{
 			"key": "positionType",
