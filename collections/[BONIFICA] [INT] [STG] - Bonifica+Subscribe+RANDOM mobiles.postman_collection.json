@@ -27,7 +27,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"console.clear()",
+									"//console.clear()",
 									"console.info('Reset environment variables')",
 									"",
 									"const resetAll = (value, ...args) => {",
@@ -5628,22 +5628,17 @@
 	"variable": [
 		{
 			"key": "INPUT_fcList",
-			"value": "FRNCHR63L48H501V\nTRVVNT80P63H501A",
+			"value": "FRNCHR63L48H501V, TRVVNT80P63H501A \n",
 			"type": "string"
 		},
 		{
 			"key": "INPUT_panList",
-			"value": "4970199002897286",
+			"value": "",
 			"type": "string"
 		},
 		{
 			"key": "INPUT_positionType",
 			"value": "[1,4]",
-			"type": "string"
-		},
-		{
-			"key": "RESULT",
-			"value": "[]",
 			"type": "string"
 		},
 		{

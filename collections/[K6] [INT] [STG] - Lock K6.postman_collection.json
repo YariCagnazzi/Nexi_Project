@@ -27,7 +27,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"console.clear()",
+									"//console.clear()",
 									"console.info('Reset environment variables')",
 									"",
 									"const resetAll = (value, ...args) => {",
@@ -2671,11 +2671,6 @@
 		{
 			"key": "INPUT_positionType",
 			"value": "[1,4]",
-			"type": "string"
-		},
-		{
-			"key": "RESULT",
-			"value": "[]",
 			"type": "string"
 		},
 		{

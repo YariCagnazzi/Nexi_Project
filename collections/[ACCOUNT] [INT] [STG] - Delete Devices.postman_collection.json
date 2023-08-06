@@ -1373,11 +1373,6 @@
 			"type": "string"
 		},
 		{
-			"key": "RESULT",
-			"value": "[]",
-			"type": "string"
-		},
-		{
 			"key": "baseUrl",
 			"value": "{{apigwServer}}/mt-services",
 			"type": "string"

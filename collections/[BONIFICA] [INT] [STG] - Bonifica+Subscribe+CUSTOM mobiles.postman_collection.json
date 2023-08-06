@@ -27,7 +27,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"console.clear()",
+									"//console.clear()",
 									"console.info('Reset environment variables')",
 									"",
 									"const resetAll = (value, ...args) => {",
@@ -5695,11 +5695,6 @@
 		{
 			"key": "INPUT_dataList",
 			"value": "[\n  {\n    \"pan\": \"4970199002897286\",\n    \"mobile\": \"3495750021\",\n    \"positionType\": [1, 4]\n  },\n  {\n    \"fc\": \"FRNCHR63L48H501V\",\n    \"mobile\": \"3495756624\",\n    \"positionType\": [1, 4]\n  },\n  {\n    \"fc\": \"TRVVNT80P63H501A\",\n    \"mobile\": \"3495751123\",\n    \"positionType\": [1, 4]\n  }\n]\n",
-			"type": "string"
-		},
-		{
-			"key": "RESULT",
-			"value": "[]",
 			"type": "string"
 		},
 		{

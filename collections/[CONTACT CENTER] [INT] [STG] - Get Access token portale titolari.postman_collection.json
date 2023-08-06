@@ -18,7 +18,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"console.clear()",
+									"//console.clear()",
 									"const c = pm.collectionVariables.replaceIn('retryCounter')",
 									"const retry = pm.collectionVariables.get('retryCounter')",
 									"pm.collectionVariables.set('retry', retry)"
@@ -1766,10 +1766,6 @@
 			"key": "INPUT_password",
 			"value": "",
 			"type": "string"
-		},
-		{
-			"key": "RESULT",
-			"value": ""
 		},
 		{
 			"key": "FUN_unsetAllColectionVariables",

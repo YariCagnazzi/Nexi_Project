@@ -27,7 +27,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"console.clear();",
+									"//console.clear();",
 									"",
 									"pm.collectionVariables.set(\"dataList\", JSON.stringify(JSON.parse(pm.collectionVariables.get(\"INPUT_data\")), null, 0));",
 									"pm.collectionVariables.set(\"currentResultVariableName\", pm.collectionVariables.get(\"defaultResultVariableName\"));"

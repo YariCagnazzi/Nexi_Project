@@ -111,7 +111,9 @@ inquirer
                 console.info('dati inseriti:'+ datachoices);
                 console.info(collectionName);
                 console.info(environmentName);
-    
+                
+                     // chiamo la procedura per poter eseguire con newman         
+                runCollection(collectionName, environmentName ,datachoices );
                 return datachoices;
              
           })
@@ -137,6 +139,10 @@ inquirer
                   console.info('dati inseriti:'+ datachoices);
                   console.info(collectionName);
                   console.info(environmentName);
+               
+                  
+                     // chiamo la procedura per poter eseguire con newman 
+                  runCollection(collectionName, environmentName ,datachoices );
     
                   return datachoices;
                
@@ -163,22 +169,69 @@ inquirer
                    console.info('dati inseriti:'+ datachoices);
                    console.info(collectionName);
                    console.info(environmentName);
+
+             // chiamo la procedura per poter eseguire con newman   
+                   runCollection(collectionName, environmentName ,datachoices );  
      
                    return datachoices;
                 
              }) 
          }
-         
-    
       };
 
+     function runCollection(collectionName, environmentName , datachoices ){
 
+        const basecollection='./collections/';
+        const baseEnv='./environment/';
+        const collectionPostfix='.postman_collection.json';
+        const envPpostfix='.postman_environment.json';
 
+     //costruiscio il path relativo della collection e dell'ambiente
+        const collectionFilePath = basecollection + collectionName + collectionPostfix;
+        const environmentFilePath = baseEnv + environmentName + envPpostfix;
+        console.info(collectionFilePath);
+        console.info(environmentFilePath);
+        console.info(datachoices);
 
-
-
+      console.log('----------------Running collection----------');
     
-  })
+   
+  newman.run(
+    {
+      //imposta la collection
+      collection: collectionFilePath ,
+      //imposta le variabili d'ambiente
+      environment: environmentFilePath,
+     // Path to the JSON or CSV file or URL to be used as data source when running multiple iterations on a collection.
+      //"iterationData": data,
+      //disabilita la verifica SSL 
+      insecure: true
+   }
+  ).on('start', function (err, args) { // on start of run, log to console
+    console.log('running a collection...');
+
+  }).on('done', function (err, summary) {
+    if (err || summary.error) {
+        console.error('collection run encountered an error.');
+    }
+    else {
+      console.info(summary.environment.name);
+      //recupero variabile RESULT in INTEGRATION e STAGING
+       console.info ('SUCCESS: '+ summary.environment.values.members[26].value);     
+     
+       //recupero dei eventuali Errori e/o Assertioni
+      summary.run.failures.forEach((err, index) => {
+        console.error('****** ERROR ****** ' + index + ': ' + JSON.stringify(err.error.message) + '  IN  '+ JSON.stringify(err.parent.name));
+      });
+      
+        console.log('Collection run completed.');
+    }
+})
+
+        
+}  
+
+  });
 /*
   // Funzione per validare PAN o CF
 function validatePANorCF(value) {
