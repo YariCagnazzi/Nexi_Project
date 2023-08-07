@@ -27,7 +27,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"console.clear()",
+									"//console.clear()",
 									"console.info('Reset environment variables')",
 									"",
 									"const resetAll = (value, ...args) => {",
@@ -1831,12 +1831,12 @@
 		},
 		{
 			"key": "INPUT_panList",
-			"value": "",
+			"value": "4532200049558021",
 			"type": "string"
 		},
 		{
 			"key": "INPUT_pivaList",
-			"value": "12967420204",
+			"value": "4532200049558021\u0000",
 			"type": "string"
 		},
 		{

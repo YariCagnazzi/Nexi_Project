@@ -1,5 +1,6 @@
 const newman = require('newman');
 const inquirer = require('inquirer');
+const fs = require('fs');
 
 
 console.info('Benvenuto su Rockman!!! ');
@@ -69,33 +70,36 @@ inquirer
 
   ])
   .then((answers) => {
-    // Use user feedback for... whatever!!
    
     console.info('Risposte inserite:', answers);
 
-        // Esegui l'operazione corrispondente alla scelta dell'utente
+        // Recupero le risposte corrispondente alla scelta dell'utente
        const collectionName = answers['first-list-questions'];
        const environmentName = answers['second-list-questions'];
        const inputDataChoice = answers['data'];
+     
 
+
+      if(inputDataChoice === 'INPUT_fcList'){
+        promptForPANsOrCFs(inputDataChoice);
+      }
+      else if(inputDataChoice === 'INPUT_panList'){
+        promptForPANsOrCFs(inputDataChoice);
+      }
+      else if(inputDataChoice === 'INPUT_pivaList'){
+        promptForPANsOrCFs(inputDataChoice);
+      }
     
-    if (inputDataChoice === 'INPUT_fcList') {
-      inputData = promptForPANsOrCFs('CF');
-    } else if (inputDataChoice === 'INPUT_panList') {
-      inputData = promptForPANsOrCFs('PAN');
-    }  else if (inputDataChoice === 'INPUT_pivaList') {
-      inputData = promptForPANsOrCFs('PIVA');
-    } 
-
+         
   
-    function promptForPANsOrCFs(type) {
+    function promptForPANsOrCFs(inputData) {
       // eseguio di nuovo il prompt che accetta  CF
-      if(type==='CF') {  
+      if(inputData==='INPUT_fcList') {  
         const panOrCFQuestions = [
           {
             type: 'checkbox',
             name: 'Select data (CF)',
-            message: `Inserisci uno o più ${type}`,
+            message: 'Inserisci uno o più CF',
             choices: ['FRNCHR63L48H501V','TRVVNT80P63H501A', 'CRCLSS62S28F496A' ],
            // validate: validatePANorCF, // Aggiungo la validazione
           },
@@ -114,16 +118,16 @@ inquirer
                 
                      // chiamo la procedura per poter eseguire con newman         
                 runCollection(collectionName, environmentName ,datachoices );
-                return datachoices;
+                return ;
              
           })
-        } else if (type==='PAN') {
+        } else if (inputData==='INPUT_panList') {
          // eseguio di nuovo il prompt che accetta  PAN
           const panOrCFQuestions = [
             {
               type: 'checkbox',
               name: 'Select data (PAN)',
-              message: `Inserisci uno o più ${type}`,
+              message: 'Inserisci uno o più PAN',
               choices: ['4970199002897286', '4532200022110725', '4539970045339062'],
              // validate: validatePANorCF, // Aggiungo la validazione
             },
@@ -144,16 +148,16 @@ inquirer
                      // chiamo la procedura per poter eseguire con newman 
                   runCollection(collectionName, environmentName ,datachoices );
     
-                  return datachoices;
+                  return ;
                
             }) 
-        } else if (type==='PIVA') {
+        } else if (inputData==='INPUT_pivaList') {
           // eseguio di nuovo il prompt che accetta  PAN
            const panOrCFQuestions = [
              {
                type: 'checkbox',
                name: 'Select data (PIVA)',
-               message: `Inserisci uno o più ${type}`,
+               message: 'Inserisci uno o più PIVA',
                choices: ['01328240054', '02333970014', '15061221469', '00000000018', '00051830529', '02333970014'],
               // validate: validatePANorCF, // Aggiungo la validazione
              },
@@ -173,13 +177,65 @@ inquirer
              // chiamo la procedura per poter eseguire con newman   
                    runCollection(collectionName, environmentName ,datachoices );  
      
-                   return datachoices;
+                   return ;
                 
              }) 
          }
       };
 
+
+          // procedura per aggiornare i dati di ingresso in base all'input
+          function updateJSONCollection(inputDataChoice, collectionFilePath, datachoices) {
+
+            let variableKey = '';
+            let resetVariableKey = '';
+        
+            // Determina la chiave corrispondente in base al nome del dato in input
+            switch (inputDataChoice) {
+                case 'INPUT_fcList':
+                    variableKey = 'INPUT_fcList';
+                    resetVariableKey = 'INPUT_panList';
+                    break;
+                case 'INPUT_panList':
+                    variableKey = 'INPUT_panList';
+                    resetVariableKey = 'INPUT_fcList';
+                    break;
+                case 'INPUT_pivaList':
+                    variableKey = 'INPUT_pivaList';
+                    break;
+                default:
+                    console.error('Nome del dato di Input non supportato.');
+                    return;
+            }
+        
+            // Parsa il file JSON e convertilo in Object
+          
+            let existingData = JSON.parse(fs.readFileSync(collectionFilePath, 'utf8'));
+        
+            // Aggiorna l'oggetto nel file JSON esistente
+            existingData.variable.forEach(variable => {
+                if (variable.key === variableKey) {
+                    variable.value = datachoices.join('\n');
+                    console.info(variable.value);
+                }
+        
+                if (variable.key === resetVariableKey) {
+                    variable.value = '';
+                }
+            });
+        
+            // Converti l'oggetto aggiornato in una stringa JSON
+            const updatedJSON = JSON.stringify(existingData, null, 2);
+        
+            fs.writeFileSync(collectionFilePath, updatedJSON, 'utf8');
+        
+            //console.log('Dato aggiornato:', updatedJSON);
+        };
+        
+
+        // running collection with newman
      function runCollection(collectionName, environmentName , datachoices ){
+   
 
         const basecollection='./collections/';
         const baseEnv='./environment/';
@@ -189,9 +245,11 @@ inquirer
      //costruiscio il path relativo della collection e dell'ambiente
         const collectionFilePath = basecollection + collectionName + collectionPostfix;
         const environmentFilePath = baseEnv + environmentName + envPpostfix;
-        console.info(collectionFilePath);
-        console.info(environmentFilePath);
+
         console.info(datachoices);
+
+      //aggiorna il JSON della collection con i dati di input
+        updateJSONCollection(inputDataChoice, collectionFilePath , datachoices );
 
       console.log('----------------Running collection----------');
     
@@ -202,8 +260,6 @@ inquirer
       collection: collectionFilePath ,
       //imposta le variabili d'ambiente
       environment: environmentFilePath,
-     // Path to the JSON or CSV file or URL to be used as data source when running multiple iterations on a collection.
-      //"iterationData": data,
       //disabilita la verifica SSL 
       insecure: true
    }
@@ -226,11 +282,14 @@ inquirer
       
         console.log('Collection run completed.');
     }
+
+    
 })
 
-        
-}  
 
+}
+
+   
   });
 /*
   // Funzione per validare PAN o CF
