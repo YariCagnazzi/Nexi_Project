@@ -1,1462 +1,1462 @@
 {
-	"info": {
-		"_postman_id": "11553790-6193-4fd4-af25-f83cea19b36c",
-		"name": "[ACCOUNT] [INT] [STG] - Delete Devices",
-		"description": "Works on both INT and STG environments.\n\nThe official documentation can be found here:\n\n[https://intmt.private.nexicloud.it:4003/mt-services/issuing/orch/mfa/v1/swagger-ui.html#!/Device/deleteDevices]()\n\nThis collection should delete all user devices.\n\nThis collection depends on a number of INPUT fields:\n\n- INPUT_mfaIdList (mandatory) – This parameter also handles email lists, with newline separator character\n- INPUT_organization (mandatory)\n- INPUT_profileType (mandatory)\n\n\nThe result of the collection is saved in the RESULT collection variable. An example of a result is the following\n    \n\nUsage:\n\n- Reset collection variables;\n- Set \"INPUT_\" prefixed parameters as your needs;\n- Run the collection.\n    \n\nE.g.:\n\n``` json\n[\n  {\n    \"userEmail\": \"insta.f@yopmail.com\",\n    \"isSuccessfull\": \"true\",\n    \"message\": \"Operation completed\"\n  }\n]\n\n ```\n\nLinked to the collection are also available a few response examples from deleteDevices in the cases of: success, failure and device not enrolled.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18258051",
-		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Rockman_player~d1db713b-f91b-41cf-8eef-7af1d78fa8bb/collection/18258051-11553790-6193-4fd4-af25-f83cea19b36c?action=share&creator=18258051&source=collection_link"
-	},
-	"item": [
-		{
-			"name": "6 - preset",
-			"item": [
-				{
-					"name": "Parse emails",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const list = pm.collectionVariables.get(\"INPUT_mfaIdList\")",
-									"const mfaIdList = list.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+)/gi) || []",
-									"",
-									"console.info(`Found ${mfaIdList.length} emails`)",
-									"pm.collectionVariables.set(\"mfaIdList\", JSON.stringify(mfaIdList, null, 2))"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://google.it",
-							"protocol": "http",
-							"host": [
-								"google",
-								"it"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "10 - Start loop through MFAIDs",
-			"item": [
-				{
-					"name": "Start loop",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const list = JSON.parse(pm.collectionVariables.get(\"mfaIdList\"))",
-									"",
-									"const mfaId = list.shift()",
-									"pm.collectionVariables.set(\"mfaId\", mfaId)",
-									"pm.collectionVariables.set(\"mfaIdList\", JSON.stringify(list))",
-									"",
-									"console.info(`Processing uid: ${mfaId}`)"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://google.it",
-							"protocol": "http",
-							"host": [
-								"google",
-								"it"
-							]
-						},
-						"description": "Lets subscribe card to one or more services."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"description": "(Required) technical code of the application calling the service.",
-										"key": "MT_APPLICATION",
-										"value": "{{MT_APPLICATION}}"
-									},
-									{
-										"description": "(Required) channel code of the request - [WEB, MOB, BAT] ",
-										"key": "MT_CHANNEL",
-										"value": "{{MT_CHANNEL}}"
-									},
-									{
-										"description": "(Required) user identifier of the request (username , userid , ...)",
-										"key": "MT_USER",
-										"value": "{{MT_USER}}"
-									},
-									{
-										"description": "(Required) Company Group identification code.",
-										"key": "MT_COMPANY_GROUP",
-										"value": "{{MT_COMPANY_GROUP}}"
-									},
-									{
-										"description": "(Required) Company code.",
-										"key": "MT_COMPANY",
-										"value": "{{MT_COMPANY}}"
-									},
-									{
-										"description": "(Required) Partner belonging to the company. It describe a subset of NEXI customer related to the specified partner.",
-										"key": "MT_PARTNER",
-										"value": "{{MT_PARTNER}}"
-									},
-									{
-										"description": "(Required) Random unique identification code of the request set by the client. Example UUID [8119c0ce-17f2-11e8-accf-0ed5f89f718b]",
-										"key": "MT_REQUEST_ID",
-										"value": "{{MT_REQUEST_ID}}"
-									},
-									{
-										"description": "(Required) Random unique identification code identifying a single session of the client. Example JSESSIONID [b272023f-05ca-44cb-96cd-6d72c72d03f9]",
-										"key": "MT_SESSION_ID",
-										"value": "{{MT_SESSION_ID}}"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"cardId\": {\n        \"type\": \"PAN\",\n        \"value\": 4532200085801459\n    },\n    \"skipCustomerCertifiedData\": false\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/issuing/cards/v1/getCard",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"issuing",
-										"cards",
-										"v1",
-										"getCard"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"card\": {\n        \"card\": {\n            \"cardId\": {\n                \"value\": \"4532200085801459\",\n                \"type\": \"PAN\",\n                \"processor\": \"S\",\n                \"bin\": \"453220\",\n                \"tail\": \"1459\"\n            },\n            \"productKey\": {\n                \"abi\": \"03395\",\n                \"affinity\": \"40\",\n                \"plastic\": \"00\",\n                \"productType\": \"CRE\",\n                \"circuitCode\": \"V\"\n            },\n            \"bankName\": \"BANCA INTERPROVINCIALE\",\n            \"productId\": \"033954000VC\",\n            \"productCode\": \"4000\",\n            \"productDescription\": \"BUSINESS CARTA BUSINESS\",\n            \"prepaidVendor\": null,\n            \"circuitDetail\": \"VISA\",\n            \"emissionTypeCode\": \"NU\",\n            \"emissionTypeDescription\": \"NUOVA\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"offlineBlockDescription\": null,\n            \"validityStartDate\": \"2018-12-21\",\n            \"expiringDate\": \"2026-03-31\",\n            \"validityState\": \"V\",\n            \"expenseLimit\": {\n                \"value\": 10000,\n                \"currency\": \"EUR\"\n            },\n            \"expenseLimit2ndLine\": null,\n            \"expenseLimit3ndLine\": null,\n            \"ibanDebit\": null,\n            \"downOptionMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"downOptionDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"flagBancomat\": \"N\",\n            \"flagChip\": \"S\",\n            \"flagContactless\": \"S\",\n            \"flagDebit\": \"N\",\n            \"flagFamiliar\": \"N\",\n            \"flagHCE\": \"N\",\n            \"flagIndividualBilling\": \"N\",\n            \"flagDirectIssuing\": \"N\",\n            \"flagMultifunction\": \"N\",\n            \"flagNFC\": \"N\",\n            \"flagPrepaid\": \"N\",\n            \"flagPrepaidNameless\": \"N\",\n            \"flagPrepaidVirtual\": \"N\",\n            \"paymentType\": \"S\",\n            \"cardIdHCE\": null,\n            \"cardIncremental\": \"1\",\n            \"anagraphicIncremental\": \"1\",\n            \"distributorBank\": null,\n            \"flagActivationRequired\": \"N\",\n            \"prepaidRechargeIBAN\": null,\n            \"contractType\": \"C\",\n            \"equensAccountId\": null,\n            \"cardRelationType\": null,\n            \"flagAnonymous\": \"N\",\n            \"tags\": [],\n            \"renewalPresent\": \"N\",\n            \"renewalShipped\": \"N\"\n        },\n        \"customerData\": {\n            \"name\": \"BRAMBILLA\",\n            \"surname\": \"ABIBO\",\n            \"heading\": \"ABIBO BRAMBILLA\",\n            \"fiscalCode\": \"BRMBBA85S01F205R\",\n            \"flagPositionOwner\": \"S\",\n            \"sex\": \"M\",\n            \"birthDate\": \"1985-11-01\",\n            \"birthPlace\": \"MILANO\",\n            \"birthCity\": \"MI\",\n            \"birthNation\": \"ITALIA\",\n            \"cardSubjectId\": \"117975817\"\n        },\n        \"position\": {\n            \"typeCode\": \"1\",\n            \"typeDescription\": \"I\",\n            \"positionId\": \"9000008\",\n            \"positionAbi\": \"03395\",\n            \"positionKeySION\": \"033959000008\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"validityState\": \"V\",\n            \"conditionTypeCode\": \"0\",\n            \"conditionTypeDescription\": \"ORDINARIO\",\n            \"flagExtendendCredit\": \"N\",\n            \"iban\": \"IT11E0339512900123456789012\",\n            \"bankAccountId\": \"123456789012\",\n            \"bankAccountType\": \"CO\",\n            \"sourceSubsystem\": \"C\",\n            \"homeAddressPostalCode\": \"20145\",\n            \"homeAddressStreet\": \"GIARDINI GUASTALLA 8\",\n            \"homeAddressCountryCode\": null,\n            \"homeAddressCity\": \"MILANO\",\n            \"homeAddressAdministrativeArea\": \"MI\",\n            \"accountholderName\": \"ABIBO BRAMBILLA\",\n            \"vatNumber\": null,\n            \"positionSubjectId\": \"117975817\",\n            \"agencyCode\": \"00001\"\n        }\n    }\n}"
-						},
-						{
-							"name": "Template response",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"description": "(Required) technical code of the application calling the service.",
-										"key": "MT_APPLICATION",
-										"value": "minim dolore"
-									},
-									{
-										"description": "(Required) channel code of the request - [WEB, MOB, BAT] ",
-										"key": "MT_CHANNEL",
-										"value": "minim dolore"
-									},
-									{
-										"description": "(Required) user identifier of the request (username , userid , ...)",
-										"key": "MT_USER",
-										"value": "minim dolore"
-									},
-									{
-										"description": "(Required) Company Group identification code.",
-										"key": "MT_COMPANY_GROUP",
-										"value": "minim dolore"
-									},
-									{
-										"description": "(Required) Company code.",
-										"key": "MT_COMPANY",
-										"value": "minim dolore"
-									},
-									{
-										"description": "(Required) Partner belonging to the company. It describe a subset of NEXI customer related to the specified partner.",
-										"key": "MT_PARTNER",
-										"value": "minim dolore"
-									},
-									{
-										"description": "(Required) Random unique identification code of the request set by the client. Example UUID [8119c0ce-17f2-11e8-accf-0ed5f89f718b]",
-										"key": "MT_REQUEST_ID",
-										"value": "minim dolore"
-									},
-									{
-										"description": "(Required) Random unique identification code identifying a single session of the client. Example JSESSIONID [b272023f-05ca-44cb-96cd-6d72c72d03f9]",
-										"key": "MT_SESSION_ID",
-										"value": "minim dolore"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"cardId\": {\n        \"bin\": \"eu\",\n        \"processor\": \"S\",\n        \"tail\": \"irure velit nisi consectetur\",\n        \"type\": \"PAN\",\n        \"value\": \"proident dolor do m\"\n    },\n    \"mobilePhone\": {\n        \"mobilePhoneNumber\": \"laborum\",\n        \"carrier\": \"qui fugiat minim labore\",\n        \"countryAlphaTwoCode\": \"IT\",\n        \"mobilePhonePrefix\": \"+39\"\n    },\n    \"updateSystems\": [\n        \"SMS\",\n        \"SMS\"\n    ],\n    \"acs\": {\n        \"issuerCode\": \"fugiat nulla\",\n        \"notificationChannel3DSecure\": \"EMAIL\",\n        \"abi\": \"aliqua anim\",\n        \"channel\": \"Duis\",\n        \"fiscalCode\": \"sclrcs95e15l407h\",\n        \"identifyingPhrase3DSecure\": \"et sint dolor Ut\",\n        \"ownerName\": \"minim id labore\",\n        \"templateId\": \"inc\",\n        \"templateSMS\": \"ad labore\",\n        \"unlockRequest\": \"culpa\"\n    },\n    \"customerData\": {\n        \"birthCity\": \"MI\",\n        \"birthDate\": \"2000-10-02\",\n        \"birthNation\": \"Italy\",\n        \"birthPlace\": \"Sesto San Giovanni\",\n        \"fiscalCode\": \"RSSMRA81M18D121R\",\n        \"flagPositionOwner\": \"S\",\n        \"heading\": \"Mario Rossi\",\n        \"name\": \"Mario\",\n        \"sex\": \"M\",\n        \"surname\": \"Rossi\"\n    },\n    \"disablePropagation\": false,\n    \"sms\": {\n        \"alertThreshold\": {\n            \"currency\": \"EUR\",\n            \"value\": 23.78\n        },\n        \"flagAlertThreshold\": \"cillum sunt velit laboris\",\n        \"availabilityThreshold\": {\n            \"currency\": \"EUR\",\n            \"value\": 23.78\n        },\n        \"flagAvailabilityBS\": \"sit\",\n        \"flagAvailabilityPull\": \"et nisi aliquip reprehenderit\",\n        \"flagAvailabilityThreshold\": \"velit Lorem cupidatat tempor dolore\",\n        \"flagCharity\": \"in quis adipisicing ani\",\n        \"flagPayment\": \"amet pariatur\",\n        \"flagWelcome\": \"esse amet cillum exercitation\",\n        \"profileType\": \"ipsum nulla reprehenderit\",\n        \"sourceCode\": \"labore ad\"\n    }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/subscribe",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"subscribe"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n \"result\": {\n  \"code\": \"dolore ex incididunt in\",\n  \"description\": \"success\",\n  \"infos\": [\n   {\n    \"code\": \"laborum qui esse eiusmod dolore\",\n    \"description\": \"success\",\n    \"source\": \"ipsum ut\"\n   },\n   {\n    \"code\": \"pariatur\",\n    \"description\": \"success\",\n    \"source\": \"dolore elit nulla\"\n   }\n  ]\n }\n}"
-						}
-					]
-				},
-				{
-					"name": "Reset variables",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"console.info('Reset environment variables')",
-									"",
-									"const resetAll = (value, ...args) => {",
-									"    args.forEach(arg => {",
-									"        pm.collectionVariables.set(arg, value)",
-									"    })",
-									"}",
-									"",
-									"resetAll(",
-									"    \"isSuccessful\",",
-									"    \"message\",",
-									"    \"code\",",
-									"    \"description\",",
-									"    \"errmsg\",",
-									"    \"errcode\"",
-									"    )"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://google.it",
-							"protocol": "http",
-							"host": [
-								"google",
-								"it"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Generate JWT",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Successful POST request\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202])",
-									"})",
-									"",
-									"const response = pm.response.json()",
-									"",
-									"pm.test(\"Response should contain 'access_token'\", () => {",
-									"    pm.expect(response.access_token).to.exist",
-									"})",
-									"",
-									"pm.collectionVariables.set(\"jwtToken\", response.access_token)"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"console.log(\"Set JWT\")"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "client_credentials",
-									"type": "text"
-								},
-								{
-									"key": "client_id",
-									"value": "{{titolariClientId}}",
-									"type": "text"
-								},
-								{
-									"key": "client_secret",
-									"value": "{{titolariClientSecret}}",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{jwtTokenServer}}/oauth/v2/token",
-							"host": [
-								"{{jwtTokenServer}}"
-							],
-							"path": [
-								"oauth",
-								"v2",
-								"token"
-							]
-						},
-						"description": "```\ngenerates and sets the Technical Token\n```"
-					},
-					"response": [
-						{
-							"name": "Token-access example",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "grant_type",
-											"value": "client_credentials",
-											"type": "text"
-										},
-										{
-											"key": "client_id",
-											"value": "{{titolariClientId}}",
-											"type": "text"
-										},
-										{
-											"key": "client_secret",
-											"value": "{{titolariClientSecret}}",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{jwtTokenServer}}/oauth/v2/token",
-									"host": [
-										"{{jwtTokenServer}}"
-									],
-									"path": [
-										"oauth",
-										"v2",
-										"token"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-store"
-								},
-								{
-									"key": "Content-Encoding",
-									"value": "gzip"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json;charset=UTF-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "873"
-								},
-								{
-									"key": "Date",
-									"value": "Mon, 28 Mar 2022 20:08:18 GMT"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiIsImtpZCI6ImNkMjZjZWFmIn0.ew0KCSJpc3MiOiAiQVBJR1ciLA0KCSJhdWQiOiAiMmY1ZmU2YzAtNDA1Ni00OWI5LTg5NWEtNmJjNzlhZjU1OGQxIiwNCgkiZXhwIjogMTY1MDkxNzI5OCwNCgkiaWF0IjogMTY0ODQ5ODA5OCwNCgkidG9rZW5UeXBlIjogIlRlY2huaWNhbCIsDQoJInN1YiI6ICIyZjVmZTZjMC00MDU2LTQ5YjktODk1YS02YmM3OWFmNTU4ZDEiLA0KCSJwcmVmaXhvcmciOiJERVVUU0NIRSIsDQoJIk9BVCI6ICIyZGZkYjIyYy1iY2RkLTRiNzAtOWQ0Yy1hMmM0YmQ1YWQxZDAiLA0KCSJzY29wZSI6ICJUZWNoX05vdGlmaWNhdG9yIFRlY2hfTWlkZGxldGllcl9QcmVwYWlkUmVjaGFyZ2UgVGVjaF9NaWRkbGV0aWVyX1BpblZpZXcgc2VydmljZWdyb3VwXzQgVGVjaF9NaWRkbGV0aWVyIHRlY2huaWNhbFRlc3RHcm91cElkZW50aXR5SXNzdWluZ19DUlVEIHRlY2huaWNhbFRlc3RHcm91cFBUX0NSVUQgVGVjaF9PdXRib3VuZF9QYWdvUEEgUFQtR3JvdXAgc2VydmljZWdyb3VwXzEgdGVjaG5pY2FsR3JvdXBLZXk2IFRlY2hfT3V0Ym91bmRfTVRfUGFnb1BBIHRlY2huaWNhbEdyb3VwTWZhX0NSVUQgc2VydmljZWdyb3VwXzQiDQp9.P1OWM502OXLmGLpdcXNqsxB_CSwQWD12yu-IFd_dN_rvOBN4pGT0IJJaVceVfG7jNiJBBRCqSMcrio9E2Rjy5-EZYWkga6hEA_JuaNDIq2J5vQUog5FyaZXMRX9nYGdhFEG6vEsUlVDOj3S-gV0W1j_EYngBN0NGwx1GnywdIwDqZl5cHr0K0hD9S8_8Jpw1Qnr0hn79JlaaGSIjIqD2JxEQE6-FhQA48a80Z1zMm2sEmTkvFzTwsxvH4qkdoshmGC1A1FCX2HQ2qnkwIfahL6k-azvv_pvCmokRdk8iu0_XL1mk4RhoWIsLwKq4AVkdDIEkzet-oONIhdEa7lFSSg\",\n    \"token_type\": \"Bearer\",\n    \"expires_in\": 2419200\n}"
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "15 - Delete devices",
-			"item": [
-				{
-					"name": "Delete devices",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Successful POST request\", function () {",
-									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202])",
-									"})",
-									"",
-									"const response = pm.response.json()",
-									"const messageExpected = \"Operation completed\"",
-									"",
-									"pm.test(`Response should be \"${messageExpected}\"`, function () {",
-									"    pm.expect(pm.response.text().toLowerCase()).to.include(messageExpected.toLowerCase())",
-									"})",
-									"",
-									"// Set collection variables based on the response status",
-									"pm.collectionVariables.set(\"isSuccessful\", response.status.match(\"200\") ? \"true\" : \"false\")",
-									"pm.collectionVariables.set(\"message\", response.message)"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"content-type": true,
-							"accept": true
-						}
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "MT_APPLICATION",
-								"value": "CH",
-								"type": "text"
-							},
-							{
-								"key": "MT_CHANNEL",
-								"value": "WEB",
-								"type": "text"
-							},
-							{
-								"key": "MT_COMPANY",
-								"value": "NEXI",
-								"type": "text"
-							},
-							{
-								"key": "MT_COMPANY_GROUP",
-								"value": "NEXI",
-								"type": "text"
-							},
-							{
-								"key": "MT_PARTNER",
-								"value": "NEXI",
-								"type": "text"
-							},
-							{
-								"key": "MT_REQUEST_ID",
-								"value": "NEXI",
-								"type": "text"
-							},
-							{
-								"key": "MT_SESSION_ID",
-								"value": "NEXI",
-								"type": "text"
-							},
-							{
-								"key": "MT_USER",
-								"value": "Test",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{ \n   \"mfaId\": \"{{mfaId}}\",\n   \"organization\": \"{{INPUT_organization}}\",\n   \"profileType\": \"{{INPUT_profileType}}\"\n }"
-						},
-						"url": {
-							"raw": "{{baseUrl}}/issuing/orch/mfa/v1/deleteDevices",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"issuing",
-								"orch",
-								"mfa",
-								"v1",
-								"deleteDevices"
-							]
-						},
-						"description": "Please, take a look to the swagger page for further details about the deleteDevice API:\n\n[https://intmt.private.nexicloud.it:4003/mt-services/issuing/orch/mfa/v1/swagger-ui.html#/Device](https://intmt.private.nexicloud.it:4003/mt-services/issuing/orch/mfa/v1/swagger-ui.html#/Device)\n\nThis collection needs a few mandatory parameters in order to be succefully run:\n\nINPUT_userEmailList (aka mfaId, e.g.: [insta.f@yopmail.com](mailto:insta.f@yopmail.com)) – This parameter also handles email lists, with newline separator character\n\nINPUT_organization (e.g. NEXI)\n\nINPUT_profileType (e.g. NEXI)\n\nA list of available organization and profileType values are listed here: [https://icbpijira.atlassian.net/wiki/spaces/SER/pages/1587249247/TA+Test+Data](https://icbpijira.atlassian.net/wiki/spaces/SER/pages/1587249247/TA+Test+Data)\n\nThe result of the collection is saved in the RESULT collection variable. An example of a result is the following:\n\n\\[ { \"userEmail\": [insta.f@yopmail.com](mailto:insta.f@yopmail.com), \"isSuccessfull\": \"true\", \"message\": \"Operation completed\" } \\]"
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json, text/plain, */*"
-									},
-									{
-										"key": "Accept-Language",
-										"value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
-									},
-									{
-										"key": "Application",
-										"value": "pt"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..SBRceJZAwKj51b3EOZ6nTw.L-Xu7IUG2uvlRDEFxs01IC1WBTGPQYBc2EISnCKY7ms2_wft__Vt7Mdl4sL9sjkgyAfSLj5hhDdQwv6WjUuBMO6v_Cv0DgNJy8E3pTsLy3RtGzfZQeqdeaRxSWReSE0oAiuDyXgXn3YZpyPvnH5HWXlfyDoX3--Dmc5eXi4zHZGlgd032a-jRhfIbm9TAEKl-Zki1po7xaVkUTra1l34rZ0_ymFY-2aTGZiOSxbLOU1ySat052QqSdY62M-3t0tsrlbm18otn2aXs-1B2wviX-3QeoAGJOkmvY7BRk3kq_sddum1OuVfiuml3le_kjORxJMDaHJF7fVh756ZG2xZKgeGz31ubm2nPOJQWvkK08KDZaiEKpOE1tZHa2C_xD2xCXkGU8rDPONxpomf0ZsEwft9UhnbL36u38ocYU65E8x2KsWnfyayKIQRuRc78WN4aCoMDlFrrsubMjZHmDzYF1Tf1K2qlU-Zxor8qy2CfiVubFHIRcApOPCcUUemg36bI1FL4PJCpYJifdJGxlb-2b2ZF5fuCBBK0F5huB5DTLWzyyUBCUtGvjRSFKJwni0McqJxy18dtGDh_TbqA6H-K7Xih7KyvJX9B7aQCkUev9QSc1OpTMeuerxm_grtr39wTj6Nmc67WdwbghTCeAsIL0W5qxdcB3aFhNrGGVjNAkDQ7ljnKj1C1HLghv8rp-e6sUn6x5Nz9_cjAsJZYSShq-dDxAnvCqYiwl2wYmlngPP-4GaUC1vbVtveTPrQIL_mkYCWLjRvkO8v0Jd-Pmlor7lzY0OL6Cv1_sqM9mMd2YfWnVMsazx-O67bUP2RD9NsVuB7opUU3xUhHbXkXJLwbFWGjHWrioThhqH3x4K3gnY_WWJ4eh51SZhYvrcnykpW3EnQ6jEQQw-Ex3WyZJlQu5UjETnv5mThlpeO-Jwc8MeusSDuNWTYaoEvlzd0-Opts2twHjItL7HtkukeIehgfAcUZbm6zqJXbkRaiLaQpQ1jmWauq3SZV1qgSt7wR_-tdYTMDkmo_1N51kv6AeJUYHtmm43NcPLKdM5QaMgNYktWxU9J6Yi885LZEyzJo7U3oKdCMC95fvA2K9afO7lObtl1durD3y6DLAf0FNKhoalG0exv0Ys0JkBXFOp-m2rALtDnEZ9t7hR2slzdixRamCwKXY-xUV4WEqzYZQ96psD5IhCxMy2mAjQzLOR4yx58AdRdeW8bkvVPybw3Pb3cFpUq3G-iUCPoJ26NWwaszPuEzEmBbzdz3c1ucZy-rfblPwr7zWuhDe6v8-UTu9uN7OsDvAbA8CRdBGZiUGtD-bu4eeZcxpysbXS75u34OgikoergY2rm0jkjHJ0Gu5mujuo3olnsj3xIsaaRYMXl8D5Y1qX2o9gRp12AAqdyhV8x7aFzokPFlRqc5G4rF1PQtjARnfc0WxFqwNSuYF9XBz9kzd3uKnBRRnd4nA7p360LLwgi1RJt657BCHOX071yTg.LG0rEjJxM6BhBn4kxZMHE4C3NphYy5fmxNf23idqrWI"
-									},
-									{
-										"key": "Cache-Control",
-										"value": "no-cache"
-									},
-									{
-										"key": "Channel",
-										"value": "web"
-									},
-									{
-										"key": "Client-Version",
-										"value": "[object Object]"
-									},
-									{
-										"key": "Connection",
-										"value": "keep-alive"
-									},
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Cookie",
-										"value": "binc=356f170ef1c8a352b0444691acfd0a66; warInfo=true; _hjSessionUser_660420=eyJpZCI6IjdlYzMzZmRjLTQzYWUtNTgxZi1iNWVkLTQxY2EyMDAzYmIwOCIsImNyZWF0ZWQiOjE2NDkxNTA1NDg2MDQsImV4aXN0aW5nIjp0cnVlfQ==; _hjSessionUser_1559303=eyJpZCI6IjZlM2E0NjhlLWU0ZDUtNTMxNS1hODViLTFiZWU5N2VkZjUyZiIsImNyZWF0ZWQiOjE2NDkxNTA1ODI3NjgsImV4aXN0aW5nIjp0cnVlfQ==; wpamm_cookie=2216253355640699831952000000000000000000000; _sfid_2d72={%22anonymousId%22:%22879b639d2bf9b5d1%22%2C%22consents%22:[]}; _hjSessionUser_643217=eyJpZCI6ImU1ZjU5MWQ5LTgwZjUtNTAzMi04M2U5LTAxMmQxZGI2ZDkyNiIsImNyZWF0ZWQiOjE2NDkyMzQ4NjE2NTgsImV4aXN0aW5nIjp0cnVlfQ==; __utmz=70129551.1649766724.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _hjSessionUser_653229=eyJpZCI6IjI5OTQzOGUwLTdlMjAtNWJkMy1iMjdjLTVlMjZiMzkwZmNiZiIsImNyZWF0ZWQiOjE2NDk3NjY2NDE5MzEsImV4aXN0aW5nIjp0cnVlfQ==; __utma=70129551.1652870361.1649150548.1649766724.1649843799.2; loginPage=/login-titolari.html; _evga_0f23={%22uuid%22:%22879b639d2bf9b5d1%22%2C%22puid%22:%22cdLT5AcZd5GQHjquvfiAI8S_ZHdMkugWtLCw0XLEB-97HRCiplxX9f21xqwAQDa_sjDnb2G9N7lZmF8IXWytJnGe0gh1G26Ih6eoHm4Zn3Y%22%2C%22affinityId%22:%2200L%22}; _evga_b04f={%22uuid%22:%22879b639d2bf9b5d1%22}; _ga_VN9X0RS717=GS1.1.1656555962.2.1.1656556308.0; cpa_pt_1.0.8={\"googleanalytics\":1,\"hotjar\":1,\"cleafy\":1}; _gcl_au=1.1.444516622.1658987462; _ga_33NYHFVJQZ=GS1.1.1659091072.5.0.1659091072.0; _gid=GA1.2.1618165898.1659359831; at_check=true; AMCVS_6A724E255ED5F2A60A495E0E%40AdobeOrg=1; AMCV_6A724E255ED5F2A60A495E0E%40AdobeOrg=1176715910%7CMCIDTS%7C19208%7CMCMID%7C26219392889104961471451979299134740425%7CMCAAMLH-1660112160%7C6%7CMCAAMB-1660112160%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1659514560s%7CNONE%7CMCSYNCSOP%7C411-19095%7CvVersion%7C5.4.0; lb_cookie_privati=\"908ce55a02212c8c2082dac152c226fa80b55f7bdfc031cbd90788f8ac37117f pero\"; did=; lb_cookie2=\"3053b47acf521572861ba3bb4f3c37546d524ccee1db330b52b6b1bccc8aa804 settimo\"; TS014fe49d=013f6cf2fb18d5f0f936f840ffcc9d0c8c4c918ba20c746ae120ee8e56fd973a2b7d35effff17ccf2639a4762071bce5aa99887e387eb91096cbb48cfe4537073b1f6871ee928d9404fbc5fa997522b6efb2ffd357; _hjSession_660420=eyJpZCI6IjA3OTBlYTAxLWFhNjAtNDMxZS1hMjRlLWQ3NDNmYWRiZjE0NyIsImNyZWF0ZWQiOjE2NTk1MTA1NDk0OTUsImluU2FtcGxlIjp0cnVlfQ==; _hjAbsoluteSessionInProgress=1; mbox=PC#4b72bc2f784b4aaeba940575514214a0.37_0#1722755357|session#6efa198249004ee1aa84e53a290aca22#1659512417; ncsi=dccda87a15ad8e6e5886e4cd0a73514e; TS01be1f7b=018954f1f74cecc67bfb69f64692cb1d3fd23d7c4b96048481114236df0752797afc6f7d0fa9e48e5a0ab813ecd75746bb6f310074; _ga_2EQBRC1CMY=GS1.1.1659512438.149.0.1659512438.0; lb_cookie=rd9o00000000000000000000ffff0a0a08c2o8443; _ga=GA1.2.1652870361.1649150548; TS01212c3f=01fedd2996dd5ca05872d787954664c8b7f1cd5237f335ec6518450bf16e2847596456e9dfb1a1773efdd8a09d4250a0e6e8e545a3; _ga_T4G92Y2MH2=GS1.1.1659512443.87.1.1659512707.0"
-									},
-									{
-										"key": "Env",
-										"value": "STAGING"
-									},
-									{
-										"key": "Locale",
-										"value": "it"
-									},
-									{
-										"key": "Macro-Context",
-										"value": "/profileRoutes/deviceManagement"
-									},
-									{
-										"key": "Micro-Context",
-										"value": "REMOVE_DEVICE"
-									},
-									{
-										"key": "Origin",
-										"value": "https://stgprivatiiam.nexi.it"
-									},
-									{
-										"key": "Otp",
-										"value": "286530"
-									},
-									{
-										"key": "Pragma",
-										"value": "no-cache"
-									},
-									{
-										"key": "Referer",
-										"value": "https://stgprivatiiam.nexi.it/profileRoutes/deviceManagement"
-									},
-									{
-										"key": "Sec-Fetch-Dest",
-										"value": "empty"
-									},
-									{
-										"key": "Sec-Fetch-Mode",
-										"value": "cors"
-									},
-									{
-										"key": "Sec-Fetch-Site",
-										"value": "same-origin"
-									},
-									{
-										"key": "User-Agent",
-										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
-									},
-									{
-										"key": "additionalInfo",
-										"value": "eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.3jDJI-T8vU7TPgFZobHDaPvj9dn2aJBicc71eCzwE8JQjfrergUP2C5YEr_7rLjGiMsw39l-3j2MlgdwQqx7kgmH94Q25m4Y.nSjN1OT3TEoXH_PyOVyjgw.Wujv3D0Y5_Tqfm40PuUTrlrobYdDaZJpVhOWBTPo7I8.8Ippzr7OLbfh9jI_uljDKoXVrsHSwjKKUPkKtLm88X8"
-									},
-									{
-										"key": "checkOutcome",
-										"value": "N"
-									},
-									{
-										"key": "forceChannel",
-										"value": "N"
-									},
-									{
-										"key": "mtTransactionId",
-										"value": "f0b53abd-e67c-47e7-b571-25aba911b915"
-									},
-									{
-										"key": "riskIT",
-										"value": "\"{\\\"deviceSignature\\\":\\\"{\\\\\\\"VERSION\\\\\\\":\\\\\\\"2.1.2\\\\\\\",\\\\\\\"MFP\\\\\\\":{\\\\\\\"Browser\\\\\\\":{\\\\\\\"UserAgent\\\\\\\":\\\\\\\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36\\\\\\\",\\\\\\\"Vendor\\\\\\\":\\\\\\\"Google Inc.\\\\\\\",\\\\\\\"VendorSubID\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"BuildID\\\\\\\":\\\\\\\"20030107\\\\\\\",\\\\\\\"CookieEnabled\\\\\\\":true},\\\\\\\"IEPlugins\\\\\\\":{},\\\\\\\"NetscapePlugins\\\\\\\":{\\\\\\\"PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chrome PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chromium PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Microsoft Edge PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"WebKit built-in PDF\\\\\\\":\\\\\\\"\\\\\\\"},\\\\\\\"Screen\\\\\\\":{\\\\\\\"FullHeight\\\\\\\":864,\\\\\\\"AvlHeight\\\\\\\":824,\\\\\\\"FullWidth\\\\\\\":1536,\\\\\\\"AvlWidth\\\\\\\":1536,\\\\\\\"ColorDepth\\\\\\\":24,\\\\\\\"PixelDepth\\\\\\\":24},\\\\\\\"System\\\\\\\":{\\\\\\\"Platform\\\\\\\":\\\\\\\"Win32\\\\\\\",\\\\\\\"systemLanguage\\\\\\\":\\\\\\\"it-IT\\\\\\\",\\\\\\\"Timezone\\\\\\\":-120}},\\\\\\\"ExternalIP\\\\\\\":\\\\\\\"__IP__\\\\\\\",\\\\\\\"MESC\\\\\\\":{\\\\\\\"mesc\\\\\\\":\\\\\\\"mi=2;cd=150;id=45;mesc=490545;mesc=466117\\\\\\\"}}\\\"}\""
-									},
-									{
-										"key": "sec-ch-ua",
-										"value": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\""
-									},
-									{
-										"key": "sec-ch-ua-mobile",
-										"value": "?0"
-									},
-									{
-										"key": "sec-ch-ua-platform",
-										"value": "\"Windows\""
-									},
-									{
-										"key": "transactionData",
-										"value": "carta_da_attivare2@yopmail.com||||||72fe3e7f70f94be0816581ef11756acf||VU+AEsPvKwOKbp8GmAR6blfz8SM+T0TTd572WPAMbaU="
-									},
-									{
-										"key": "transactionId",
-										"value": "72fe3e7f70f94be0816581ef11756acf"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"deviceId\": \"10003659\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://stgprivatiiam.nexi.it/api/services/device-management-service/sca/delete-device-mfa",
-									"protocol": "https",
-									"host": [
-										"stgprivatiiam",
-										"nexi",
-										"it"
-									],
-									"path": [
-										"api",
-										"services",
-										"device-management-service",
-										"sca",
-										"delete-device-mfa"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\n    \"cardContextRefreshRequired\": false,\n    \"skipContextRefresh\": false,\n    \"client\": {\n        \"application\": \"pt\",\n        \"channel\": \"web\",\n        \"locale\": \"it\",\n        \"version\": \"[object Object]\"\n    },\n    \"commercialCardContextRefreshRequired\": false,\n    \"commercialSkipContextRefresh\": false,\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"status\": \"200\",\n    \"message\": \"Operation completed\"\n}"
-						},
-						{
-							"name": "401",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json, text/plain, */*"
-									},
-									{
-										"key": "Accept-Language",
-										"value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
-									},
-									{
-										"key": "Application",
-										"value": "pt"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..SBRceJZAwKj51b3EOZ6nTw.L-Xu7IUG2uvlRDEFxs01IC1WBTGPQYBc2EISnCKY7ms2_wft__Vt7Mdl4sL9sjkgyAfSLj5hhDdQwv6WjUuBMO6v_Cv0DgNJy8E3pTsLy3RtGzfZQeqdeaRxSWReSE0oAiuDyXgXn3YZpyPvnH5HWXlfyDoX3--Dmc5eXi4zHZGlgd032a-jRhfIbm9TAEKl-Zki1po7xaVkUTra1l34rZ0_ymFY-2aTGZiOSxbLOU1ySat052QqSdY62M-3t0tsrlbm18otn2aXs-1B2wviX-3QeoAGJOkmvY7BRk3kq_sddum1OuVfiuml3le_kjORxJMDaHJF7fVh756ZG2xZKgeGz31ubm2nPOJQWvkK08KDZaiEKpOE1tZHa2C_xD2xCXkGU8rDPONxpomf0ZsEwft9UhnbL36u38ocYU65E8x2KsWnfyayKIQRuRc78WN4aCoMDlFrrsubMjZHmDzYF1Tf1K2qlU-Zxor8qy2CfiVubFHIRcApOPCcUUemg36bI1FL4PJCpYJifdJGxlb-2b2ZF5fuCBBK0F5huB5DTLWzyyUBCUtGvjRSFKJwni0McqJxy18dtGDh_TbqA6H-K7Xih7KyvJX9B7aQCkUev9QSc1OpTMeuerxm_grtr39wTj6Nmc67WdwbghTCeAsIL0W5qxdcB3aFhNrGGVjNAkDQ7ljnKj1C1HLghv8rp-e6sUn6x5Nz9_cjAsJZYSShq-dDxAnvCqYiwl2wYmlngPP-4GaUC1vbVtveTPrQIL_mkYCWLjRvkO8v0Jd-Pmlor7lzY0OL6Cv1_sqM9mMd2YfWnVMsazx-O67bUP2RD9NsVuB7opUU3xUhHbXkXJLwbFWGjHWrioThhqH3x4K3gnY_WWJ4eh51SZhYvrcnykpW3EnQ6jEQQw-Ex3WyZJlQu5UjETnv5mThlpeO-Jwc8MeusSDuNWTYaoEvlzd0-Opts2twHjItL7HtkukeIehgfAcUZbm6zqJXbkRaiLaQpQ1jmWauq3SZV1qgSt7wR_-tdYTMDkmo_1N51kv6AeJUYHtmm43NcPLKdM5QaMgNYktWxU9J6Yi885LZEyzJo7U3oKdCMC95fvA2K9afO7lObtl1durD3y6DLAf0FNKhoalG0exv0Ys0JkBXFOp-m2rALtDnEZ9t7hR2slzdixRamCwKXY-xUV4WEqzYZQ96psD5IhCxMy2mAjQzLOR4yx58AdRdeW8bkvVPybw3Pb3cFpUq3G-iUCPoJ26NWwaszPuEzEmBbzdz3c1ucZy-rfblPwr7zWuhDe6v8-UTu9uN7OsDvAbA8CRdBGZiUGtD-bu4eeZcxpysbXS75u34OgikoergY2rm0jkjHJ0Gu5mujuo3olnsj3xIsaaRYMXl8D5Y1qX2o9gRp12AAqdyhV8x7aFzokPFlRqc5G4rF1PQtjARnfc0WxFqwNSuYF9XBz9kzd3uKnBRRnd4nA7p360LLwgi1RJt657BCHOX071yTg.LG0rEjJxM6BhBn4kxZMHE4C3NphYy5fmxNf23idqrWI"
-									},
-									{
-										"key": "Cache-Control",
-										"value": "no-cache"
-									},
-									{
-										"key": "Channel",
-										"value": "web"
-									},
-									{
-										"key": "Client-Version",
-										"value": "[object Object]"
-									},
-									{
-										"key": "Connection",
-										"value": "keep-alive"
-									},
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Cookie",
-										"value": "binc=356f170ef1c8a352b0444691acfd0a66; warInfo=true; _hjSessionUser_660420=eyJpZCI6IjdlYzMzZmRjLTQzYWUtNTgxZi1iNWVkLTQxY2EyMDAzYmIwOCIsImNyZWF0ZWQiOjE2NDkxNTA1NDg2MDQsImV4aXN0aW5nIjp0cnVlfQ==; _hjSessionUser_1559303=eyJpZCI6IjZlM2E0NjhlLWU0ZDUtNTMxNS1hODViLTFiZWU5N2VkZjUyZiIsImNyZWF0ZWQiOjE2NDkxNTA1ODI3NjgsImV4aXN0aW5nIjp0cnVlfQ==; wpamm_cookie=2216253355640699831952000000000000000000000; _sfid_2d72={%22anonymousId%22:%22879b639d2bf9b5d1%22%2C%22consents%22:[]}; _hjSessionUser_643217=eyJpZCI6ImU1ZjU5MWQ5LTgwZjUtNTAzMi04M2U5LTAxMmQxZGI2ZDkyNiIsImNyZWF0ZWQiOjE2NDkyMzQ4NjE2NTgsImV4aXN0aW5nIjp0cnVlfQ==; __utmz=70129551.1649766724.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _hjSessionUser_653229=eyJpZCI6IjI5OTQzOGUwLTdlMjAtNWJkMy1iMjdjLTVlMjZiMzkwZmNiZiIsImNyZWF0ZWQiOjE2NDk3NjY2NDE5MzEsImV4aXN0aW5nIjp0cnVlfQ==; __utma=70129551.1652870361.1649150548.1649766724.1649843799.2; loginPage=/login-titolari.html; _evga_0f23={%22uuid%22:%22879b639d2bf9b5d1%22%2C%22puid%22:%22cdLT5AcZd5GQHjquvfiAI8S_ZHdMkugWtLCw0XLEB-97HRCiplxX9f21xqwAQDa_sjDnb2G9N7lZmF8IXWytJnGe0gh1G26Ih6eoHm4Zn3Y%22%2C%22affinityId%22:%2200L%22}; _evga_b04f={%22uuid%22:%22879b639d2bf9b5d1%22}; _ga_VN9X0RS717=GS1.1.1656555962.2.1.1656556308.0; cpa_pt_1.0.8={\"googleanalytics\":1,\"hotjar\":1,\"cleafy\":1}; _gcl_au=1.1.444516622.1658987462; _ga_33NYHFVJQZ=GS1.1.1659091072.5.0.1659091072.0; _gid=GA1.2.1618165898.1659359831; at_check=true; AMCVS_6A724E255ED5F2A60A495E0E%40AdobeOrg=1; AMCV_6A724E255ED5F2A60A495E0E%40AdobeOrg=1176715910%7CMCIDTS%7C19208%7CMCMID%7C26219392889104961471451979299134740425%7CMCAAMLH-1660112160%7C6%7CMCAAMB-1660112160%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1659514560s%7CNONE%7CMCSYNCSOP%7C411-19095%7CvVersion%7C5.4.0; lb_cookie_privati=\"908ce55a02212c8c2082dac152c226fa80b55f7bdfc031cbd90788f8ac37117f pero\"; did=; lb_cookie2=\"3053b47acf521572861ba3bb4f3c37546d524ccee1db330b52b6b1bccc8aa804 settimo\"; TS014fe49d=013f6cf2fb18d5f0f936f840ffcc9d0c8c4c918ba20c746ae120ee8e56fd973a2b7d35effff17ccf2639a4762071bce5aa99887e387eb91096cbb48cfe4537073b1f6871ee928d9404fbc5fa997522b6efb2ffd357; _hjSession_660420=eyJpZCI6IjA3OTBlYTAxLWFhNjAtNDMxZS1hMjRlLWQ3NDNmYWRiZjE0NyIsImNyZWF0ZWQiOjE2NTk1MTA1NDk0OTUsImluU2FtcGxlIjp0cnVlfQ==; _hjAbsoluteSessionInProgress=1; mbox=PC#4b72bc2f784b4aaeba940575514214a0.37_0#1722755357|session#6efa198249004ee1aa84e53a290aca22#1659512417; ncsi=dccda87a15ad8e6e5886e4cd0a73514e; TS01be1f7b=018954f1f74cecc67bfb69f64692cb1d3fd23d7c4b96048481114236df0752797afc6f7d0fa9e48e5a0ab813ecd75746bb6f310074; _ga_2EQBRC1CMY=GS1.1.1659512438.149.0.1659512438.0; lb_cookie=rd9o00000000000000000000ffff0a0a08c2o8443; _ga=GA1.2.1652870361.1649150548; TS01212c3f=01fedd2996dd5ca05872d787954664c8b7f1cd5237f335ec6518450bf16e2847596456e9dfb1a1773efdd8a09d4250a0e6e8e545a3; _ga_T4G92Y2MH2=GS1.1.1659512443.87.1.1659512707.0"
-									},
-									{
-										"key": "Env",
-										"value": "STAGING"
-									},
-									{
-										"key": "Locale",
-										"value": "it"
-									},
-									{
-										"key": "Macro-Context",
-										"value": "/profileRoutes/deviceManagement"
-									},
-									{
-										"key": "Micro-Context",
-										"value": "REMOVE_DEVICE"
-									},
-									{
-										"key": "Origin",
-										"value": "https://stgprivatiiam.nexi.it"
-									},
-									{
-										"key": "Otp",
-										"value": "286530"
-									},
-									{
-										"key": "Pragma",
-										"value": "no-cache"
-									},
-									{
-										"key": "Referer",
-										"value": "https://stgprivatiiam.nexi.it/profileRoutes/deviceManagement"
-									},
-									{
-										"key": "Sec-Fetch-Dest",
-										"value": "empty"
-									},
-									{
-										"key": "Sec-Fetch-Mode",
-										"value": "cors"
-									},
-									{
-										"key": "Sec-Fetch-Site",
-										"value": "same-origin"
-									},
-									{
-										"key": "User-Agent",
-										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
-									},
-									{
-										"key": "additionalInfo",
-										"value": "eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.3jDJI-T8vU7TPgFZobHDaPvj9dn2aJBicc71eCzwE8JQjfrergUP2C5YEr_7rLjGiMsw39l-3j2MlgdwQqx7kgmH94Q25m4Y.nSjN1OT3TEoXH_PyOVyjgw.Wujv3D0Y5_Tqfm40PuUTrlrobYdDaZJpVhOWBTPo7I8.8Ippzr7OLbfh9jI_uljDKoXVrsHSwjKKUPkKtLm88X8"
-									},
-									{
-										"key": "checkOutcome",
-										"value": "N"
-									},
-									{
-										"key": "forceChannel",
-										"value": "N"
-									},
-									{
-										"key": "mtTransactionId",
-										"value": "f0b53abd-e67c-47e7-b571-25aba911b915"
-									},
-									{
-										"key": "riskIT",
-										"value": "\"{\\\"deviceSignature\\\":\\\"{\\\\\\\"VERSION\\\\\\\":\\\\\\\"2.1.2\\\\\\\",\\\\\\\"MFP\\\\\\\":{\\\\\\\"Browser\\\\\\\":{\\\\\\\"UserAgent\\\\\\\":\\\\\\\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36\\\\\\\",\\\\\\\"Vendor\\\\\\\":\\\\\\\"Google Inc.\\\\\\\",\\\\\\\"VendorSubID\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"BuildID\\\\\\\":\\\\\\\"20030107\\\\\\\",\\\\\\\"CookieEnabled\\\\\\\":true},\\\\\\\"IEPlugins\\\\\\\":{},\\\\\\\"NetscapePlugins\\\\\\\":{\\\\\\\"PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chrome PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chromium PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Microsoft Edge PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"WebKit built-in PDF\\\\\\\":\\\\\\\"\\\\\\\"},\\\\\\\"Screen\\\\\\\":{\\\\\\\"FullHeight\\\\\\\":864,\\\\\\\"AvlHeight\\\\\\\":824,\\\\\\\"FullWidth\\\\\\\":1536,\\\\\\\"AvlWidth\\\\\\\":1536,\\\\\\\"ColorDepth\\\\\\\":24,\\\\\\\"PixelDepth\\\\\\\":24},\\\\\\\"System\\\\\\\":{\\\\\\\"Platform\\\\\\\":\\\\\\\"Win32\\\\\\\",\\\\\\\"systemLanguage\\\\\\\":\\\\\\\"it-IT\\\\\\\",\\\\\\\"Timezone\\\\\\\":-120}},\\\\\\\"ExternalIP\\\\\\\":\\\\\\\"__IP__\\\\\\\",\\\\\\\"MESC\\\\\\\":{\\\\\\\"mesc\\\\\\\":\\\\\\\"mi=2;cd=150;id=45;mesc=490545;mesc=466117\\\\\\\"}}\\\"}\""
-									},
-									{
-										"key": "sec-ch-ua",
-										"value": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\""
-									},
-									{
-										"key": "sec-ch-ua-mobile",
-										"value": "?0"
-									},
-									{
-										"key": "sec-ch-ua-platform",
-										"value": "\"Windows\""
-									},
-									{
-										"key": "transactionData",
-										"value": "carta_da_attivare2@yopmail.com||||||72fe3e7f70f94be0816581ef11756acf||VU+AEsPvKwOKbp8GmAR6blfz8SM+T0TTd572WPAMbaU="
-									},
-									{
-										"key": "transactionId",
-										"value": "72fe3e7f70f94be0816581ef11756acf"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"deviceId\": \"10003659\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://stgprivatiiam.nexi.it/api/services/device-management-service/sca/delete-device-mfa",
-									"protocol": "https",
-									"host": [
-										"stgprivatiiam",
-										"nexi",
-										"it"
-									],
-									"path": [
-										"api",
-										"services",
-										"device-management-service",
-										"sca",
-										"delete-device-mfa"
-									]
-								}
-							},
-							"status": "Unauthorized",
-							"code": 401,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json",
-									"name": "Content-Type",
-									"description": "",
-									"type": "text"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"result\": {\n        \"code\": \"E9040NOAUTH\",\n        \"description\": \"Authorization validation failed\"\n    }\n}"
-						},
-						{
-							"name": "Unauthorized",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json, text/plain, */*"
-									},
-									{
-										"key": "Accept-Language",
-										"value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
-									},
-									{
-										"key": "Application",
-										"value": "pt"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..SBRceJZAwKj51b3EOZ6nTw.L-Xu7IUG2uvlRDEFxs01IC1WBTGPQYBc2EISnCKY7ms2_wft__Vt7Mdl4sL9sjkgyAfSLj5hhDdQwv6WjUuBMO6v_Cv0DgNJy8E3pTsLy3RtGzfZQeqdeaRxSWReSE0oAiuDyXgXn3YZpyPvnH5HWXlfyDoX3--Dmc5eXi4zHZGlgd032a-jRhfIbm9TAEKl-Zki1po7xaVkUTra1l34rZ0_ymFY-2aTGZiOSxbLOU1ySat052QqSdY62M-3t0tsrlbm18otn2aXs-1B2wviX-3QeoAGJOkmvY7BRk3kq_sddum1OuVfiuml3le_kjORxJMDaHJF7fVh756ZG2xZKgeGz31ubm2nPOJQWvkK08KDZaiEKpOE1tZHa2C_xD2xCXkGU8rDPONxpomf0ZsEwft9UhnbL36u38ocYU65E8x2KsWnfyayKIQRuRc78WN4aCoMDlFrrsubMjZHmDzYF1Tf1K2qlU-Zxor8qy2CfiVubFHIRcApOPCcUUemg36bI1FL4PJCpYJifdJGxlb-2b2ZF5fuCBBK0F5huB5DTLWzyyUBCUtGvjRSFKJwni0McqJxy18dtGDh_TbqA6H-K7Xih7KyvJX9B7aQCkUev9QSc1OpTMeuerxm_grtr39wTj6Nmc67WdwbghTCeAsIL0W5qxdcB3aFhNrGGVjNAkDQ7ljnKj1C1HLghv8rp-e6sUn6x5Nz9_cjAsJZYSShq-dDxAnvCqYiwl2wYmlngPP-4GaUC1vbVtveTPrQIL_mkYCWLjRvkO8v0Jd-Pmlor7lzY0OL6Cv1_sqM9mMd2YfWnVMsazx-O67bUP2RD9NsVuB7opUU3xUhHbXkXJLwbFWGjHWrioThhqH3x4K3gnY_WWJ4eh51SZhYvrcnykpW3EnQ6jEQQw-Ex3WyZJlQu5UjETnv5mThlpeO-Jwc8MeusSDuNWTYaoEvlzd0-Opts2twHjItL7HtkukeIehgfAcUZbm6zqJXbkRaiLaQpQ1jmWauq3SZV1qgSt7wR_-tdYTMDkmo_1N51kv6AeJUYHtmm43NcPLKdM5QaMgNYktWxU9J6Yi885LZEyzJo7U3oKdCMC95fvA2K9afO7lObtl1durD3y6DLAf0FNKhoalG0exv0Ys0JkBXFOp-m2rALtDnEZ9t7hR2slzdixRamCwKXY-xUV4WEqzYZQ96psD5IhCxMy2mAjQzLOR4yx58AdRdeW8bkvVPybw3Pb3cFpUq3G-iUCPoJ26NWwaszPuEzEmBbzdz3c1ucZy-rfblPwr7zWuhDe6v8-UTu9uN7OsDvAbA8CRdBGZiUGtD-bu4eeZcxpysbXS75u34OgikoergY2rm0jkjHJ0Gu5mujuo3olnsj3xIsaaRYMXl8D5Y1qX2o9gRp12AAqdyhV8x7aFzokPFlRqc5G4rF1PQtjARnfc0WxFqwNSuYF9XBz9kzd3uKnBRRnd4nA7p360LLwgi1RJt657BCHOX071yTg.LG0rEjJxM6BhBn4kxZMHE4C3NphYy5fmxNf23idqrWI"
-									},
-									{
-										"key": "Channel",
-										"value": "web"
-									},
-									{
-										"key": "Client-Version",
-										"value": "[object Object]"
-									},
-									{
-										"key": "Cookie",
-										"value": "binc=356f170ef1c8a352b0444691acfd0a66; warInfo=true; _hjSessionUser_660420=eyJpZCI6IjdlYzMzZmRjLTQzYWUtNTgxZi1iNWVkLTQxY2EyMDAzYmIwOCIsImNyZWF0ZWQiOjE2NDkxNTA1NDg2MDQsImV4aXN0aW5nIjp0cnVlfQ==; _hjSessionUser_1559303=eyJpZCI6IjZlM2E0NjhlLWU0ZDUtNTMxNS1hODViLTFiZWU5N2VkZjUyZiIsImNyZWF0ZWQiOjE2NDkxNTA1ODI3NjgsImV4aXN0aW5nIjp0cnVlfQ==; wpamm_cookie=2216253355640699831952000000000000000000000; _sfid_2d72={%22anonymousId%22:%22879b639d2bf9b5d1%22%2C%22consents%22:[]}; _hjSessionUser_643217=eyJpZCI6ImU1ZjU5MWQ5LTgwZjUtNTAzMi04M2U5LTAxMmQxZGI2ZDkyNiIsImNyZWF0ZWQiOjE2NDkyMzQ4NjE2NTgsImV4aXN0aW5nIjp0cnVlfQ==; __utmz=70129551.1649766724.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _hjSessionUser_653229=eyJpZCI6IjI5OTQzOGUwLTdlMjAtNWJkMy1iMjdjLTVlMjZiMzkwZmNiZiIsImNyZWF0ZWQiOjE2NDk3NjY2NDE5MzEsImV4aXN0aW5nIjp0cnVlfQ==; __utma=70129551.1652870361.1649150548.1649766724.1649843799.2; loginPage=/login-titolari.html; _evga_0f23={%22uuid%22:%22879b639d2bf9b5d1%22%2C%22puid%22:%22cdLT5AcZd5GQHjquvfiAI8S_ZHdMkugWtLCw0XLEB-97HRCiplxX9f21xqwAQDa_sjDnb2G9N7lZmF8IXWytJnGe0gh1G26Ih6eoHm4Zn3Y%22%2C%22affinityId%22:%2200L%22}; _evga_b04f={%22uuid%22:%22879b639d2bf9b5d1%22}; _ga_VN9X0RS717=GS1.1.1656555962.2.1.1656556308.0; cpa_pt_1.0.8={\"googleanalytics\":1,\"hotjar\":1,\"cleafy\":1}; _gcl_au=1.1.444516622.1658987462; _ga_33NYHFVJQZ=GS1.1.1659091072.5.0.1659091072.0; _gid=GA1.2.1618165898.1659359831; at_check=true; AMCVS_6A724E255ED5F2A60A495E0E%40AdobeOrg=1; AMCV_6A724E255ED5F2A60A495E0E%40AdobeOrg=1176715910%7CMCIDTS%7C19208%7CMCMID%7C26219392889104961471451979299134740425%7CMCAAMLH-1660112160%7C6%7CMCAAMB-1660112160%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1659514560s%7CNONE%7CMCSYNCSOP%7C411-19095%7CvVersion%7C5.4.0; lb_cookie_privati=\"908ce55a02212c8c2082dac152c226fa80b55f7bdfc031cbd90788f8ac37117f pero\"; did=; lb_cookie2=\"3053b47acf521572861ba3bb4f3c37546d524ccee1db330b52b6b1bccc8aa804 settimo\"; TS014fe49d=013f6cf2fb18d5f0f936f840ffcc9d0c8c4c918ba20c746ae120ee8e56fd973a2b7d35effff17ccf2639a4762071bce5aa99887e387eb91096cbb48cfe4537073b1f6871ee928d9404fbc5fa997522b6efb2ffd357; _hjSession_660420=eyJpZCI6IjA3OTBlYTAxLWFhNjAtNDMxZS1hMjRlLWQ3NDNmYWRiZjE0NyIsImNyZWF0ZWQiOjE2NTk1MTA1NDk0OTUsImluU2FtcGxlIjp0cnVlfQ==; _hjAbsoluteSessionInProgress=1; mbox=PC#4b72bc2f784b4aaeba940575514214a0.37_0#1722755357|session#6efa198249004ee1aa84e53a290aca22#1659512417; ncsi=dccda87a15ad8e6e5886e4cd0a73514e; TS01be1f7b=018954f1f74cecc67bfb69f64692cb1d3fd23d7c4b96048481114236df0752797afc6f7d0fa9e48e5a0ab813ecd75746bb6f310074; _ga_2EQBRC1CMY=GS1.1.1659512438.149.0.1659512438.0; lb_cookie=rd9o00000000000000000000ffff0a0a08c2o8443; _ga=GA1.2.1652870361.1649150548; _gat_UA-3681719-36=1; _ga_T4G92Y2MH2=GS1.1.1659512443.87.1.1659512696.0; TS01212c3f=01fedd2996dd5ca05872d787954664c8b7f1cd5237f335ec6518450bf16e2847596456e9dfb1a1773efdd8a09d4250a0e6e8e545a3"
-									},
-									{
-										"key": "Env",
-										"value": "STAGING"
-									},
-									{
-										"key": "Locale",
-										"value": "it"
-									},
-									{
-										"key": "Macro-Context",
-										"value": "/profileRoutes/deviceManagement"
-									},
-									{
-										"key": "Micro-Context",
-										"value": "REMOVE_DEVICE"
-									},
-									{
-										"key": "Origin",
-										"value": "https://stgprivatiiam.nexi.it"
-									},
-									{
-										"key": "Otp",
-										"value": ""
-									},
-									{
-										"key": "Pragma",
-										"value": "no-cache"
-									},
-									{
-										"key": "Referer",
-										"value": "https://stgprivatiiam.nexi.it/profileRoutes/deviceManagement"
-									},
-									{
-										"key": "Sec-Fetch-Dest",
-										"value": "empty"
-									},
-									{
-										"key": "Sec-Fetch-Mode",
-										"value": "cors"
-									},
-									{
-										"key": "Sec-Fetch-Site",
-										"value": "same-origin"
-									},
-									{
-										"key": "User-Agent",
-										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
-									},
-									{
-										"key": "checkOutcome",
-										"value": "N"
-									},
-									{
-										"key": "mtTransactionId",
-										"value": ""
-									},
-									{
-										"key": "riskIT",
-										"value": "\"{\\\"deviceSignature\\\":\\\"{\\\\\\\"VERSION\\\\\\\":\\\\\\\"2.1.2\\\\\\\",\\\\\\\"MFP\\\\\\\":{\\\\\\\"Browser\\\\\\\":{\\\\\\\"UserAgent\\\\\\\":\\\\\\\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36\\\\\\\",\\\\\\\"Vendor\\\\\\\":\\\\\\\"Google Inc.\\\\\\\",\\\\\\\"VendorSubID\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"BuildID\\\\\\\":\\\\\\\"20030107\\\\\\\",\\\\\\\"CookieEnabled\\\\\\\":true},\\\\\\\"IEPlugins\\\\\\\":{},\\\\\\\"NetscapePlugins\\\\\\\":{\\\\\\\"PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chrome PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chromium PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Microsoft Edge PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"WebKit built-in PDF\\\\\\\":\\\\\\\"\\\\\\\"},\\\\\\\"Screen\\\\\\\":{\\\\\\\"FullHeight\\\\\\\":864,\\\\\\\"AvlHeight\\\\\\\":824,\\\\\\\"FullWidth\\\\\\\":1536,\\\\\\\"AvlWidth\\\\\\\":1536,\\\\\\\"ColorDepth\\\\\\\":24,\\\\\\\"PixelDepth\\\\\\\":24},\\\\\\\"System\\\\\\\":{\\\\\\\"Platform\\\\\\\":\\\\\\\"Win32\\\\\\\",\\\\\\\"systemLanguage\\\\\\\":\\\\\\\"it-IT\\\\\\\",\\\\\\\"Timezone\\\\\\\":-120}},\\\\\\\"ExternalIP\\\\\\\":\\\\\\\"__IP__\\\\\\\",\\\\\\\"MESC\\\\\\\":{\\\\\\\"mesc\\\\\\\":\\\\\\\"mi=2;cd=150;id=45;mesc=490545;mesc=466117\\\\\\\"}}\\\"}\""
-									},
-									{
-										"key": "sec-ch-ua",
-										"value": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\""
-									},
-									{
-										"key": "sec-ch-ua-mobile",
-										"value": "?0"
-									},
-									{
-										"key": "sec-ch-ua-platform",
-										"value": "\"Windows\""
-									},
-									{
-										"key": "transactionData",
-										"value": ""
-									},
-									{
-										"key": "transactionId",
-										"value": ""
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"deviceId\": \"10003659\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://stgprivatiiam.nexi.it/api/services/device-management-service/sca/delete-device-mfa",
-									"protocol": "https",
-									"host": [
-										"stgprivatiiam",
-										"nexi",
-										"it"
-									],
-									"path": [
-										"api",
-										"services",
-										"device-management-service",
-										"sca",
-										"delete-device-mfa"
-									]
-								}
-							},
-							"status": "Unauthorized",
-							"code": 401,
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\n    \"errmsg\": \"Unauthorized\",\n    \"errcode\": \"Unauthorized\"\n}"
-						},
-						{
-							"name": "No Enrolled Device",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "MT_APPLICATION",
-										"value": "CH",
-										"type": "text"
-									},
-									{
-										"key": "MT_CHANNEL",
-										"value": "WEB",
-										"type": "text"
-									},
-									{
-										"key": "MT_COMPANY",
-										"value": "NEXI",
-										"type": "text"
-									},
-									{
-										"key": "MT_COMPANY_GROUP",
-										"value": "NEXI",
-										"type": "text"
-									},
-									{
-										"key": "MT_PARTNER",
-										"value": "NEXI",
-										"type": "text"
-									},
-									{
-										"key": "MT_REQUEST_ID",
-										"value": "NEXI",
-										"type": "text"
-									},
-									{
-										"key": "MT_SESSION_ID",
-										"value": "NEXI",
-										"type": "text"
-									},
-									{
-										"key": "MT_USER",
-										"value": "Test",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"mfaId\": \"UTENZA_CHB_21@YOPMAIL.COM\",\n    \"organization\": \"NEXI\",\n    \"profileType\": \"NEXI\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/issuing/orch/mfa/v1/deleteDevices",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"issuing",
-										"orch",
-										"mfa",
-										"v1",
-										"deleteDevices"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\n  \"result\": {\n    \"code\": \"-8100\",\n    \"description\": \"Risk Engine error.\",\n    \"infos\": [\n      {\n        \"source\": \"deleteDevice\",\n        \"code\": \"-8103\",\n        \"description\": \"Bad request.\"\n      },\n      {\n        \"code\": \"-8110\",\n        \"description\": \"No enrolled profile for user.\"\n      }\n    ]\n  },\n  \"status\": \"5712\",\n  \"message\": \"No enrolled profile for user UTENZA_CHB_21@YOPMAIL.COM\"\n}"
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "20 - Report",
-			"item": [
-				{
-					"name": "Write Result report",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"console.info(\"Update Result\")",
-									"",
-									"// Create the updateResult object",
-									"const updateResult = {",
-									"    mfaId: pm.collectionVariables.get(\"mfaId\"),",
-									"    userEmail: pm.collectionVariables.get(\"userEmail\"),",
-									"    isSuccessfull: pm.collectionVariables.get(\"isSuccessful\"),",
-									"    message: pm.collectionVariables.get(\"message\")",
-									"}",
-									"",
-									"// Get the existing result from collection variables and parse it",
-									"const existingResultJSON = pm.environment.get(\"RESULT\")",
-									"const existingResult = JSON.parse(existingResultJSON)",
-									"",
-									"// Push the updateResult into the existing result array",
-									"existingResult.push(updateResult)",
-									"",
-									"// Set the updated result back to collection variables",
-									"pm.environment.set(\"RESULT\", JSON.stringify(existingResult, null, 2))"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://google.it",
-							"protocol": "http",
-							"host": [
-								"google",
-								"it"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Set next request",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"console.info(\"Set next request\")",
-									"",
-									"const list = JSON.parse(pm.collectionVariables.get(\"mfaIdList\")) || []",
-									"",
-									"if (list.length > 0)",
-									"    postman.setNextRequest(\"Safe wait\")",
-									"else {",
-									"    console.info(\"End of input data reached.\")",
-									"    postman.setNextRequest(null)",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://google.it",
-							"protocol": "http",
-							"host": [
-								"google",
-								"it"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Safe wait",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"console.info(\"Please wait...\");",
-									"setTimeout(function() {",
-									"    postman.setNextRequest(\"Start loop\");",
-									"}, 1000); // 1000 milliseconds (1 seconds) delay"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"accept": true
-						},
-						"disableBodyPruning": true,
-						"followRedirects": false
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://google.it",
-							"protocol": "http",
-							"host": [
-								"google",
-								"it"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "{{jwtToken}}",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "INPUT_mfaIdList",
-			"value": "UTENZA_CHB_21@YOPMAIL.COM\nUTENZA_CHB_21@YOPMAIL.COM",
-			"type": "string"
-		},
-		{
-			"key": "INPUT_organization",
-			"value": "NEXI",
-			"type": "string"
-		},
-		{
-			"key": "INPUT_profileType",
-			"value": "NEXI",
-			"type": "string"
-		},
-		{
-			"key": "RESULT",
-			"value": "[]",
-			"type": "string"
-		},
-		{
-			"key": "baseUrl",
-			"value": "{{apigwServer}}/mt-services",
-			"type": "string"
-		},
-		{
-			"key": "MT_APPLICATION",
-			"value": "{{MT_APPLICATION_ENV}}",
-			"type": "string"
-		},
-		{
-			"key": "MT_CHANNEL",
-			"value": "{{MT_CHANNEL_ENV}}",
-			"type": "string"
-		},
-		{
-			"key": "MT_COMPANY",
-			"value": "{{MT_COMPANY_ENV}}",
-			"type": "string"
-		},
-		{
-			"key": "MT_COMPANY_GROUP",
-			"value": "{{MT_COMPANY_GROUP_ENV}}",
-			"type": "string"
-		},
-		{
-			"key": "MT_PARTNER",
-			"value": "{{MT_PARTNER_ENV}}",
-			"type": "string"
-		},
-		{
-			"key": "MT_REQUEST_ID",
-			"value": "{{MT_REQUEST_ID_ENV}}",
-			"type": "string"
-		},
-		{
-			"key": "MT_SESSION_ID",
-			"value": "{{MT_SESSION_ID_ENV}}",
-			"type": "string"
-		},
-		{
-			"key": "FUN_extractEmails",
-			"value": "function extractEmails(text) {\n    const regex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+)/gi\n    return text.match(regex)\n}",
-			"type": "string"
-		},
-		{
-			"key": "mfaIdList",
-			"value": ""
-		},
-		{
-			"key": "jwtToken",
-			"value": ""
-		},
-		{
-			"key": "mfaId",
-			"value": ""
-		},
-		{
-			"key": "isSuccessful",
-			"value": ""
-		},
-		{
-			"key": "message",
-			"value": ""
-		},
-		{
-			"key": "code",
-			"value": ""
-		},
-		{
-			"key": "description",
-			"value": ""
-		},
-		{
-			"key": "errmsg",
-			"value": ""
-		},
-		{
-			"key": "errcode",
-			"value": ""
-		}
-	]
+  "info": {
+    "_postman_id": "11553790-6193-4fd4-af25-f83cea19b36c",
+    "name": "[ACCOUNT] [INT] [STG] - Delete Devices",
+    "description": "Works on both INT and STG environments.\n\nThe official documentation can be found here:\n\n[https://intmt.private.nexicloud.it:4003/mt-services/issuing/orch/mfa/v1/swagger-ui.html#!/Device/deleteDevices]()\n\nThis collection should delete all user devices.\n\nThis collection depends on a number of INPUT fields:\n\n- INPUT_mfaIdList (mandatory) – This parameter also handles email lists, with newline separator character\n- INPUT_organization (mandatory)\n- INPUT_profileType (mandatory)\n\n\nThe result of the collection is saved in the RESULT collection variable. An example of a result is the following\n    \n\nUsage:\n\n- Reset collection variables;\n- Set \"INPUT_\" prefixed parameters as your needs;\n- Run the collection.\n    \n\nE.g.:\n\n``` json\n[\n  {\n    \"userEmail\": \"insta.f@yopmail.com\",\n    \"isSuccessfull\": \"true\",\n    \"message\": \"Operation completed\"\n  }\n]\n\n ```\n\nLinked to the collection are also available a few response examples from deleteDevices in the cases of: success, failure and device not enrolled.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18258051",
+    "_collection_link": "https://team-nexi-alten.postman.co/workspace/Rockman_player~d1db713b-f91b-41cf-8eef-7af1d78fa8bb/collection/18258051-11553790-6193-4fd4-af25-f83cea19b36c?action=share&creator=18258051&source=collection_link"
+  },
+  "item": [
+    {
+      "name": "6 - preset",
+      "item": [
+        {
+          "name": "Parse emails",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const list = pm.collectionVariables.get(\"INPUT_mfaIdList\")",
+                  "const mfaIdList = list.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+)/gi) || []",
+                  "",
+                  "console.info(`Found ${mfaIdList.length} emails`)",
+                  "pm.collectionVariables.set(\"mfaIdList\", JSON.stringify(mfaIdList, null, 2))"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://google.it",
+              "protocol": "http",
+              "host": [
+                "google",
+                "it"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "10 - Start loop through MFAIDs",
+      "item": [
+        {
+          "name": "Start loop",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const list = JSON.parse(pm.collectionVariables.get(\"mfaIdList\"))",
+                  "",
+                  "const mfaId = list.shift()",
+                  "pm.collectionVariables.set(\"mfaId\", mfaId)",
+                  "pm.collectionVariables.set(\"mfaIdList\", JSON.stringify(list))",
+                  "",
+                  "console.info(`Processing uid: ${mfaId}`)"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://google.it",
+              "protocol": "http",
+              "host": [
+                "google",
+                "it"
+              ]
+            },
+            "description": "Lets subscribe card to one or more services."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "(Required) technical code of the application calling the service.",
+                    "key": "MT_APPLICATION",
+                    "value": "{{MT_APPLICATION}}"
+                  },
+                  {
+                    "description": "(Required) channel code of the request - [WEB, MOB, BAT] ",
+                    "key": "MT_CHANNEL",
+                    "value": "{{MT_CHANNEL}}"
+                  },
+                  {
+                    "description": "(Required) user identifier of the request (username , userid , ...)",
+                    "key": "MT_USER",
+                    "value": "{{MT_USER}}"
+                  },
+                  {
+                    "description": "(Required) Company Group identification code.",
+                    "key": "MT_COMPANY_GROUP",
+                    "value": "{{MT_COMPANY_GROUP}}"
+                  },
+                  {
+                    "description": "(Required) Company code.",
+                    "key": "MT_COMPANY",
+                    "value": "{{MT_COMPANY}}"
+                  },
+                  {
+                    "description": "(Required) Partner belonging to the company. It describe a subset of NEXI customer related to the specified partner.",
+                    "key": "MT_PARTNER",
+                    "value": "{{MT_PARTNER}}"
+                  },
+                  {
+                    "description": "(Required) Random unique identification code of the request set by the client. Example UUID [8119c0ce-17f2-11e8-accf-0ed5f89f718b]",
+                    "key": "MT_REQUEST_ID",
+                    "value": "{{MT_REQUEST_ID}}"
+                  },
+                  {
+                    "description": "(Required) Random unique identification code identifying a single session of the client. Example JSESSIONID [b272023f-05ca-44cb-96cd-6d72c72d03f9]",
+                    "key": "MT_SESSION_ID",
+                    "value": "{{MT_SESSION_ID}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"cardId\": {\n        \"type\": \"PAN\",\n        \"value\": 4532200085801459\n    },\n    \"skipCustomerCertifiedData\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/issuing/cards/v1/getCard",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "issuing",
+                    "cards",
+                    "v1",
+                    "getCard"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"card\": {\n        \"card\": {\n            \"cardId\": {\n                \"value\": \"4532200085801459\",\n                \"type\": \"PAN\",\n                \"processor\": \"S\",\n                \"bin\": \"453220\",\n                \"tail\": \"1459\"\n            },\n            \"productKey\": {\n                \"abi\": \"03395\",\n                \"affinity\": \"40\",\n                \"plastic\": \"00\",\n                \"productType\": \"CRE\",\n                \"circuitCode\": \"V\"\n            },\n            \"bankName\": \"BANCA INTERPROVINCIALE\",\n            \"productId\": \"033954000VC\",\n            \"productCode\": \"4000\",\n            \"productDescription\": \"BUSINESS CARTA BUSINESS\",\n            \"prepaidVendor\": null,\n            \"circuitDetail\": \"VISA\",\n            \"emissionTypeCode\": \"NU\",\n            \"emissionTypeDescription\": \"NUOVA\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"offlineBlockDescription\": null,\n            \"validityStartDate\": \"2018-12-21\",\n            \"expiringDate\": \"2026-03-31\",\n            \"validityState\": \"V\",\n            \"expenseLimit\": {\n                \"value\": 10000,\n                \"currency\": \"EUR\"\n            },\n            \"expenseLimit2ndLine\": null,\n            \"expenseLimit3ndLine\": null,\n            \"ibanDebit\": null,\n            \"downOptionMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"downOptionDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"flagBancomat\": \"N\",\n            \"flagChip\": \"S\",\n            \"flagContactless\": \"S\",\n            \"flagDebit\": \"N\",\n            \"flagFamiliar\": \"N\",\n            \"flagHCE\": \"N\",\n            \"flagIndividualBilling\": \"N\",\n            \"flagDirectIssuing\": \"N\",\n            \"flagMultifunction\": \"N\",\n            \"flagNFC\": \"N\",\n            \"flagPrepaid\": \"N\",\n            \"flagPrepaidNameless\": \"N\",\n            \"flagPrepaidVirtual\": \"N\",\n            \"paymentType\": \"S\",\n            \"cardIdHCE\": null,\n            \"cardIncremental\": \"1\",\n            \"anagraphicIncremental\": \"1\",\n            \"distributorBank\": null,\n            \"flagActivationRequired\": \"N\",\n            \"prepaidRechargeIBAN\": null,\n            \"contractType\": \"C\",\n            \"equensAccountId\": null,\n            \"cardRelationType\": null,\n            \"flagAnonymous\": \"N\",\n            \"tags\": [],\n            \"renewalPresent\": \"N\",\n            \"renewalShipped\": \"N\"\n        },\n        \"customerData\": {\n            \"name\": \"BRAMBILLA\",\n            \"surname\": \"ABIBO\",\n            \"heading\": \"ABIBO BRAMBILLA\",\n            \"fiscalCode\": \"BRMBBA85S01F205R\",\n            \"flagPositionOwner\": \"S\",\n            \"sex\": \"M\",\n            \"birthDate\": \"1985-11-01\",\n            \"birthPlace\": \"MILANO\",\n            \"birthCity\": \"MI\",\n            \"birthNation\": \"ITALIA\",\n            \"cardSubjectId\": \"117975817\"\n        },\n        \"position\": {\n            \"typeCode\": \"1\",\n            \"typeDescription\": \"I\",\n            \"positionId\": \"9000008\",\n            \"positionAbi\": \"03395\",\n            \"positionKeySION\": \"033959000008\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"validityState\": \"V\",\n            \"conditionTypeCode\": \"0\",\n            \"conditionTypeDescription\": \"ORDINARIO\",\n            \"flagExtendendCredit\": \"N\",\n            \"iban\": \"IT11E0339512900123456789012\",\n            \"bankAccountId\": \"123456789012\",\n            \"bankAccountType\": \"CO\",\n            \"sourceSubsystem\": \"C\",\n            \"homeAddressPostalCode\": \"20145\",\n            \"homeAddressStreet\": \"GIARDINI GUASTALLA 8\",\n            \"homeAddressCountryCode\": null,\n            \"homeAddressCity\": \"MILANO\",\n            \"homeAddressAdministrativeArea\": \"MI\",\n            \"accountholderName\": \"ABIBO BRAMBILLA\",\n            \"vatNumber\": null,\n            \"positionSubjectId\": \"117975817\",\n            \"agencyCode\": \"00001\"\n        }\n    }\n}"
+            },
+            {
+              "name": "Template response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "(Required) technical code of the application calling the service.",
+                    "key": "MT_APPLICATION",
+                    "value": "minim dolore"
+                  },
+                  {
+                    "description": "(Required) channel code of the request - [WEB, MOB, BAT] ",
+                    "key": "MT_CHANNEL",
+                    "value": "minim dolore"
+                  },
+                  {
+                    "description": "(Required) user identifier of the request (username , userid , ...)",
+                    "key": "MT_USER",
+                    "value": "minim dolore"
+                  },
+                  {
+                    "description": "(Required) Company Group identification code.",
+                    "key": "MT_COMPANY_GROUP",
+                    "value": "minim dolore"
+                  },
+                  {
+                    "description": "(Required) Company code.",
+                    "key": "MT_COMPANY",
+                    "value": "minim dolore"
+                  },
+                  {
+                    "description": "(Required) Partner belonging to the company. It describe a subset of NEXI customer related to the specified partner.",
+                    "key": "MT_PARTNER",
+                    "value": "minim dolore"
+                  },
+                  {
+                    "description": "(Required) Random unique identification code of the request set by the client. Example UUID [8119c0ce-17f2-11e8-accf-0ed5f89f718b]",
+                    "key": "MT_REQUEST_ID",
+                    "value": "minim dolore"
+                  },
+                  {
+                    "description": "(Required) Random unique identification code identifying a single session of the client. Example JSESSIONID [b272023f-05ca-44cb-96cd-6d72c72d03f9]",
+                    "key": "MT_SESSION_ID",
+                    "value": "minim dolore"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"cardId\": {\n        \"bin\": \"eu\",\n        \"processor\": \"S\",\n        \"tail\": \"irure velit nisi consectetur\",\n        \"type\": \"PAN\",\n        \"value\": \"proident dolor do m\"\n    },\n    \"mobilePhone\": {\n        \"mobilePhoneNumber\": \"laborum\",\n        \"carrier\": \"qui fugiat minim labore\",\n        \"countryAlphaTwoCode\": \"IT\",\n        \"mobilePhonePrefix\": \"+39\"\n    },\n    \"updateSystems\": [\n        \"SMS\",\n        \"SMS\"\n    ],\n    \"acs\": {\n        \"issuerCode\": \"fugiat nulla\",\n        \"notificationChannel3DSecure\": \"EMAIL\",\n        \"abi\": \"aliqua anim\",\n        \"channel\": \"Duis\",\n        \"fiscalCode\": \"sclrcs95e15l407h\",\n        \"identifyingPhrase3DSecure\": \"et sint dolor Ut\",\n        \"ownerName\": \"minim id labore\",\n        \"templateId\": \"inc\",\n        \"templateSMS\": \"ad labore\",\n        \"unlockRequest\": \"culpa\"\n    },\n    \"customerData\": {\n        \"birthCity\": \"MI\",\n        \"birthDate\": \"2000-10-02\",\n        \"birthNation\": \"Italy\",\n        \"birthPlace\": \"Sesto San Giovanni\",\n        \"fiscalCode\": \"RSSMRA81M18D121R\",\n        \"flagPositionOwner\": \"S\",\n        \"heading\": \"Mario Rossi\",\n        \"name\": \"Mario\",\n        \"sex\": \"M\",\n        \"surname\": \"Rossi\"\n    },\n    \"disablePropagation\": false,\n    \"sms\": {\n        \"alertThreshold\": {\n            \"currency\": \"EUR\",\n            \"value\": 23.78\n        },\n        \"flagAlertThreshold\": \"cillum sunt velit laboris\",\n        \"availabilityThreshold\": {\n            \"currency\": \"EUR\",\n            \"value\": 23.78\n        },\n        \"flagAvailabilityBS\": \"sit\",\n        \"flagAvailabilityPull\": \"et nisi aliquip reprehenderit\",\n        \"flagAvailabilityThreshold\": \"velit Lorem cupidatat tempor dolore\",\n        \"flagCharity\": \"in quis adipisicing ani\",\n        \"flagPayment\": \"amet pariatur\",\n        \"flagWelcome\": \"esse amet cillum exercitation\",\n        \"profileType\": \"ipsum nulla reprehenderit\",\n        \"sourceCode\": \"labore ad\"\n    }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/subscribe",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "subscribe"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n \"result\": {\n  \"code\": \"dolore ex incididunt in\",\n  \"description\": \"success\",\n  \"infos\": [\n   {\n    \"code\": \"laborum qui esse eiusmod dolore\",\n    \"description\": \"success\",\n    \"source\": \"ipsum ut\"\n   },\n   {\n    \"code\": \"pariatur\",\n    \"description\": \"success\",\n    \"source\": \"dolore elit nulla\"\n   }\n  ]\n }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reset variables",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "console.info('Reset environment variables')",
+                  "",
+                  "const resetAll = (value, ...args) => {",
+                  "    args.forEach(arg => {",
+                  "        pm.collectionVariables.set(arg, value)",
+                  "    })",
+                  "}",
+                  "",
+                  "resetAll(",
+                  "    \"isSuccessful\",",
+                  "    \"message\",",
+                  "    \"code\",",
+                  "    \"description\",",
+                  "    \"errmsg\",",
+                  "    \"errcode\"",
+                  "    )"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://google.it",
+              "protocol": "http",
+              "host": [
+                "google",
+                "it"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate JWT",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Successful POST request\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202])",
+                  "})",
+                  "",
+                  "const response = pm.response.json()",
+                  "",
+                  "pm.test(\"Response should contain 'access_token'\", () => {",
+                  "    pm.expect(response.access_token).to.exist",
+                  "})",
+                  "",
+                  "pm.collectionVariables.set(\"jwtToken\", response.access_token)"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "console.log(\"Set JWT\")"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{titolariClientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{titolariClientSecret}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{jwtTokenServer}}/oauth/v2/token",
+              "host": [
+                "{{jwtTokenServer}}"
+              ],
+              "path": [
+                "oauth",
+                "v2",
+                "token"
+              ]
+            },
+            "description": "```\ngenerates and sets the Technical Token\n```"
+          },
+          "response": [
+            {
+              "name": "Token-access example",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "client_credentials",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{titolariClientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{titolariClientSecret}}",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{jwtTokenServer}}/oauth/v2/token",
+                  "host": [
+                    "{{jwtTokenServer}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "v2",
+                    "token"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-store"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json;charset=UTF-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "873"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 28 Mar 2022 20:08:18 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiIsImtpZCI6ImNkMjZjZWFmIn0.ew0KCSJpc3MiOiAiQVBJR1ciLA0KCSJhdWQiOiAiMmY1ZmU2YzAtNDA1Ni00OWI5LTg5NWEtNmJjNzlhZjU1OGQxIiwNCgkiZXhwIjogMTY1MDkxNzI5OCwNCgkiaWF0IjogMTY0ODQ5ODA5OCwNCgkidG9rZW5UeXBlIjogIlRlY2huaWNhbCIsDQoJInN1YiI6ICIyZjVmZTZjMC00MDU2LTQ5YjktODk1YS02YmM3OWFmNTU4ZDEiLA0KCSJwcmVmaXhvcmciOiJERVVUU0NIRSIsDQoJIk9BVCI6ICIyZGZkYjIyYy1iY2RkLTRiNzAtOWQ0Yy1hMmM0YmQ1YWQxZDAiLA0KCSJzY29wZSI6ICJUZWNoX05vdGlmaWNhdG9yIFRlY2hfTWlkZGxldGllcl9QcmVwYWlkUmVjaGFyZ2UgVGVjaF9NaWRkbGV0aWVyX1BpblZpZXcgc2VydmljZWdyb3VwXzQgVGVjaF9NaWRkbGV0aWVyIHRlY2huaWNhbFRlc3RHcm91cElkZW50aXR5SXNzdWluZ19DUlVEIHRlY2huaWNhbFRlc3RHcm91cFBUX0NSVUQgVGVjaF9PdXRib3VuZF9QYWdvUEEgUFQtR3JvdXAgc2VydmljZWdyb3VwXzEgdGVjaG5pY2FsR3JvdXBLZXk2IFRlY2hfT3V0Ym91bmRfTVRfUGFnb1BBIHRlY2huaWNhbEdyb3VwTWZhX0NSVUQgc2VydmljZWdyb3VwXzQiDQp9.P1OWM502OXLmGLpdcXNqsxB_CSwQWD12yu-IFd_dN_rvOBN4pGT0IJJaVceVfG7jNiJBBRCqSMcrio9E2Rjy5-EZYWkga6hEA_JuaNDIq2J5vQUog5FyaZXMRX9nYGdhFEG6vEsUlVDOj3S-gV0W1j_EYngBN0NGwx1GnywdIwDqZl5cHr0K0hD9S8_8Jpw1Qnr0hn79JlaaGSIjIqD2JxEQE6-FhQA48a80Z1zMm2sEmTkvFzTwsxvH4qkdoshmGC1A1FCX2HQ2qnkwIfahL6k-azvv_pvCmokRdk8iu0_XL1mk4RhoWIsLwKq4AVkdDIEkzet-oONIhdEa7lFSSg\",\n    \"token_type\": \"Bearer\",\n    \"expires_in\": 2419200\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "15 - Delete devices",
+      "item": [
+        {
+          "name": "Delete devices",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Successful POST request\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202])",
+                  "})",
+                  "",
+                  "const response = pm.response.json()",
+                  "const messageExpected = \"Operation completed\"",
+                  "",
+                  "pm.test(`Response should be \"${messageExpected}\"`, function () {",
+                  "    pm.expect(pm.response.text().toLowerCase()).to.include(messageExpected.toLowerCase())",
+                  "})",
+                  "",
+                  "// Set collection variables based on the response status",
+                  "pm.collectionVariables.set(\"isSuccessful\", response.status.match(\"200\") ? \"true\" : \"false\")",
+                  "pm.collectionVariables.set(\"message\", response.message)"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true,
+              "accept": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "MT_APPLICATION",
+                "value": "CH",
+                "type": "text"
+              },
+              {
+                "key": "MT_CHANNEL",
+                "value": "WEB",
+                "type": "text"
+              },
+              {
+                "key": "MT_COMPANY",
+                "value": "NEXI",
+                "type": "text"
+              },
+              {
+                "key": "MT_COMPANY_GROUP",
+                "value": "NEXI",
+                "type": "text"
+              },
+              {
+                "key": "MT_PARTNER",
+                "value": "NEXI",
+                "type": "text"
+              },
+              {
+                "key": "MT_REQUEST_ID",
+                "value": "NEXI",
+                "type": "text"
+              },
+              {
+                "key": "MT_SESSION_ID",
+                "value": "NEXI",
+                "type": "text"
+              },
+              {
+                "key": "MT_USER",
+                "value": "Test",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \n   \"mfaId\": \"{{mfaId}}\",\n   \"organization\": \"{{INPUT_organization}}\",\n   \"profileType\": \"{{INPUT_profileType}}\"\n }"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/issuing/orch/mfa/v1/deleteDevices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "issuing",
+                "orch",
+                "mfa",
+                "v1",
+                "deleteDevices"
+              ]
+            },
+            "description": "Please, take a look to the swagger page for further details about the deleteDevice API:\n\n[https://intmt.private.nexicloud.it:4003/mt-services/issuing/orch/mfa/v1/swagger-ui.html#/Device](https://intmt.private.nexicloud.it:4003/mt-services/issuing/orch/mfa/v1/swagger-ui.html#/Device)\n\nThis collection needs a few mandatory parameters in order to be succefully run:\n\nINPUT_userEmailList (aka mfaId, e.g.: [insta.f@yopmail.com](mailto:insta.f@yopmail.com)) – This parameter also handles email lists, with newline separator character\n\nINPUT_organization (e.g. NEXI)\n\nINPUT_profileType (e.g. NEXI)\n\nA list of available organization and profileType values are listed here: [https://icbpijira.atlassian.net/wiki/spaces/SER/pages/1587249247/TA+Test+Data](https://icbpijira.atlassian.net/wiki/spaces/SER/pages/1587249247/TA+Test+Data)\n\nThe result of the collection is saved in the RESULT collection variable. An example of a result is the following:\n\n\\[ { \"userEmail\": [insta.f@yopmail.com](mailto:insta.f@yopmail.com), \"isSuccessfull\": \"true\", \"message\": \"Operation completed\" } \\]"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json, text/plain, */*"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
+                  },
+                  {
+                    "key": "Application",
+                    "value": "pt"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..SBRceJZAwKj51b3EOZ6nTw.L-Xu7IUG2uvlRDEFxs01IC1WBTGPQYBc2EISnCKY7ms2_wft__Vt7Mdl4sL9sjkgyAfSLj5hhDdQwv6WjUuBMO6v_Cv0DgNJy8E3pTsLy3RtGzfZQeqdeaRxSWReSE0oAiuDyXgXn3YZpyPvnH5HWXlfyDoX3--Dmc5eXi4zHZGlgd032a-jRhfIbm9TAEKl-Zki1po7xaVkUTra1l34rZ0_ymFY-2aTGZiOSxbLOU1ySat052QqSdY62M-3t0tsrlbm18otn2aXs-1B2wviX-3QeoAGJOkmvY7BRk3kq_sddum1OuVfiuml3le_kjORxJMDaHJF7fVh756ZG2xZKgeGz31ubm2nPOJQWvkK08KDZaiEKpOE1tZHa2C_xD2xCXkGU8rDPONxpomf0ZsEwft9UhnbL36u38ocYU65E8x2KsWnfyayKIQRuRc78WN4aCoMDlFrrsubMjZHmDzYF1Tf1K2qlU-Zxor8qy2CfiVubFHIRcApOPCcUUemg36bI1FL4PJCpYJifdJGxlb-2b2ZF5fuCBBK0F5huB5DTLWzyyUBCUtGvjRSFKJwni0McqJxy18dtGDh_TbqA6H-K7Xih7KyvJX9B7aQCkUev9QSc1OpTMeuerxm_grtr39wTj6Nmc67WdwbghTCeAsIL0W5qxdcB3aFhNrGGVjNAkDQ7ljnKj1C1HLghv8rp-e6sUn6x5Nz9_cjAsJZYSShq-dDxAnvCqYiwl2wYmlngPP-4GaUC1vbVtveTPrQIL_mkYCWLjRvkO8v0Jd-Pmlor7lzY0OL6Cv1_sqM9mMd2YfWnVMsazx-O67bUP2RD9NsVuB7opUU3xUhHbXkXJLwbFWGjHWrioThhqH3x4K3gnY_WWJ4eh51SZhYvrcnykpW3EnQ6jEQQw-Ex3WyZJlQu5UjETnv5mThlpeO-Jwc8MeusSDuNWTYaoEvlzd0-Opts2twHjItL7HtkukeIehgfAcUZbm6zqJXbkRaiLaQpQ1jmWauq3SZV1qgSt7wR_-tdYTMDkmo_1N51kv6AeJUYHtmm43NcPLKdM5QaMgNYktWxU9J6Yi885LZEyzJo7U3oKdCMC95fvA2K9afO7lObtl1durD3y6DLAf0FNKhoalG0exv0Ys0JkBXFOp-m2rALtDnEZ9t7hR2slzdixRamCwKXY-xUV4WEqzYZQ96psD5IhCxMy2mAjQzLOR4yx58AdRdeW8bkvVPybw3Pb3cFpUq3G-iUCPoJ26NWwaszPuEzEmBbzdz3c1ucZy-rfblPwr7zWuhDe6v8-UTu9uN7OsDvAbA8CRdBGZiUGtD-bu4eeZcxpysbXS75u34OgikoergY2rm0jkjHJ0Gu5mujuo3olnsj3xIsaaRYMXl8D5Y1qX2o9gRp12AAqdyhV8x7aFzokPFlRqc5G4rF1PQtjARnfc0WxFqwNSuYF9XBz9kzd3uKnBRRnd4nA7p360LLwgi1RJt657BCHOX071yTg.LG0rEjJxM6BhBn4kxZMHE4C3NphYy5fmxNf23idqrWI"
+                  },
+                  {
+                    "key": "Cache-Control",
+                    "value": "no-cache"
+                  },
+                  {
+                    "key": "Channel",
+                    "value": "web"
+                  },
+                  {
+                    "key": "Client-Version",
+                    "value": "[object Object]"
+                  },
+                  {
+                    "key": "Connection",
+                    "value": "keep-alive"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "binc=356f170ef1c8a352b0444691acfd0a66; warInfo=true; _hjSessionUser_660420=eyJpZCI6IjdlYzMzZmRjLTQzYWUtNTgxZi1iNWVkLTQxY2EyMDAzYmIwOCIsImNyZWF0ZWQiOjE2NDkxNTA1NDg2MDQsImV4aXN0aW5nIjp0cnVlfQ==; _hjSessionUser_1559303=eyJpZCI6IjZlM2E0NjhlLWU0ZDUtNTMxNS1hODViLTFiZWU5N2VkZjUyZiIsImNyZWF0ZWQiOjE2NDkxNTA1ODI3NjgsImV4aXN0aW5nIjp0cnVlfQ==; wpamm_cookie=2216253355640699831952000000000000000000000; _sfid_2d72={%22anonymousId%22:%22879b639d2bf9b5d1%22%2C%22consents%22:[]}; _hjSessionUser_643217=eyJpZCI6ImU1ZjU5MWQ5LTgwZjUtNTAzMi04M2U5LTAxMmQxZGI2ZDkyNiIsImNyZWF0ZWQiOjE2NDkyMzQ4NjE2NTgsImV4aXN0aW5nIjp0cnVlfQ==; __utmz=70129551.1649766724.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _hjSessionUser_653229=eyJpZCI6IjI5OTQzOGUwLTdlMjAtNWJkMy1iMjdjLTVlMjZiMzkwZmNiZiIsImNyZWF0ZWQiOjE2NDk3NjY2NDE5MzEsImV4aXN0aW5nIjp0cnVlfQ==; __utma=70129551.1652870361.1649150548.1649766724.1649843799.2; loginPage=/login-titolari.html; _evga_0f23={%22uuid%22:%22879b639d2bf9b5d1%22%2C%22puid%22:%22cdLT5AcZd5GQHjquvfiAI8S_ZHdMkugWtLCw0XLEB-97HRCiplxX9f21xqwAQDa_sjDnb2G9N7lZmF8IXWytJnGe0gh1G26Ih6eoHm4Zn3Y%22%2C%22affinityId%22:%2200L%22}; _evga_b04f={%22uuid%22:%22879b639d2bf9b5d1%22}; _ga_VN9X0RS717=GS1.1.1656555962.2.1.1656556308.0; cpa_pt_1.0.8={\"googleanalytics\":1,\"hotjar\":1,\"cleafy\":1}; _gcl_au=1.1.444516622.1658987462; _ga_33NYHFVJQZ=GS1.1.1659091072.5.0.1659091072.0; _gid=GA1.2.1618165898.1659359831; at_check=true; AMCVS_6A724E255ED5F2A60A495E0E%40AdobeOrg=1; AMCV_6A724E255ED5F2A60A495E0E%40AdobeOrg=1176715910%7CMCIDTS%7C19208%7CMCMID%7C26219392889104961471451979299134740425%7CMCAAMLH-1660112160%7C6%7CMCAAMB-1660112160%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1659514560s%7CNONE%7CMCSYNCSOP%7C411-19095%7CvVersion%7C5.4.0; lb_cookie_privati=\"908ce55a02212c8c2082dac152c226fa80b55f7bdfc031cbd90788f8ac37117f pero\"; did=; lb_cookie2=\"3053b47acf521572861ba3bb4f3c37546d524ccee1db330b52b6b1bccc8aa804 settimo\"; TS014fe49d=013f6cf2fb18d5f0f936f840ffcc9d0c8c4c918ba20c746ae120ee8e56fd973a2b7d35effff17ccf2639a4762071bce5aa99887e387eb91096cbb48cfe4537073b1f6871ee928d9404fbc5fa997522b6efb2ffd357; _hjSession_660420=eyJpZCI6IjA3OTBlYTAxLWFhNjAtNDMxZS1hMjRlLWQ3NDNmYWRiZjE0NyIsImNyZWF0ZWQiOjE2NTk1MTA1NDk0OTUsImluU2FtcGxlIjp0cnVlfQ==; _hjAbsoluteSessionInProgress=1; mbox=PC#4b72bc2f784b4aaeba940575514214a0.37_0#1722755357|session#6efa198249004ee1aa84e53a290aca22#1659512417; ncsi=dccda87a15ad8e6e5886e4cd0a73514e; TS01be1f7b=018954f1f74cecc67bfb69f64692cb1d3fd23d7c4b96048481114236df0752797afc6f7d0fa9e48e5a0ab813ecd75746bb6f310074; _ga_2EQBRC1CMY=GS1.1.1659512438.149.0.1659512438.0; lb_cookie=rd9o00000000000000000000ffff0a0a08c2o8443; _ga=GA1.2.1652870361.1649150548; TS01212c3f=01fedd2996dd5ca05872d787954664c8b7f1cd5237f335ec6518450bf16e2847596456e9dfb1a1773efdd8a09d4250a0e6e8e545a3; _ga_T4G92Y2MH2=GS1.1.1659512443.87.1.1659512707.0"
+                  },
+                  {
+                    "key": "Env",
+                    "value": "STAGING"
+                  },
+                  {
+                    "key": "Locale",
+                    "value": "it"
+                  },
+                  {
+                    "key": "Macro-Context",
+                    "value": "/profileRoutes/deviceManagement"
+                  },
+                  {
+                    "key": "Micro-Context",
+                    "value": "REMOVE_DEVICE"
+                  },
+                  {
+                    "key": "Origin",
+                    "value": "https://stgprivatiiam.nexi.it"
+                  },
+                  {
+                    "key": "Otp",
+                    "value": "286530"
+                  },
+                  {
+                    "key": "Pragma",
+                    "value": "no-cache"
+                  },
+                  {
+                    "key": "Referer",
+                    "value": "https://stgprivatiiam.nexi.it/profileRoutes/deviceManagement"
+                  },
+                  {
+                    "key": "Sec-Fetch-Dest",
+                    "value": "empty"
+                  },
+                  {
+                    "key": "Sec-Fetch-Mode",
+                    "value": "cors"
+                  },
+                  {
+                    "key": "Sec-Fetch-Site",
+                    "value": "same-origin"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+                  },
+                  {
+                    "key": "additionalInfo",
+                    "value": "eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.3jDJI-T8vU7TPgFZobHDaPvj9dn2aJBicc71eCzwE8JQjfrergUP2C5YEr_7rLjGiMsw39l-3j2MlgdwQqx7kgmH94Q25m4Y.nSjN1OT3TEoXH_PyOVyjgw.Wujv3D0Y5_Tqfm40PuUTrlrobYdDaZJpVhOWBTPo7I8.8Ippzr7OLbfh9jI_uljDKoXVrsHSwjKKUPkKtLm88X8"
+                  },
+                  {
+                    "key": "checkOutcome",
+                    "value": "N"
+                  },
+                  {
+                    "key": "forceChannel",
+                    "value": "N"
+                  },
+                  {
+                    "key": "mtTransactionId",
+                    "value": "f0b53abd-e67c-47e7-b571-25aba911b915"
+                  },
+                  {
+                    "key": "riskIT",
+                    "value": "\"{\\\"deviceSignature\\\":\\\"{\\\\\\\"VERSION\\\\\\\":\\\\\\\"2.1.2\\\\\\\",\\\\\\\"MFP\\\\\\\":{\\\\\\\"Browser\\\\\\\":{\\\\\\\"UserAgent\\\\\\\":\\\\\\\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36\\\\\\\",\\\\\\\"Vendor\\\\\\\":\\\\\\\"Google Inc.\\\\\\\",\\\\\\\"VendorSubID\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"BuildID\\\\\\\":\\\\\\\"20030107\\\\\\\",\\\\\\\"CookieEnabled\\\\\\\":true},\\\\\\\"IEPlugins\\\\\\\":{},\\\\\\\"NetscapePlugins\\\\\\\":{\\\\\\\"PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chrome PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chromium PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Microsoft Edge PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"WebKit built-in PDF\\\\\\\":\\\\\\\"\\\\\\\"},\\\\\\\"Screen\\\\\\\":{\\\\\\\"FullHeight\\\\\\\":864,\\\\\\\"AvlHeight\\\\\\\":824,\\\\\\\"FullWidth\\\\\\\":1536,\\\\\\\"AvlWidth\\\\\\\":1536,\\\\\\\"ColorDepth\\\\\\\":24,\\\\\\\"PixelDepth\\\\\\\":24},\\\\\\\"System\\\\\\\":{\\\\\\\"Platform\\\\\\\":\\\\\\\"Win32\\\\\\\",\\\\\\\"systemLanguage\\\\\\\":\\\\\\\"it-IT\\\\\\\",\\\\\\\"Timezone\\\\\\\":-120}},\\\\\\\"ExternalIP\\\\\\\":\\\\\\\"__IP__\\\\\\\",\\\\\\\"MESC\\\\\\\":{\\\\\\\"mesc\\\\\\\":\\\\\\\"mi=2;cd=150;id=45;mesc=490545;mesc=466117\\\\\\\"}}\\\"}\""
+                  },
+                  {
+                    "key": "sec-ch-ua",
+                    "value": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\""
+                  },
+                  {
+                    "key": "sec-ch-ua-mobile",
+                    "value": "?0"
+                  },
+                  {
+                    "key": "sec-ch-ua-platform",
+                    "value": "\"Windows\""
+                  },
+                  {
+                    "key": "transactionData",
+                    "value": "carta_da_attivare2@yopmail.com||||||72fe3e7f70f94be0816581ef11756acf||VU+AEsPvKwOKbp8GmAR6blfz8SM+T0TTd572WPAMbaU="
+                  },
+                  {
+                    "key": "transactionId",
+                    "value": "72fe3e7f70f94be0816581ef11756acf"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"deviceId\": \"10003659\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://stgprivatiiam.nexi.it/api/services/device-management-service/sca/delete-device-mfa",
+                  "protocol": "https",
+                  "host": [
+                    "stgprivatiiam",
+                    "nexi",
+                    "it"
+                  ],
+                  "path": [
+                    "api",
+                    "services",
+                    "device-management-service",
+                    "sca",
+                    "delete-device-mfa"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n    \"cardContextRefreshRequired\": false,\n    \"skipContextRefresh\": false,\n    \"client\": {\n        \"application\": \"pt\",\n        \"channel\": \"web\",\n        \"locale\": \"it\",\n        \"version\": \"[object Object]\"\n    },\n    \"commercialCardContextRefreshRequired\": false,\n    \"commercialSkipContextRefresh\": false,\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"status\": \"200\",\n    \"message\": \"Operation completed\"\n}"
+            },
+            {
+              "name": "401",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json, text/plain, */*"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
+                  },
+                  {
+                    "key": "Application",
+                    "value": "pt"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..SBRceJZAwKj51b3EOZ6nTw.L-Xu7IUG2uvlRDEFxs01IC1WBTGPQYBc2EISnCKY7ms2_wft__Vt7Mdl4sL9sjkgyAfSLj5hhDdQwv6WjUuBMO6v_Cv0DgNJy8E3pTsLy3RtGzfZQeqdeaRxSWReSE0oAiuDyXgXn3YZpyPvnH5HWXlfyDoX3--Dmc5eXi4zHZGlgd032a-jRhfIbm9TAEKl-Zki1po7xaVkUTra1l34rZ0_ymFY-2aTGZiOSxbLOU1ySat052QqSdY62M-3t0tsrlbm18otn2aXs-1B2wviX-3QeoAGJOkmvY7BRk3kq_sddum1OuVfiuml3le_kjORxJMDaHJF7fVh756ZG2xZKgeGz31ubm2nPOJQWvkK08KDZaiEKpOE1tZHa2C_xD2xCXkGU8rDPONxpomf0ZsEwft9UhnbL36u38ocYU65E8x2KsWnfyayKIQRuRc78WN4aCoMDlFrrsubMjZHmDzYF1Tf1K2qlU-Zxor8qy2CfiVubFHIRcApOPCcUUemg36bI1FL4PJCpYJifdJGxlb-2b2ZF5fuCBBK0F5huB5DTLWzyyUBCUtGvjRSFKJwni0McqJxy18dtGDh_TbqA6H-K7Xih7KyvJX9B7aQCkUev9QSc1OpTMeuerxm_grtr39wTj6Nmc67WdwbghTCeAsIL0W5qxdcB3aFhNrGGVjNAkDQ7ljnKj1C1HLghv8rp-e6sUn6x5Nz9_cjAsJZYSShq-dDxAnvCqYiwl2wYmlngPP-4GaUC1vbVtveTPrQIL_mkYCWLjRvkO8v0Jd-Pmlor7lzY0OL6Cv1_sqM9mMd2YfWnVMsazx-O67bUP2RD9NsVuB7opUU3xUhHbXkXJLwbFWGjHWrioThhqH3x4K3gnY_WWJ4eh51SZhYvrcnykpW3EnQ6jEQQw-Ex3WyZJlQu5UjETnv5mThlpeO-Jwc8MeusSDuNWTYaoEvlzd0-Opts2twHjItL7HtkukeIehgfAcUZbm6zqJXbkRaiLaQpQ1jmWauq3SZV1qgSt7wR_-tdYTMDkmo_1N51kv6AeJUYHtmm43NcPLKdM5QaMgNYktWxU9J6Yi885LZEyzJo7U3oKdCMC95fvA2K9afO7lObtl1durD3y6DLAf0FNKhoalG0exv0Ys0JkBXFOp-m2rALtDnEZ9t7hR2slzdixRamCwKXY-xUV4WEqzYZQ96psD5IhCxMy2mAjQzLOR4yx58AdRdeW8bkvVPybw3Pb3cFpUq3G-iUCPoJ26NWwaszPuEzEmBbzdz3c1ucZy-rfblPwr7zWuhDe6v8-UTu9uN7OsDvAbA8CRdBGZiUGtD-bu4eeZcxpysbXS75u34OgikoergY2rm0jkjHJ0Gu5mujuo3olnsj3xIsaaRYMXl8D5Y1qX2o9gRp12AAqdyhV8x7aFzokPFlRqc5G4rF1PQtjARnfc0WxFqwNSuYF9XBz9kzd3uKnBRRnd4nA7p360LLwgi1RJt657BCHOX071yTg.LG0rEjJxM6BhBn4kxZMHE4C3NphYy5fmxNf23idqrWI"
+                  },
+                  {
+                    "key": "Cache-Control",
+                    "value": "no-cache"
+                  },
+                  {
+                    "key": "Channel",
+                    "value": "web"
+                  },
+                  {
+                    "key": "Client-Version",
+                    "value": "[object Object]"
+                  },
+                  {
+                    "key": "Connection",
+                    "value": "keep-alive"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "binc=356f170ef1c8a352b0444691acfd0a66; warInfo=true; _hjSessionUser_660420=eyJpZCI6IjdlYzMzZmRjLTQzYWUtNTgxZi1iNWVkLTQxY2EyMDAzYmIwOCIsImNyZWF0ZWQiOjE2NDkxNTA1NDg2MDQsImV4aXN0aW5nIjp0cnVlfQ==; _hjSessionUser_1559303=eyJpZCI6IjZlM2E0NjhlLWU0ZDUtNTMxNS1hODViLTFiZWU5N2VkZjUyZiIsImNyZWF0ZWQiOjE2NDkxNTA1ODI3NjgsImV4aXN0aW5nIjp0cnVlfQ==; wpamm_cookie=2216253355640699831952000000000000000000000; _sfid_2d72={%22anonymousId%22:%22879b639d2bf9b5d1%22%2C%22consents%22:[]}; _hjSessionUser_643217=eyJpZCI6ImU1ZjU5MWQ5LTgwZjUtNTAzMi04M2U5LTAxMmQxZGI2ZDkyNiIsImNyZWF0ZWQiOjE2NDkyMzQ4NjE2NTgsImV4aXN0aW5nIjp0cnVlfQ==; __utmz=70129551.1649766724.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _hjSessionUser_653229=eyJpZCI6IjI5OTQzOGUwLTdlMjAtNWJkMy1iMjdjLTVlMjZiMzkwZmNiZiIsImNyZWF0ZWQiOjE2NDk3NjY2NDE5MzEsImV4aXN0aW5nIjp0cnVlfQ==; __utma=70129551.1652870361.1649150548.1649766724.1649843799.2; loginPage=/login-titolari.html; _evga_0f23={%22uuid%22:%22879b639d2bf9b5d1%22%2C%22puid%22:%22cdLT5AcZd5GQHjquvfiAI8S_ZHdMkugWtLCw0XLEB-97HRCiplxX9f21xqwAQDa_sjDnb2G9N7lZmF8IXWytJnGe0gh1G26Ih6eoHm4Zn3Y%22%2C%22affinityId%22:%2200L%22}; _evga_b04f={%22uuid%22:%22879b639d2bf9b5d1%22}; _ga_VN9X0RS717=GS1.1.1656555962.2.1.1656556308.0; cpa_pt_1.0.8={\"googleanalytics\":1,\"hotjar\":1,\"cleafy\":1}; _gcl_au=1.1.444516622.1658987462; _ga_33NYHFVJQZ=GS1.1.1659091072.5.0.1659091072.0; _gid=GA1.2.1618165898.1659359831; at_check=true; AMCVS_6A724E255ED5F2A60A495E0E%40AdobeOrg=1; AMCV_6A724E255ED5F2A60A495E0E%40AdobeOrg=1176715910%7CMCIDTS%7C19208%7CMCMID%7C26219392889104961471451979299134740425%7CMCAAMLH-1660112160%7C6%7CMCAAMB-1660112160%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1659514560s%7CNONE%7CMCSYNCSOP%7C411-19095%7CvVersion%7C5.4.0; lb_cookie_privati=\"908ce55a02212c8c2082dac152c226fa80b55f7bdfc031cbd90788f8ac37117f pero\"; did=; lb_cookie2=\"3053b47acf521572861ba3bb4f3c37546d524ccee1db330b52b6b1bccc8aa804 settimo\"; TS014fe49d=013f6cf2fb18d5f0f936f840ffcc9d0c8c4c918ba20c746ae120ee8e56fd973a2b7d35effff17ccf2639a4762071bce5aa99887e387eb91096cbb48cfe4537073b1f6871ee928d9404fbc5fa997522b6efb2ffd357; _hjSession_660420=eyJpZCI6IjA3OTBlYTAxLWFhNjAtNDMxZS1hMjRlLWQ3NDNmYWRiZjE0NyIsImNyZWF0ZWQiOjE2NTk1MTA1NDk0OTUsImluU2FtcGxlIjp0cnVlfQ==; _hjAbsoluteSessionInProgress=1; mbox=PC#4b72bc2f784b4aaeba940575514214a0.37_0#1722755357|session#6efa198249004ee1aa84e53a290aca22#1659512417; ncsi=dccda87a15ad8e6e5886e4cd0a73514e; TS01be1f7b=018954f1f74cecc67bfb69f64692cb1d3fd23d7c4b96048481114236df0752797afc6f7d0fa9e48e5a0ab813ecd75746bb6f310074; _ga_2EQBRC1CMY=GS1.1.1659512438.149.0.1659512438.0; lb_cookie=rd9o00000000000000000000ffff0a0a08c2o8443; _ga=GA1.2.1652870361.1649150548; TS01212c3f=01fedd2996dd5ca05872d787954664c8b7f1cd5237f335ec6518450bf16e2847596456e9dfb1a1773efdd8a09d4250a0e6e8e545a3; _ga_T4G92Y2MH2=GS1.1.1659512443.87.1.1659512707.0"
+                  },
+                  {
+                    "key": "Env",
+                    "value": "STAGING"
+                  },
+                  {
+                    "key": "Locale",
+                    "value": "it"
+                  },
+                  {
+                    "key": "Macro-Context",
+                    "value": "/profileRoutes/deviceManagement"
+                  },
+                  {
+                    "key": "Micro-Context",
+                    "value": "REMOVE_DEVICE"
+                  },
+                  {
+                    "key": "Origin",
+                    "value": "https://stgprivatiiam.nexi.it"
+                  },
+                  {
+                    "key": "Otp",
+                    "value": "286530"
+                  },
+                  {
+                    "key": "Pragma",
+                    "value": "no-cache"
+                  },
+                  {
+                    "key": "Referer",
+                    "value": "https://stgprivatiiam.nexi.it/profileRoutes/deviceManagement"
+                  },
+                  {
+                    "key": "Sec-Fetch-Dest",
+                    "value": "empty"
+                  },
+                  {
+                    "key": "Sec-Fetch-Mode",
+                    "value": "cors"
+                  },
+                  {
+                    "key": "Sec-Fetch-Site",
+                    "value": "same-origin"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+                  },
+                  {
+                    "key": "additionalInfo",
+                    "value": "eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.3jDJI-T8vU7TPgFZobHDaPvj9dn2aJBicc71eCzwE8JQjfrergUP2C5YEr_7rLjGiMsw39l-3j2MlgdwQqx7kgmH94Q25m4Y.nSjN1OT3TEoXH_PyOVyjgw.Wujv3D0Y5_Tqfm40PuUTrlrobYdDaZJpVhOWBTPo7I8.8Ippzr7OLbfh9jI_uljDKoXVrsHSwjKKUPkKtLm88X8"
+                  },
+                  {
+                    "key": "checkOutcome",
+                    "value": "N"
+                  },
+                  {
+                    "key": "forceChannel",
+                    "value": "N"
+                  },
+                  {
+                    "key": "mtTransactionId",
+                    "value": "f0b53abd-e67c-47e7-b571-25aba911b915"
+                  },
+                  {
+                    "key": "riskIT",
+                    "value": "\"{\\\"deviceSignature\\\":\\\"{\\\\\\\"VERSION\\\\\\\":\\\\\\\"2.1.2\\\\\\\",\\\\\\\"MFP\\\\\\\":{\\\\\\\"Browser\\\\\\\":{\\\\\\\"UserAgent\\\\\\\":\\\\\\\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36\\\\\\\",\\\\\\\"Vendor\\\\\\\":\\\\\\\"Google Inc.\\\\\\\",\\\\\\\"VendorSubID\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"BuildID\\\\\\\":\\\\\\\"20030107\\\\\\\",\\\\\\\"CookieEnabled\\\\\\\":true},\\\\\\\"IEPlugins\\\\\\\":{},\\\\\\\"NetscapePlugins\\\\\\\":{\\\\\\\"PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chrome PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chromium PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Microsoft Edge PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"WebKit built-in PDF\\\\\\\":\\\\\\\"\\\\\\\"},\\\\\\\"Screen\\\\\\\":{\\\\\\\"FullHeight\\\\\\\":864,\\\\\\\"AvlHeight\\\\\\\":824,\\\\\\\"FullWidth\\\\\\\":1536,\\\\\\\"AvlWidth\\\\\\\":1536,\\\\\\\"ColorDepth\\\\\\\":24,\\\\\\\"PixelDepth\\\\\\\":24},\\\\\\\"System\\\\\\\":{\\\\\\\"Platform\\\\\\\":\\\\\\\"Win32\\\\\\\",\\\\\\\"systemLanguage\\\\\\\":\\\\\\\"it-IT\\\\\\\",\\\\\\\"Timezone\\\\\\\":-120}},\\\\\\\"ExternalIP\\\\\\\":\\\\\\\"__IP__\\\\\\\",\\\\\\\"MESC\\\\\\\":{\\\\\\\"mesc\\\\\\\":\\\\\\\"mi=2;cd=150;id=45;mesc=490545;mesc=466117\\\\\\\"}}\\\"}\""
+                  },
+                  {
+                    "key": "sec-ch-ua",
+                    "value": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\""
+                  },
+                  {
+                    "key": "sec-ch-ua-mobile",
+                    "value": "?0"
+                  },
+                  {
+                    "key": "sec-ch-ua-platform",
+                    "value": "\"Windows\""
+                  },
+                  {
+                    "key": "transactionData",
+                    "value": "carta_da_attivare2@yopmail.com||||||72fe3e7f70f94be0816581ef11756acf||VU+AEsPvKwOKbp8GmAR6blfz8SM+T0TTd572WPAMbaU="
+                  },
+                  {
+                    "key": "transactionId",
+                    "value": "72fe3e7f70f94be0816581ef11756acf"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"deviceId\": \"10003659\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://stgprivatiiam.nexi.it/api/services/device-management-service/sca/delete-device-mfa",
+                  "protocol": "https",
+                  "host": [
+                    "stgprivatiiam",
+                    "nexi",
+                    "it"
+                  ],
+                  "path": [
+                    "api",
+                    "services",
+                    "device-management-service",
+                    "sca",
+                    "delete-device-mfa"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"result\": {\n        \"code\": \"E9040NOAUTH\",\n        \"description\": \"Authorization validation failed\"\n    }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json, text/plain, */*"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
+                  },
+                  {
+                    "key": "Application",
+                    "value": "pt"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..SBRceJZAwKj51b3EOZ6nTw.L-Xu7IUG2uvlRDEFxs01IC1WBTGPQYBc2EISnCKY7ms2_wft__Vt7Mdl4sL9sjkgyAfSLj5hhDdQwv6WjUuBMO6v_Cv0DgNJy8E3pTsLy3RtGzfZQeqdeaRxSWReSE0oAiuDyXgXn3YZpyPvnH5HWXlfyDoX3--Dmc5eXi4zHZGlgd032a-jRhfIbm9TAEKl-Zki1po7xaVkUTra1l34rZ0_ymFY-2aTGZiOSxbLOU1ySat052QqSdY62M-3t0tsrlbm18otn2aXs-1B2wviX-3QeoAGJOkmvY7BRk3kq_sddum1OuVfiuml3le_kjORxJMDaHJF7fVh756ZG2xZKgeGz31ubm2nPOJQWvkK08KDZaiEKpOE1tZHa2C_xD2xCXkGU8rDPONxpomf0ZsEwft9UhnbL36u38ocYU65E8x2KsWnfyayKIQRuRc78WN4aCoMDlFrrsubMjZHmDzYF1Tf1K2qlU-Zxor8qy2CfiVubFHIRcApOPCcUUemg36bI1FL4PJCpYJifdJGxlb-2b2ZF5fuCBBK0F5huB5DTLWzyyUBCUtGvjRSFKJwni0McqJxy18dtGDh_TbqA6H-K7Xih7KyvJX9B7aQCkUev9QSc1OpTMeuerxm_grtr39wTj6Nmc67WdwbghTCeAsIL0W5qxdcB3aFhNrGGVjNAkDQ7ljnKj1C1HLghv8rp-e6sUn6x5Nz9_cjAsJZYSShq-dDxAnvCqYiwl2wYmlngPP-4GaUC1vbVtveTPrQIL_mkYCWLjRvkO8v0Jd-Pmlor7lzY0OL6Cv1_sqM9mMd2YfWnVMsazx-O67bUP2RD9NsVuB7opUU3xUhHbXkXJLwbFWGjHWrioThhqH3x4K3gnY_WWJ4eh51SZhYvrcnykpW3EnQ6jEQQw-Ex3WyZJlQu5UjETnv5mThlpeO-Jwc8MeusSDuNWTYaoEvlzd0-Opts2twHjItL7HtkukeIehgfAcUZbm6zqJXbkRaiLaQpQ1jmWauq3SZV1qgSt7wR_-tdYTMDkmo_1N51kv6AeJUYHtmm43NcPLKdM5QaMgNYktWxU9J6Yi885LZEyzJo7U3oKdCMC95fvA2K9afO7lObtl1durD3y6DLAf0FNKhoalG0exv0Ys0JkBXFOp-m2rALtDnEZ9t7hR2slzdixRamCwKXY-xUV4WEqzYZQ96psD5IhCxMy2mAjQzLOR4yx58AdRdeW8bkvVPybw3Pb3cFpUq3G-iUCPoJ26NWwaszPuEzEmBbzdz3c1ucZy-rfblPwr7zWuhDe6v8-UTu9uN7OsDvAbA8CRdBGZiUGtD-bu4eeZcxpysbXS75u34OgikoergY2rm0jkjHJ0Gu5mujuo3olnsj3xIsaaRYMXl8D5Y1qX2o9gRp12AAqdyhV8x7aFzokPFlRqc5G4rF1PQtjARnfc0WxFqwNSuYF9XBz9kzd3uKnBRRnd4nA7p360LLwgi1RJt657BCHOX071yTg.LG0rEjJxM6BhBn4kxZMHE4C3NphYy5fmxNf23idqrWI"
+                  },
+                  {
+                    "key": "Channel",
+                    "value": "web"
+                  },
+                  {
+                    "key": "Client-Version",
+                    "value": "[object Object]"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "binc=356f170ef1c8a352b0444691acfd0a66; warInfo=true; _hjSessionUser_660420=eyJpZCI6IjdlYzMzZmRjLTQzYWUtNTgxZi1iNWVkLTQxY2EyMDAzYmIwOCIsImNyZWF0ZWQiOjE2NDkxNTA1NDg2MDQsImV4aXN0aW5nIjp0cnVlfQ==; _hjSessionUser_1559303=eyJpZCI6IjZlM2E0NjhlLWU0ZDUtNTMxNS1hODViLTFiZWU5N2VkZjUyZiIsImNyZWF0ZWQiOjE2NDkxNTA1ODI3NjgsImV4aXN0aW5nIjp0cnVlfQ==; wpamm_cookie=2216253355640699831952000000000000000000000; _sfid_2d72={%22anonymousId%22:%22879b639d2bf9b5d1%22%2C%22consents%22:[]}; _hjSessionUser_643217=eyJpZCI6ImU1ZjU5MWQ5LTgwZjUtNTAzMi04M2U5LTAxMmQxZGI2ZDkyNiIsImNyZWF0ZWQiOjE2NDkyMzQ4NjE2NTgsImV4aXN0aW5nIjp0cnVlfQ==; __utmz=70129551.1649766724.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _hjSessionUser_653229=eyJpZCI6IjI5OTQzOGUwLTdlMjAtNWJkMy1iMjdjLTVlMjZiMzkwZmNiZiIsImNyZWF0ZWQiOjE2NDk3NjY2NDE5MzEsImV4aXN0aW5nIjp0cnVlfQ==; __utma=70129551.1652870361.1649150548.1649766724.1649843799.2; loginPage=/login-titolari.html; _evga_0f23={%22uuid%22:%22879b639d2bf9b5d1%22%2C%22puid%22:%22cdLT5AcZd5GQHjquvfiAI8S_ZHdMkugWtLCw0XLEB-97HRCiplxX9f21xqwAQDa_sjDnb2G9N7lZmF8IXWytJnGe0gh1G26Ih6eoHm4Zn3Y%22%2C%22affinityId%22:%2200L%22}; _evga_b04f={%22uuid%22:%22879b639d2bf9b5d1%22}; _ga_VN9X0RS717=GS1.1.1656555962.2.1.1656556308.0; cpa_pt_1.0.8={\"googleanalytics\":1,\"hotjar\":1,\"cleafy\":1}; _gcl_au=1.1.444516622.1658987462; _ga_33NYHFVJQZ=GS1.1.1659091072.5.0.1659091072.0; _gid=GA1.2.1618165898.1659359831; at_check=true; AMCVS_6A724E255ED5F2A60A495E0E%40AdobeOrg=1; AMCV_6A724E255ED5F2A60A495E0E%40AdobeOrg=1176715910%7CMCIDTS%7C19208%7CMCMID%7C26219392889104961471451979299134740425%7CMCAAMLH-1660112160%7C6%7CMCAAMB-1660112160%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1659514560s%7CNONE%7CMCSYNCSOP%7C411-19095%7CvVersion%7C5.4.0; lb_cookie_privati=\"908ce55a02212c8c2082dac152c226fa80b55f7bdfc031cbd90788f8ac37117f pero\"; did=; lb_cookie2=\"3053b47acf521572861ba3bb4f3c37546d524ccee1db330b52b6b1bccc8aa804 settimo\"; TS014fe49d=013f6cf2fb18d5f0f936f840ffcc9d0c8c4c918ba20c746ae120ee8e56fd973a2b7d35effff17ccf2639a4762071bce5aa99887e387eb91096cbb48cfe4537073b1f6871ee928d9404fbc5fa997522b6efb2ffd357; _hjSession_660420=eyJpZCI6IjA3OTBlYTAxLWFhNjAtNDMxZS1hMjRlLWQ3NDNmYWRiZjE0NyIsImNyZWF0ZWQiOjE2NTk1MTA1NDk0OTUsImluU2FtcGxlIjp0cnVlfQ==; _hjAbsoluteSessionInProgress=1; mbox=PC#4b72bc2f784b4aaeba940575514214a0.37_0#1722755357|session#6efa198249004ee1aa84e53a290aca22#1659512417; ncsi=dccda87a15ad8e6e5886e4cd0a73514e; TS01be1f7b=018954f1f74cecc67bfb69f64692cb1d3fd23d7c4b96048481114236df0752797afc6f7d0fa9e48e5a0ab813ecd75746bb6f310074; _ga_2EQBRC1CMY=GS1.1.1659512438.149.0.1659512438.0; lb_cookie=rd9o00000000000000000000ffff0a0a08c2o8443; _ga=GA1.2.1652870361.1649150548; _gat_UA-3681719-36=1; _ga_T4G92Y2MH2=GS1.1.1659512443.87.1.1659512696.0; TS01212c3f=01fedd2996dd5ca05872d787954664c8b7f1cd5237f335ec6518450bf16e2847596456e9dfb1a1773efdd8a09d4250a0e6e8e545a3"
+                  },
+                  {
+                    "key": "Env",
+                    "value": "STAGING"
+                  },
+                  {
+                    "key": "Locale",
+                    "value": "it"
+                  },
+                  {
+                    "key": "Macro-Context",
+                    "value": "/profileRoutes/deviceManagement"
+                  },
+                  {
+                    "key": "Micro-Context",
+                    "value": "REMOVE_DEVICE"
+                  },
+                  {
+                    "key": "Origin",
+                    "value": "https://stgprivatiiam.nexi.it"
+                  },
+                  {
+                    "key": "Otp",
+                    "value": ""
+                  },
+                  {
+                    "key": "Pragma",
+                    "value": "no-cache"
+                  },
+                  {
+                    "key": "Referer",
+                    "value": "https://stgprivatiiam.nexi.it/profileRoutes/deviceManagement"
+                  },
+                  {
+                    "key": "Sec-Fetch-Dest",
+                    "value": "empty"
+                  },
+                  {
+                    "key": "Sec-Fetch-Mode",
+                    "value": "cors"
+                  },
+                  {
+                    "key": "Sec-Fetch-Site",
+                    "value": "same-origin"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+                  },
+                  {
+                    "key": "checkOutcome",
+                    "value": "N"
+                  },
+                  {
+                    "key": "mtTransactionId",
+                    "value": ""
+                  },
+                  {
+                    "key": "riskIT",
+                    "value": "\"{\\\"deviceSignature\\\":\\\"{\\\\\\\"VERSION\\\\\\\":\\\\\\\"2.1.2\\\\\\\",\\\\\\\"MFP\\\\\\\":{\\\\\\\"Browser\\\\\\\":{\\\\\\\"UserAgent\\\\\\\":\\\\\\\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36\\\\\\\",\\\\\\\"Vendor\\\\\\\":\\\\\\\"Google Inc.\\\\\\\",\\\\\\\"VendorSubID\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"BuildID\\\\\\\":\\\\\\\"20030107\\\\\\\",\\\\\\\"CookieEnabled\\\\\\\":true},\\\\\\\"IEPlugins\\\\\\\":{},\\\\\\\"NetscapePlugins\\\\\\\":{\\\\\\\"PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chrome PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Chromium PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Microsoft Edge PDF Viewer\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"WebKit built-in PDF\\\\\\\":\\\\\\\"\\\\\\\"},\\\\\\\"Screen\\\\\\\":{\\\\\\\"FullHeight\\\\\\\":864,\\\\\\\"AvlHeight\\\\\\\":824,\\\\\\\"FullWidth\\\\\\\":1536,\\\\\\\"AvlWidth\\\\\\\":1536,\\\\\\\"ColorDepth\\\\\\\":24,\\\\\\\"PixelDepth\\\\\\\":24},\\\\\\\"System\\\\\\\":{\\\\\\\"Platform\\\\\\\":\\\\\\\"Win32\\\\\\\",\\\\\\\"systemLanguage\\\\\\\":\\\\\\\"it-IT\\\\\\\",\\\\\\\"Timezone\\\\\\\":-120}},\\\\\\\"ExternalIP\\\\\\\":\\\\\\\"__IP__\\\\\\\",\\\\\\\"MESC\\\\\\\":{\\\\\\\"mesc\\\\\\\":\\\\\\\"mi=2;cd=150;id=45;mesc=490545;mesc=466117\\\\\\\"}}\\\"}\""
+                  },
+                  {
+                    "key": "sec-ch-ua",
+                    "value": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\""
+                  },
+                  {
+                    "key": "sec-ch-ua-mobile",
+                    "value": "?0"
+                  },
+                  {
+                    "key": "sec-ch-ua-platform",
+                    "value": "\"Windows\""
+                  },
+                  {
+                    "key": "transactionData",
+                    "value": ""
+                  },
+                  {
+                    "key": "transactionId",
+                    "value": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"deviceId\": \"10003659\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://stgprivatiiam.nexi.it/api/services/device-management-service/sca/delete-device-mfa",
+                  "protocol": "https",
+                  "host": [
+                    "stgprivatiiam",
+                    "nexi",
+                    "it"
+                  ],
+                  "path": [
+                    "api",
+                    "services",
+                    "device-management-service",
+                    "sca",
+                    "delete-device-mfa"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n    \"errmsg\": \"Unauthorized\",\n    \"errcode\": \"Unauthorized\"\n}"
+            },
+            {
+              "name": "No Enrolled Device",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "MT_APPLICATION",
+                    "value": "CH",
+                    "type": "text"
+                  },
+                  {
+                    "key": "MT_CHANNEL",
+                    "value": "WEB",
+                    "type": "text"
+                  },
+                  {
+                    "key": "MT_COMPANY",
+                    "value": "NEXI",
+                    "type": "text"
+                  },
+                  {
+                    "key": "MT_COMPANY_GROUP",
+                    "value": "NEXI",
+                    "type": "text"
+                  },
+                  {
+                    "key": "MT_PARTNER",
+                    "value": "NEXI",
+                    "type": "text"
+                  },
+                  {
+                    "key": "MT_REQUEST_ID",
+                    "value": "NEXI",
+                    "type": "text"
+                  },
+                  {
+                    "key": "MT_SESSION_ID",
+                    "value": "NEXI",
+                    "type": "text"
+                  },
+                  {
+                    "key": "MT_USER",
+                    "value": "Test",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mfaId\": \"UTENZA_CHB_21@YOPMAIL.COM\",\n    \"organization\": \"NEXI\",\n    \"profileType\": \"NEXI\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/issuing/orch/mfa/v1/deleteDevices",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "issuing",
+                    "orch",
+                    "mfa",
+                    "v1",
+                    "deleteDevices"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"result\": {\n    \"code\": \"-8100\",\n    \"description\": \"Risk Engine error.\",\n    \"infos\": [\n      {\n        \"source\": \"deleteDevice\",\n        \"code\": \"-8103\",\n        \"description\": \"Bad request.\"\n      },\n      {\n        \"code\": \"-8110\",\n        \"description\": \"No enrolled profile for user.\"\n      }\n    ]\n  },\n  \"status\": \"5712\",\n  \"message\": \"No enrolled profile for user UTENZA_CHB_21@YOPMAIL.COM\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "20 - Report",
+      "item": [
+        {
+          "name": "Write Result report",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "console.info(\"Update Result\")",
+                  "",
+                  "// Create the updateResult object",
+                  "const updateResult = {",
+                  "    mfaId: pm.collectionVariables.get(\"mfaId\"),",
+                  "    userEmail: pm.collectionVariables.get(\"userEmail\"),",
+                  "    isSuccessfull: pm.collectionVariables.get(\"isSuccessful\"),",
+                  "    message: pm.collectionVariables.get(\"message\")",
+                  "}",
+                  "",
+                  "// Get the existing result from collection variables and parse it",
+                  "const existingResultJSON = pm.environment.get(\"RESULT\")",
+                  "const existingResult = JSON.parse(existingResultJSON)",
+                  "",
+                  "// Push the updateResult into the existing result array",
+                  "existingResult.push(updateResult)",
+                  "",
+                  "// Set the updated result back to collection variables",
+                  "pm.environment.set(\"RESULT\", JSON.stringify(existingResult, null, 2))"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://google.it",
+              "protocol": "http",
+              "host": [
+                "google",
+                "it"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Set next request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "console.info(\"Set next request\")",
+                  "",
+                  "const list = JSON.parse(pm.collectionVariables.get(\"mfaIdList\")) || []",
+                  "",
+                  "if (list.length > 0)",
+                  "    postman.setNextRequest(\"Safe wait\")",
+                  "else {",
+                  "    console.info(\"End of input data reached.\")",
+                  "    postman.setNextRequest(null)",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://google.it",
+              "protocol": "http",
+              "host": [
+                "google",
+                "it"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Safe wait",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "console.info(\"Please wait...\");",
+                  "setTimeout(function() {",
+                  "    postman.setNextRequest(\"Start loop\");",
+                  "}, 1000); // 1000 milliseconds (1 seconds) delay"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true
+            },
+            "disableBodyPruning": true,
+            "followRedirects": false
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://google.it",
+              "protocol": "http",
+              "host": [
+                "google",
+                "it"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwtToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "INPUT_mfaIdList",
+      "value": "UTENZA_CHB_21@YOPMAIL.COM\niosi.debito4@yopmail.com",
+      "type": "string"
+    },
+    {
+      "key": "INPUT_organization",
+      "value": "NEXI",
+      "type": "string"
+    },
+    {
+      "key": "INPUT_profileType",
+      "value": "NEXI",
+      "type": "string"
+    },
+    {
+      "key": "RESULT",
+      "value": "[]",
+      "type": "string"
+    },
+    {
+      "key": "baseUrl",
+      "value": "{{apigwServer}}/mt-services",
+      "type": "string"
+    },
+    {
+      "key": "MT_APPLICATION",
+      "value": "{{MT_APPLICATION_ENV}}",
+      "type": "string"
+    },
+    {
+      "key": "MT_CHANNEL",
+      "value": "{{MT_CHANNEL_ENV}}",
+      "type": "string"
+    },
+    {
+      "key": "MT_COMPANY",
+      "value": "{{MT_COMPANY_ENV}}",
+      "type": "string"
+    },
+    {
+      "key": "MT_COMPANY_GROUP",
+      "value": "{{MT_COMPANY_GROUP_ENV}}",
+      "type": "string"
+    },
+    {
+      "key": "MT_PARTNER",
+      "value": "{{MT_PARTNER_ENV}}",
+      "type": "string"
+    },
+    {
+      "key": "MT_REQUEST_ID",
+      "value": "{{MT_REQUEST_ID_ENV}}",
+      "type": "string"
+    },
+    {
+      "key": "MT_SESSION_ID",
+      "value": "{{MT_SESSION_ID_ENV}}",
+      "type": "string"
+    },
+    {
+      "key": "FUN_extractEmails",
+      "value": "function extractEmails(text) {\n    const regex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+)/gi\n    return text.match(regex)\n}",
+      "type": "string"
+    },
+    {
+      "key": "mfaIdList",
+      "value": ""
+    },
+    {
+      "key": "jwtToken",
+      "value": ""
+    },
+    {
+      "key": "mfaId",
+      "value": ""
+    },
+    {
+      "key": "isSuccessful",
+      "value": ""
+    },
+    {
+      "key": "message",
+      "value": ""
+    },
+    {
+      "key": "code",
+      "value": ""
+    },
+    {
+      "key": "description",
+      "value": ""
+    },
+    {
+      "key": "errmsg",
+      "value": ""
+    },
+    {
+      "key": "errcode",
+      "value": ""
+    }
+  ]
 }

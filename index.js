@@ -11,8 +11,8 @@ inquirer
     /*scelta quale operazione vuoi eseguire */
     {
       type: 'list',
-      name: 'first-list-questions',
-      messagge: 'Quale collection vuoi eseguire ?',
+      name: 'Quale collection vuoi eseguire ?',
+      messagge: 'fist-list-question',
       choices: ['[ACCOUNT] [INT] [STG] - Delete Devices',
                 '[ACCOUNT] [STG] - Account password update custom password',
                 '[API] [INT] [STG] - API primitive utili',
@@ -35,8 +35,8 @@ inquirer
     /*scelta in quale ambiente vuoi eseguire */
     {
       type: 'list',  
-      name: 'second-list-questions',
-      messagge: 'In quale ambiente vuoi eseguire la collection ?',
+      name: 'In quale ambiente vuoi eseguire la collection ?',
+      messagge: 'second-list-question',
       choices: ['INT_NEXI', 
                 'INT_CA_DEBIT',
                 'INT_CHB',
@@ -64,7 +64,8 @@ inquirer
                 'INPUT_pan', 
                 'INPUT_dataList', 
                 'INPUT_pivaList',
-                'INPUT_mfaIdList'] 
+                'INPUT_mfaIdList',
+                'INPUT_uidList'] 
 
     }
 
@@ -74,8 +75,8 @@ inquirer
     console.info('Risposte inserite:', answers);
 
         // Recupero le risposte corrispondente alla scelta dell'utente
-       const collectionName = answers['first-list-questions'];
-       const environmentName = answers['second-list-questions'];
+       const collectionName = answers['Quale collection vuoi eseguire ?'];
+       const environmentName = answers['In quale ambiente vuoi eseguire la collection ?'];
        const inputDataChoice = answers['data'];
      
 
@@ -87,6 +88,9 @@ inquirer
         promptForPANsOrCFs(inputDataChoice);
       }
       else if(inputDataChoice === 'INPUT_pivaList'){
+        promptForPANsOrCFs(inputDataChoice);
+      }
+      else if (inputDataChoice ==='INPUT_mfaIdList' || inputDataChoice==='INPUT_uidList'){
         promptForPANsOrCFs(inputDataChoice);
       }
     
@@ -178,10 +182,42 @@ inquirer
                    runCollection(collectionName, environmentName ,datachoices );  
      
                    return ;
-                
-             }) 
+                }) 
+            
+         } else if (inputData === 'INPUT_mfaIdList' || inputData === 'INPUT_uidList') {
+              
+              // eseguio di nuovo il prompt che accetta e-mail
+            const panOrCFQuestions = [
+              {
+                type: 'checkbox',
+                name: 'Select data (E-MAIL)',
+                message: 'Inserisci uno o più E-MAIL',
+                choices: ['UTENZA_CHB_21@YOPMAIL.COM', 'iosi.debito4@yopmail.com','stg_pt.excel.mc03@yopmail.com'],
+               // validate: validatePANorCF, // Aggiungo la validazione
+              },
+            ];
+        
+            inquirer
+            .prompt(panOrCFQuestions)
+            .then((answers) => {
+                    // Use user feedback for... whatever!!
+                    console.info('Risposte:', answers['Select data (E-MAIL)']);
+                    // recupero le risposte e le memorizzo 
+                    const datachoices = answers['Select data (E-MAIL)'];
+                    console.info('dati inseriti:'+ datachoices);
+                    console.info(collectionName);
+                    console.info(environmentName);
+
+                    // chiamo la procedura per poter eseguire con newman   
+                   runCollection(collectionName, environmentName ,datachoices );  
+               
+                    return ;                     
+         })     
+               
+
          }
-      };
+
+};
 
 
           // procedura per aggiornare i dati di ingresso in base all'input
@@ -203,6 +239,12 @@ inquirer
                 case 'INPUT_pivaList':
                     variableKey = 'INPUT_pivaList';
                     break;
+                case 'INPUT_mfaIdList':
+                  variableKey = 'INPUT_mfaIdList';
+                     break;
+                case 'INPUT_uidList':
+                  variableKey ='INPUT_uidList';
+                     break;      
                 default:
                     console.error('Nome del dato di Input non supportato.');
                     return;
@@ -212,7 +254,7 @@ inquirer
           
             let existingData = JSON.parse(fs.readFileSync(collectionFilePath, 'utf8'));
         
-            // Aggiorna l'oggetto nel file JSON esistente
+            // Aggiorna l'oggetto del file JSON 
             existingData.variable.forEach(variable => {
                 if (variable.key === variableKey) {
                     variable.value = datachoices.join('\n');
