@@ -93,7 +93,6 @@ inquirer
       else if (inputDataChoice ==='INPUT_mfaIdList' || inputDataChoice==='INPUT_uidList'){
         promptForPANsOrCFs(inputDataChoice);
       }
-    
          
   
     function promptForPANsOrCFs(inputData) {
