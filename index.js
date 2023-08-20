@@ -93,6 +93,9 @@ inquirer
       else if (inputDataChoice ==='INPUT_mfaIdList' || inputDataChoice==='INPUT_uidList'){
         promptForPANsOrCFs(inputDataChoice);
       }
+      else if (collectionName==='[BONIFICA] [INT] [STG] - Bonifica+Subscribe+CUSTOM mobiles' && inputDataChoice ==='INPUT_dataList')  {
+        promptForPANsOrCFs(inputDataChoice);
+      }
          
   
     function promptForPANsOrCFs(inputData) {
@@ -211,10 +214,89 @@ inquirer
                    runCollection(collectionName, environmentName ,datachoices );  
                
                     return ;                     
-         })     
-               
+         }) 
+         
+        } else if (inputData === 'INPUT_dataList') {
 
-         }
+          async function getUserInput() {
+            const panOrCFQuestions = [
+              {
+                type: 'checkbox',
+                name: 'Select data (CF)',
+                message: 'Inserisci uno o più CF',
+                choices: ['FRNCHR63L48H501V', 'TRVVNT80P63H501A'],
+              },
+              {
+                type: 'checkbox',
+                name: 'Select data (PAN)',
+                message: 'Inserisci uno o più PAN',
+                choices: ['4970199002897286'],
+                // validate: validatePANorCF, // Aggiungo la validazione
+              },
+              {
+                type: 'input',
+                name: 'Insert number',
+                message: 'Inserisci il numero di 6 cifre',
+                validate: function (input) {
+                  const isValidNumber = /^\d{6}$/.test(input);
+                  if (!isValidNumber) {
+                    return 'Inserisci un numero valido di 6 cifre.';
+                  }
+                  return true;
+                },
+              },
+            ];
+          
+            const answers = await inquirer.prompt(panOrCFQuestions);
+            return answers;
+          }
+          
+          async function main() {
+            const numIterations = 3; // Numero di iterazioni del ciclo for
+            const resultsInput = [];
+          
+            for (let i = 0; i < numIterations; i++) {
+              console.log(`Iterazione ${i + 1}`);
+              const answers = await getUserInput();
+          
+              const data = {
+                mobile: answers['Insert number'],
+                positionType: [1, 4],
+              };
+          
+              if (answers['Select data (CF)'].length > 0) {
+                for (const cf of answers['Select data (CF)']) {
+                  const entry = {
+                    fc: cf,
+                    mobile: data.mobile,
+                    positionType: data.positionType,
+                  };
+                  resultsInput.push(entry);
+                }
+              }
+          
+              if (answers['Select data (PAN)'].length > 0) {
+                for (const pan of answers['Select data (PAN)']) {
+                  const entry = {
+                    pan: pan,
+                    mobile: data.mobile,
+                    positionType: data.positionType,
+                  };
+                  resultsInput.push(entry);
+                }
+              }
+            }
+            console.log('Risultati:', resultsInput);
+            console.info(collectionName);
+            console.info(environmentName);
+
+             // chiamo la procedura per poter eseguire con newman   
+             runCollection(collectionName, environmentName , resultsInput );  
+          }
+          
+          main();
+            
+      }
 
 };
 
@@ -243,7 +325,10 @@ inquirer
                      break;
                 case 'INPUT_uidList':
                   variableKey ='INPUT_uidList';
-                     break;      
+                     break;   
+                case 'INPUT_dataList':
+                  variableKey='INPUT_dataList';
+                     break;        
                 default:
                     console.error('Nome del dato di Input non supportato.');
                     return;
@@ -255,10 +340,14 @@ inquirer
         
             // Aggiorna l'oggetto del file JSON 
             existingData.variable.forEach(variable => {
-                if (variable.key === variableKey) {
+              if (variable.key === variableKey) {
+                if (typeof datachoices === 'object') {
+                    variable.value = JSON.stringify(datachoices, null, 2);
+                } else {
                     variable.value = datachoices.join('\n');
-                    console.info(variable.value);
                 }
+                console.info(variable.value);
+            }
         
                 if (variable.key === resetVariableKey) {
                     variable.value = '';
