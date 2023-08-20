@@ -62,6 +62,9 @@ inquirer
                 'INPUT_panList',
                 'INPUT_fc',
                 'INPUT_pan', 
+                'INPUT_processor',
+                'INPUT_codiceABI',
+                'INPUT_codicePosizione',
                 'INPUT_dataList', 
                 'INPUT_pivaList',
                 'INPUT_mfaIdList',
@@ -81,10 +84,10 @@ inquirer
      
 
 
-      if(inputDataChoice === 'INPUT_fcList'){
+      if(inputDataChoice === 'INPUT_fcList' || inputDataChoice ==='INPUT_fc'){
         promptForPANsOrCFs(inputDataChoice);
       }
-      else if(inputDataChoice === 'INPUT_panList'){
+      else if(inputDataChoice === 'INPUT_panList' || inputDataChoice ==='INPUT_pan'){
         promptForPANsOrCFs(inputDataChoice);
       }
       else if(inputDataChoice === 'INPUT_pivaList'){
@@ -100,7 +103,7 @@ inquirer
   
     function promptForPANsOrCFs(inputData) {
       // eseguio di nuovo il prompt che accetta  CF
-      if(inputData==='INPUT_fcList') {  
+      if(inputData==='INPUT_fcList' || inputData==='INPUT_fc') {  
         const panOrCFQuestions = [
           {
             type: 'checkbox',
@@ -127,7 +130,7 @@ inquirer
                 return ;
              
           })
-        } else if (inputData==='INPUT_panList') {
+        } else if (inputData==='INPUT_panList' || inputData==='INPUT_pan') {
          // eseguio di nuovo il prompt che accetta  PAN
           const panOrCFQuestions = [
             {
@@ -313,10 +316,18 @@ inquirer
                     variableKey = 'INPUT_fcList';
                     resetVariableKey = 'INPUT_panList';
                     break;
+                case 'INPUT_fc':
+                  variableKey = 'INPUT_fc';
+                  resetVariableKey ='INPUT_pan';
+                    break;   
                 case 'INPUT_panList':
                     variableKey = 'INPUT_panList';
                     resetVariableKey = 'INPUT_fcList';
                     break;
+                case 'INPUT_pan':
+                    variableKey = 'INPUT_pan';
+                    resetVariableKey = 'INPUT_fc';
+                    break;    
                 case 'INPUT_pivaList':
                     variableKey = 'INPUT_pivaList';
                     break;
