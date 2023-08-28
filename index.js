@@ -1,6 +1,7 @@
 const newman = require('newman');
 const inquirer = require('inquirer');
 const fs = require('fs');
+const XLSX = require('xlsx');
 
 
 console.info('Benvenuto su Rockman!!! ');
@@ -81,8 +82,9 @@ inquirer
        const collectionName = answers['Quale collection vuoi eseguire ?'];
        const environmentName = answers['In quale ambiente vuoi eseguire la collection ?'];
        const inputDataChoice = answers['data'];
-     
        
+       
+
       if (inputDataChoice === 'INPUT_fcList' || inputDataChoice === 'INPUT_fc') {
         promptForPANsOrCFs(inputDataChoice);
       } else if (inputDataChoice === 'INPUT_panList' || inputDataChoice === 'INPUT_pan') {
@@ -299,55 +301,7 @@ inquirer
 };
 
     
-    function promptForCC() {
-      // eseguio di nuovo il prompt che accetta username
-        const userNameQuestions = [
-          {
-            type: 'checkbox',
-            name: 'Select data (USERNAME)',
-            message: 'Inserisci il tuo username',
-            choices: ['CO0A460','CO07991','CO0A087','CO0C407','CO0B250','CO07680','CO05641','CO07560','CO0B387','CO0B606','CO0B706', 'CO0C441','CO0B727','CO0C033','CO0B705','CO07699','CO0C408'],
-          },
-          {
-			      type: 'password',
-			      mask: '*',			
-			      message: 'Enter a password',
-			      name: 'password'
-			    },
-          {
-            type: 'checkbox',
-            name: 'Select data (CF)',
-            message: 'Inserisci uno o più CF',
-            choices: ['FRNCHR63L48H501V','TRVVNT80P63H501A', 'CRCLSS62S28F496A' ],
-          },
-        ];
-
-        inquirer
-        .prompt(userNameQuestions)
-        .then((answers) => {
-                // Use user feedback for... whatever!!
-                console.info('Risposte:', answers['Select data (USERNAME)']);
-                console.info('Risposte:', answers['password']);
-                console.info('Risposte:', answers['Select data (CF)']);
-                // recupero le risposte e le memorizzo 
-                //const datachoicesUsername = answers['Select data (USERNAME)'];
-                //console.info('dati inseriti:'+ datachoicesUsername);
-                //recupero la password e la memorizzo
-                //console.info('Risposte:', answers['password']);
-                //const datachoicesPassword = answers['password'];
-                //console.info('dati inseriti:'+ datachoicesPassword);
-
-                console.info(collectionName);
-                console.info(environmentName);
-
-             // chiamo la procedura per poter eseguire con newman         
-            //runCollection(collectionName, environmentName ,datachoices );
-            //return ;
-        }) 
-      
-    }
     
-
           // procedura per aggiornare i dati di ingresso in base all'input
           function updateJSONCollection(inputDataChoice, collectionFilePath, datachoices) {
 
