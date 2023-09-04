@@ -1,0 +1,1603 @@
+{
+	"info": {
+		"_postman_id": "e1467f61-1bae-44a8-b4e7-2bb1e6ef8a76",
+		"name": "[SMS] [INT STG] [14] - Nuovo Portale SMS - Delivery",
+		"description": "Operates on both INT and STG environments.\n\nThe collection purpose is to retrieve a list of mobile messages based on provided mobile numbers and a specified date range.\n\nThe collection relies on several mandatory INPUT fields:\n\n1. `INPUT_primaryContactDestinationList`: A list of mobile numbers, separated by commas or newlines.\n    \n2. `INPUT_eventDateFrom`: A date string that adheres to the ISO 8601 format.\n    \n3. `INPUT_eventDateTo`: Another date string following the ISO 8601 format.\n    \n4. `INPUT_localeCode`: A string that is compliant with both ISO 639-1 and ISO 3166-1 standards, for example: \"it-IT.\"\n    \n\nAdditionally, the collection validates the input data to ensure compliance with all ISO standards.\n\nUsage:\n\n1. Reset collection variables.\n    \n2. Adjust parameters with the 'INPUT_' prefix to suit your requirements.\n    \n3. Execute the collection.\"\n    \n\nThis collection relies on additional JavaScript scripts for validating the accuracy of mobile numbers. The 'Validate mobile' step is dependent on the following library: '[https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.10.38/libphonenumber-js.min.js](https://)'.\n\nThe collection generates output in JSON format, which is stored in the collection variable named 'RESULT'.\n\nE.g.:\n\n``` json\n[\n  {\n    \"mobile\": \"+393939453034\",\n    \"sentMessagesList\": [\n      {\n        \"source\": \"OLD_GP_MC\",\n        \"messageUid\": \"67280376623080716023878\",\n        \"messageRequestUid\": \"8040203\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"9\",\n        \"requestStatus\": \"INVIO_SENDMSGBYTEMPLATE_OK\",\n        \"messageStatus\": \"BLACKLIST\",\n        \"deliveryReportLogStatus\": null,\n        \"deliveryReportStatus\": null,\n        \"eventDate\": \"2023-08-07T16:02:38+02:00\",\n        \"expirationDate\": \"2023-08-07T16:11:38+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": null,\n        \"messageTemplateCode\": \"DOB_IT_SMS_VERIFICA_CELL_OTP_NEXI\",\n        \"messageTemplateDescription\": \"Il tuo codice di verifica e': #cod# . Inseriscilo per confermare il tuo numero di cellulare e continua la procedura.\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": null,\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": null,\n        \"deliveryReportChannel\": null,\n        \"deliveryReportCarrier\": null,\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"Il tuo codice di verifica e': *** . Inseriscilo per confermare il tuo numero di cellulare e continua la procedura.\",\n        \"insertDate\": \"2023-08-07T16:02:38+02:00\",\n        \"lastUpdateDate\": \"2023-08-07T16:02:38+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"22c73958-d8fd-44cb-843b-8d8c1aa65c9e\",\n        \"messageRequestUid\": \"37a8a386-145a-4565-84cf-250d1d6f4818\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"SENT\",\n        \"requestStatus\": \"DONE\",\n        \"messageStatus\": \"SENT\",\n        \"deliveryReportLogStatus\": \"DONE\",\n        \"deliveryReportStatus\": \"DELIVERED\",\n        \"eventDate\": \"2023-08-02T17:16:46.202439+02:00\",\n        \"expirationDate\": \"2023-08-02T17:25:46.202439+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": \"2023-08-02T17:16:49.22451+02:00\",\n        \"deliveryReportChannel\": \"bulk\",\n        \"deliveryReportCarrier\": \"VODF\",\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"*** e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-08-02T17:16:47.235646+02:00\",\n        \"lastUpdateDate\": \"2023-08-02T17:16:47.910846+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"cfbcdc3a-99c1-4122-ab2b-62359837d1b7\",\n        \"messageRequestUid\": \"340e21c7-07d1-43fd-ba30-ad987ca5c0b3\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"BLACKLIST\",\n        \"requestStatus\": \"ERROR\",\n        \"messageStatus\": \"BLACKLIST\",\n        \"deliveryReportLogStatus\": null,\n        \"deliveryReportStatus\": null,\n        \"eventDate\": \"2023-07-28T10:11:56.739867+02:00\",\n        \"expirationDate\": \"2023-07-28T10:20:56.739867+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": null,\n        \"deliveryReportChannel\": null,\n        \"deliveryReportCarrier\": null,\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"adadaw e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-07-28T10:12:47.379524+02:00\",\n        \"lastUpdateDate\": \"2023-07-28T10:12:47.379524+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"f2242c80-36cc-4d48-9b50-d0826563a6bc\",\n        \"messageRequestUid\": \"87dd7507-145a-478e-9449-203c44f56837\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"SENT\",\n        \"requestStatus\": \"DONE\",\n        \"messageStatus\": \"SENT\",\n        \"deliveryReportLogStatus\": \"DONE\",\n        \"deliveryReportStatus\": \"DELIVERED\",\n        \"eventDate\": \"2023-07-27T17:39:15.801131+02:00\",\n        \"expirationDate\": \"2023-07-27T17:48:15.801131+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": \"2023-07-27T17:39:17.867671+02:00\",\n        \"deliveryReportChannel\": \"bulk\",\n        \"deliveryReportCarrier\": \"VODF\",\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"adadaw e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-07-27T17:39:15.833602+02:00\",\n        \"lastUpdateDate\": \"2023-07-27T17:39:16.36673+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"d37198c7-ade3-4aaa-b6b8-dcdbea38567c\",\n        \"messageRequestUid\": \"7b522e7c-dfe5-406b-b460-0a197d82c3be\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"ERROR\",\n        \"requestStatus\": \"ERROR\",\n        \"messageStatus\": \"ERROR\",\n        \"deliveryReportLogStatus\": null,\n        \"deliveryReportStatus\": null,\n        \"eventDate\": \"2023-07-27T17:36:03.493393+02:00\",\n        \"expirationDate\": \"2023-07-27T17:45:03.493393+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": null,\n        \"deliveryReportChannel\": null,\n        \"deliveryReportCarrier\": null,\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"adadaw e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-07-27T17:36:03.528751+02:00\",\n        \"lastUpdateDate\": \"2023-07-27T17:36:03.680815+02:00\"\n      },\n      {\n        \"source\": \"OLD_GP_MC\",\n        \"messageUid\": \"82249303623072717341391\",\n        \"messageRequestUid\": \"8037930\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"3\",\n        \"requestStatus\": \"INVIO_SENDMSGBYTEMPLATE_OK\",\n        \"messageStatus\": \"TODO\",\n        \"deliveryReportLogStatus\": null,\n        \"deliveryReportStatus\": null,\n        \"eventDate\": \"2023-07-27T17:34:13+02:00\",\n        \"expirationDate\": \"2023-07-27T17:43:13+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": null,\n        \"messageTemplateCode\": \"DOB_IT_SMS_VERIFICA_CELL_OTP_NEXI\",\n        \"messageTemplateDescription\": \"Il tuo codice di verifica e': #cod# . Inseriscilo per confermare il tuo numero di cellulare e continua la procedura.\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": null,\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": null,\n        \"deliveryReportChannel\": null,\n        \"deliveryReportCarrier\": null,\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"Il tuo codice di verifica e': *** . Inseriscilo per confermare il tuo numero di cellulare e continua la procedura.\",\n        \"insertDate\": \"2023-07-27T17:34:13+02:00\",\n        \"lastUpdateDate\": \"2023-07-27T17:34:14+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"9f2541f3-1d1d-4af8-8ccf-d6713f3f5561\",\n        \"messageRequestUid\": \"136a0205-0c21-4919-b855-baedf087f13e\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"SENT\",\n        \"requestStatus\": \"DONE\",\n        \"messageStatus\": \"SENT\",\n        \"deliveryReportLogStatus\": \"DONE\",\n        \"deliveryReportStatus\": \"DELIVERED\",\n        \"eventDate\": \"2023-07-27T17:33:39.436652+02:00\",\n        \"expirationDate\": \"2023-07-27T17:42:39.436652+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": \"2023-07-27T17:34:27.159635+02:00\",\n        \"deliveryReportChannel\": \"bulk\",\n        \"deliveryReportCarrier\": \"VODF\",\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"adadaw e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-07-27T17:34:24.555994+02:00\",\n        \"lastUpdateDate\": \"2023-07-27T17:34:25.167125+02:00\"\n      },\n      {\n        \"source\": \"OLD_GP_MC\",\n        \"messageUid\": \"3531121923072514575465\",\n        \"messageRequestUid\": \"8037387\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"3\",\n        \"requestStatus\": \"INVIO_SENDMSGBYTEMPLATE_OK\",\n        \"messageStatus\": \"TODO\",\n        \"deliveryReportLogStatus\": \"DONE\",\n        \"deliveryReportStatus\": \"DELIVERED\",\n        \"eventDate\": \"2023-07-25T14:57:54+02:00\",\n        \"expirationDate\": \"2023-07-26T14:57:54+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": null,\n        \"messageTemplateCode\": \"OBI_SERVIZIATTIVATI_NEXI\",\n        \"messageTemplateDescription\": \"I servizi SMS Alert e 3D Secure per la tua nuova Carta sono ora attivi.\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": null,\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": \"2023-07-25T14:57:56.809+02:00\",\n        \"deliveryReportChannel\": \"bulk\",\n        \"deliveryReportCarrier\": \"VODF\",\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"I servizi SMS Alert e 3D Secure per la tua nuova Carta sono ora attivi.\",\n        \"insertDate\": \"2023-07-25T14:57:54+02:00\",\n        \"lastUpdateDate\": \"2023-07-25T14:57:54+02:00\"\n      },\n      {\n        \"source\": \"OLD_GP_MC\",\n        \"messageUid\": \"67280376623080716023878\",\n        \"messageRequestUid\": \"8040203\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"9\",\n        \"requestStatus\": \"INVIO_SENDMSGBYTEMPLATE_OK\",\n        \"messageStatus\": \"BLACKLIST\",\n        \"deliveryReportLogStatus\": null,\n        \"deliveryReportStatus\": null,\n        \"eventDate\": \"2023-08-07T16:02:38+02:00\",\n        \"expirationDate\": \"2023-08-07T16:11:38+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": null,\n        \"messageTemplateCode\": \"DOB_IT_SMS_VERIFICA_CELL_OTP_NEXI\",\n        \"messageTemplateDescription\": \"Il tuo codice di verifica e': #cod# . Inseriscilo per confermare il tuo numero di cellulare e continua la procedura.\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": null,\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": null,\n        \"deliveryReportChannel\": null,\n        \"deliveryReportCarrier\": null,\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"Il tuo codice di verifica e': *** . Inseriscilo per confermare il tuo numero di cellulare e continua la procedura.\",\n        \"insertDate\": \"2023-08-07T16:02:38+02:00\",\n        \"lastUpdateDate\": \"2023-08-07T16:02:38+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"22c73958-d8fd-44cb-843b-8d8c1aa65c9e\",\n        \"messageRequestUid\": \"37a8a386-145a-4565-84cf-250d1d6f4818\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"SENT\",\n        \"requestStatus\": \"DONE\",\n        \"messageStatus\": \"SENT\",\n        \"deliveryReportLogStatus\": \"DONE\",\n        \"deliveryReportStatus\": \"DELIVERED\",\n        \"eventDate\": \"2023-08-02T17:16:46.202439+02:00\",\n        \"expirationDate\": \"2023-08-02T17:25:46.202439+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": \"2023-08-02T17:16:49.22451+02:00\",\n        \"deliveryReportChannel\": \"bulk\",\n        \"deliveryReportCarrier\": \"VODF\",\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"*** e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-08-02T17:16:47.235646+02:00\",\n        \"lastUpdateDate\": \"2023-08-02T17:16:47.910846+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"cfbcdc3a-99c1-4122-ab2b-62359837d1b7\",\n        \"messageRequestUid\": \"340e21c7-07d1-43fd-ba30-ad987ca5c0b3\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"BLACKLIST\",\n        \"requestStatus\": \"ERROR\",\n        \"messageStatus\": \"BLACKLIST\",\n        \"deliveryReportLogStatus\": null,\n        \"deliveryReportStatus\": null,\n        \"eventDate\": \"2023-07-28T10:11:56.739867+02:00\",\n        \"expirationDate\": \"2023-07-28T10:20:56.739867+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": null,\n        \"deliveryReportChannel\": null,\n        \"deliveryReportCarrier\": null,\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"adadaw e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-07-28T10:12:47.379524+02:00\",\n        \"lastUpdateDate\": \"2023-07-28T10:12:47.379524+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"f2242c80-36cc-4d48-9b50-d0826563a6bc\",\n        \"messageRequestUid\": \"87dd7507-145a-478e-9449-203c44f56837\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"SENT\",\n        \"requestStatus\": \"DONE\",\n        \"messageStatus\": \"SENT\",\n        \"deliveryReportLogStatus\": \"DONE\",\n        \"deliveryReportStatus\": \"DELIVERED\",\n        \"eventDate\": \"2023-07-27T17:39:15.801131+02:00\",\n        \"expirationDate\": \"2023-07-27T17:48:15.801131+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": \"2023-07-27T17:39:17.867671+02:00\",\n        \"deliveryReportChannel\": \"bulk\",\n        \"deliveryReportCarrier\": \"VODF\",\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"adadaw e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-07-27T17:39:15.833602+02:00\",\n        \"lastUpdateDate\": \"2023-07-27T17:39:16.36673+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"d37198c7-ade3-4aaa-b6b8-dcdbea38567c\",\n        \"messageRequestUid\": \"7b522e7c-dfe5-406b-b460-0a197d82c3be\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"ERROR\",\n        \"requestStatus\": \"ERROR\",\n        \"messageStatus\": \"ERROR\",\n        \"deliveryReportLogStatus\": null,\n        \"deliveryReportStatus\": null,\n        \"eventDate\": \"2023-07-27T17:36:03.493393+02:00\",\n        \"expirationDate\": \"2023-07-27T17:45:03.493393+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": null,\n        \"deliveryReportChannel\": null,\n        \"deliveryReportCarrier\": null,\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"adadaw e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-07-27T17:36:03.528751+02:00\",\n        \"lastUpdateDate\": \"2023-07-27T17:36:03.680815+02:00\"\n      },\n      {\n        \"source\": \"OLD_GP_MC\",\n        \"messageUid\": \"82249303623072717341391\",\n        \"messageRequestUid\": \"8037930\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"3\",\n        \"requestStatus\": \"INVIO_SENDMSGBYTEMPLATE_OK\",\n        \"messageStatus\": \"TODO\",\n        \"deliveryReportLogStatus\": null,\n        \"deliveryReportStatus\": null,\n        \"eventDate\": \"2023-07-27T17:34:13+02:00\",\n        \"expirationDate\": \"2023-07-27T17:43:13+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": null,\n        \"messageTemplateCode\": \"DOB_IT_SMS_VERIFICA_CELL_OTP_NEXI\",\n        \"messageTemplateDescription\": \"Il tuo codice di verifica e': #cod# . Inseriscilo per confermare il tuo numero di cellulare e continua la procedura.\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": null,\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": null,\n        \"deliveryReportChannel\": null,\n        \"deliveryReportCarrier\": null,\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"Il tuo codice di verifica e': *** . Inseriscilo per confermare il tuo numero di cellulare e continua la procedura.\",\n        \"insertDate\": \"2023-07-27T17:34:13+02:00\",\n        \"lastUpdateDate\": \"2023-07-27T17:34:14+02:00\"\n      },\n      {\n        \"source\": \"NEW_GP_MC\",\n        \"messageUid\": \"9f2541f3-1d1d-4af8-8ccf-d6713f3f5561\",\n        \"messageRequestUid\": \"136a0205-0c21-4919-b855-baedf087f13e\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"SENT\",\n        \"requestStatus\": \"DONE\",\n        \"messageStatus\": \"SENT\",\n        \"deliveryReportLogStatus\": \"DONE\",\n        \"deliveryReportStatus\": \"DELIVERED\",\n        \"eventDate\": \"2023-07-27T17:33:39.436652+02:00\",\n        \"expirationDate\": \"2023-07-27T17:42:39.436652+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": \"MES_FOR_ACS\",\n        \"messageTemplateCode\": \"ACQUISTO_2_OTP_ACS_BPM\",\n        \"messageTemplateDescription\": \"Testo di conferma acquisto 3D Secure\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": \"WEB\",\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": \"2023-07-27T17:34:27.159635+02:00\",\n        \"deliveryReportChannel\": \"bulk\",\n        \"deliveryReportCarrier\": \"VODF\",\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"adadaw e' il codice per confermare l'acquisto online di 312 EUR con la carta sdasda su 312\",\n        \"insertDate\": \"2023-07-27T17:34:24.555994+02:00\",\n        \"lastUpdateDate\": \"2023-07-27T17:34:25.167125+02:00\"\n      },\n      {\n        \"source\": \"OLD_GP_MC\",\n        \"messageUid\": \"3531121923072514575465\",\n        \"messageRequestUid\": \"8037387\",\n        \"parentMessageRequestUid\": null,\n        \"sentStatus\": \"3\",\n        \"requestStatus\": \"INVIO_SENDMSGBYTEMPLATE_OK\",\n        \"messageStatus\": \"TODO\",\n        \"deliveryReportLogStatus\": \"DONE\",\n        \"deliveryReportStatus\": \"DELIVERED\",\n        \"eventDate\": \"2023-07-25T14:57:54+02:00\",\n        \"expirationDate\": \"2023-07-26T14:57:54+02:00\",\n        \"destinationChannelCode\": \"SMS\",\n        \"messageTemplateGroupCode\": null,\n        \"messageTemplateCode\": \"OBI_SERVIZIATTIVATI_NEXI\",\n        \"messageTemplateDescription\": \"I servizi SMS Alert e 3D Secure per la tua nuova Carta sono ora attivi.\",\n        \"requestApplication\": \"CH\",\n        \"requestApplicationChannel\": null,\n        \"requestCompanyGroup\": \"NEXI\",\n        \"requestCompany\": \"NEXI\",\n        \"requestVendor\": \"NEXI\",\n        \"deliveryReportDate\": \"2023-07-25T14:57:56.809+02:00\",\n        \"deliveryReportChannel\": \"bulk\",\n        \"deliveryReportCarrier\": \"VODF\",\n        \"sentMessageBodyEncoding\": \"NONE\",\n        \"sentMessageBody\": \"I servizi SMS Alert e 3D Secure per la tua nuova Carta sono ora attivi.\",\n        \"insertDate\": \"2023-07-25T14:57:54+02:00\",\n        \"lastUpdateDate\": \"2023-07-25T14:57:54+02:00\"\n      }\n    ]\n  }\n]\n\n ```",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18258051",
+		"_collection_link": "https://team-nexi-alten.postman.co/workspace/Team-Workspace~d73c1392-e276-429a-830d-648e8e808912/collection/18019665-e1467f61-1bae-44a8-b4e7-2bb1e6ef8a76?action=share&source=collection_link&creator=18258051"
+	},
+	"item": [
+		{
+			"name": "0 - preset",
+			"item": [
+				{
+					"name": "Reset environment variables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//console.clear()",
+									"console.info('Reset environment variables')",
+									"",
+									"const resetAll = (value, ...args) => {",
+									"    args.forEach(arg => {",
+									"        pm.collectionVariables.set(arg, value)",
+									"    })",
+									"}",
+									"",
+									"resetAll(\"[]\", ",
+									"    \"primaryContactDestinationList\",",
+									"    \"inputFields\",",
+									"    \"RESULT\"",
+									"    )",
+									"",
+									"resetAll(\"\", ",
+									"    \"eventDateFrom\", ",
+									"    \"eventDateTo\",",
+									"    \"localeCode\",",
+									"    \"jwtToken\", ",
+									"    )",
+									"",
+									"resetAll(\"1\", ",
+									"    \"pageNumber\", ",
+									"    )"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch input prefixed keys",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.info(\"Fetch input keys from collection variables\")",
+									"const collectionVariables = pm.collectionVariables.toObject()",
+									"const exceptionKeys = []",
+									"const inputVariableKeys = []",
+									"",
+									"for (const variableName of Object.keys(collectionVariables)) {",
+									"  if (variableName.startsWith('INPUT_') && !exceptionKeys.includes(variableName)) {",
+									"    inputVariableKeys.push(variableName);",
+									"  }",
+									"}",
+									"",
+									"console.log(inputVariableKeys)",
+									"pm.collectionVariables.set(\"inputFields\", JSON.stringify(inputVariableKeys))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check INPUT fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Write here optional input fields",
+									"const exceptionKeys = []",
+									"",
+									"const inputFields = JSON.parse(pm.collectionVariables.get('inputFields'))",
+									"",
+									"// Function to check if a variable is empty or null",
+									"const isNullOrEmpty = (variable) => {",
+									"  return variable === null || variable === undefined || variable === '' || variable.trim().length === 0",
+									"}",
+									"",
+									"const allValidWithExceptions = inputFields.every((variable) => {",
+									"  if (exceptionKeys.includes(variable)) {",
+									"    return true; // Skip the variable if it's in the exception list",
+									"  }",
+									"  return !isNullOrEmpty(pm.collectionVariables.get(variable))",
+									"})",
+									"",
+									"// Assert test to check if all variables are not empty or null",
+									"pm.test(\"All input fields are not empty or null\", function () {",
+									"  pm.expect(allValidWithExceptions).to.be.true",
+									"})",
+									"",
+									"// Log the names of empty or null variables if any",
+									"if (!allValidWithExceptions) {",
+									"  console.error('FATAL: One or more collection variables are empty or null.')",
+									"",
+									"  inputFields.forEach((variable) => {",
+									"    if (isNullOrEmpty(pm.collectionVariables.get(variable))) {",
+									"      console.error(`Variable \"${variable}\" seems to be empty or null`)",
+									"    }",
+									"  })",
+									"",
+									"  postman.setNextRequest(\"null\")",
+									"} else {",
+									"  console.info('All collection input variables are valid.')",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Store input fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.info('Parsing fields to array variables')",
+									"",
+									"const inputFields = JSON.parse(pm.collectionVariables.get('inputFields'))",
+									"const separatorRegexPattern = pm.collectionVariables.get('arrayRegex')",
+									"const separatorRegex = new RegExp(separatorRegexPattern, 'g') // Add the 'g' flag for global matching",
+									"",
+									"/* Replace not alphanumeric chars as single space \" \"",
+									"   Split a String removing any Empty Elements using",
+									"   Boolean(). the regular expression /[\\p{Z}\\p{C}]/gu",
+									"   matches all Unicode whitespace characters (\\p{Z}) and",
+									"   control characters (\\p{C}). The u flag indicates that",
+									"   the regex should be applied to Unicode strings, and",
+									"   the g flag makes the replacement global across the",
+									"   string.",
+									"*/",
+									"const toArray = value => value.split(separatorRegex).map(item => item.trim().replace(/[\\p{Z}\\p{C}]/gu, '')).filter(Boolean)",
+									"",
+									"inputFields.forEach(field => {",
+									"    const value = pm.collectionVariables.get(field)",
+									"    const isList = field.endsWith(\"List\")",
+									"    ",
+									"    // Remove \"INPUT_\" prefix",
+									"    const cleanedInputFieldName = field.replace(/^INPUT_/, '')",
+									"    if (isList) {",
+									"        pm.collectionVariables.set(cleanedInputFieldName, JSON.stringify(toArray(value)))",
+									"    } else {",
+									"        pm.collectionVariables.set(cleanedInputFieldName, value)",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5 - Validate INPUT Mobile list",
+			"item": [
+				{
+					"name": "preset variables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.info(\"Preset variables\")",
+									"",
+									"pm.collectionVariables.set(\"primaryContactDestinationSourceList\",",
+									"    pm.collectionVariables.get(\"primaryContactDestinationList\"))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start loop contact list",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const list = JSON.parse(pm.collectionVariables.get(\"primaryContactDestinationList\")) || []",
+									"",
+									"const mobile = list.shift()",
+									"pm.collectionVariables.set(\"mobile\", mobile)",
+									"pm.collectionVariables.set(\"primaryContactDestinationList\", JSON.stringify(list))",
+									"",
+									"console.info(`Processing mobile: ${pm.collectionVariables.get(\"mobile\")}`)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						},
+						"description": "Lets subscribe card to one or more services."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) technical code of the application calling the service.",
+										"key": "MT_APPLICATION",
+										"value": "{{MT_APPLICATION}}"
+									},
+									{
+										"description": "(Required) channel code of the request - [WEB, MOB, BAT] ",
+										"key": "MT_CHANNEL",
+										"value": "{{MT_CHANNEL}}"
+									},
+									{
+										"description": "(Required) user identifier of the request (username , userid , ...)",
+										"key": "MT_USER",
+										"value": "{{MT_USER}}"
+									},
+									{
+										"description": "(Required) Company Group identification code.",
+										"key": "MT_COMPANY_GROUP",
+										"value": "{{MT_COMPANY_GROUP}}"
+									},
+									{
+										"description": "(Required) Company code.",
+										"key": "MT_COMPANY",
+										"value": "{{MT_COMPANY}}"
+									},
+									{
+										"description": "(Required) Partner belonging to the company. It describe a subset of NEXI customer related to the specified partner.",
+										"key": "MT_PARTNER",
+										"value": "{{MT_PARTNER}}"
+									},
+									{
+										"description": "(Required) Random unique identification code of the request set by the client. Example UUID [8119c0ce-17f2-11e8-accf-0ed5f89f718b]",
+										"key": "MT_REQUEST_ID",
+										"value": "{{MT_REQUEST_ID}}"
+									},
+									{
+										"description": "(Required) Random unique identification code identifying a single session of the client. Example JSESSIONID [b272023f-05ca-44cb-96cd-6d72c72d03f9]",
+										"key": "MT_SESSION_ID",
+										"value": "{{MT_SESSION_ID}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"cardId\": {\n        \"type\": \"PAN\",\n        \"value\": 4532200085801459\n    },\n    \"skipCustomerCertifiedData\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/issuing/cards/v1/getCard",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"issuing",
+										"cards",
+										"v1",
+										"getCard"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"card\": {\n        \"card\": {\n            \"cardId\": {\n                \"value\": \"4532200085801459\",\n                \"type\": \"PAN\",\n                \"processor\": \"S\",\n                \"bin\": \"453220\",\n                \"tail\": \"1459\"\n            },\n            \"productKey\": {\n                \"abi\": \"03395\",\n                \"affinity\": \"40\",\n                \"plastic\": \"00\",\n                \"productType\": \"CRE\",\n                \"circuitCode\": \"V\"\n            },\n            \"bankName\": \"BANCA INTERPROVINCIALE\",\n            \"productId\": \"033954000VC\",\n            \"productCode\": \"4000\",\n            \"productDescription\": \"BUSINESS CARTA BUSINESS\",\n            \"prepaidVendor\": null,\n            \"circuitDetail\": \"VISA\",\n            \"emissionTypeCode\": \"NU\",\n            \"emissionTypeDescription\": \"NUOVA\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"offlineBlockDescription\": null,\n            \"validityStartDate\": \"2018-12-21\",\n            \"expiringDate\": \"2026-03-31\",\n            \"validityState\": \"V\",\n            \"expenseLimit\": {\n                \"value\": 10000,\n                \"currency\": \"EUR\"\n            },\n            \"expenseLimit2ndLine\": null,\n            \"expenseLimit3ndLine\": null,\n            \"ibanDebit\": null,\n            \"downOptionMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"downOptionDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"flagBancomat\": \"N\",\n            \"flagChip\": \"S\",\n            \"flagContactless\": \"S\",\n            \"flagDebit\": \"N\",\n            \"flagFamiliar\": \"N\",\n            \"flagHCE\": \"N\",\n            \"flagIndividualBilling\": \"N\",\n            \"flagDirectIssuing\": \"N\",\n            \"flagMultifunction\": \"N\",\n            \"flagNFC\": \"N\",\n            \"flagPrepaid\": \"N\",\n            \"flagPrepaidNameless\": \"N\",\n            \"flagPrepaidVirtual\": \"N\",\n            \"paymentType\": \"S\",\n            \"cardIdHCE\": null,\n            \"cardIncremental\": \"1\",\n            \"anagraphicIncremental\": \"1\",\n            \"distributorBank\": null,\n            \"flagActivationRequired\": \"N\",\n            \"prepaidRechargeIBAN\": null,\n            \"contractType\": \"C\",\n            \"equensAccountId\": null,\n            \"cardRelationType\": null,\n            \"flagAnonymous\": \"N\",\n            \"tags\": [],\n            \"renewalPresent\": \"N\",\n            \"renewalShipped\": \"N\"\n        },\n        \"customerData\": {\n            \"name\": \"BRAMBILLA\",\n            \"surname\": \"ABIBO\",\n            \"heading\": \"ABIBO BRAMBILLA\",\n            \"fiscalCode\": \"BRMBBA85S01F205R\",\n            \"flagPositionOwner\": \"S\",\n            \"sex\": \"M\",\n            \"birthDate\": \"1985-11-01\",\n            \"birthPlace\": \"MILANO\",\n            \"birthCity\": \"MI\",\n            \"birthNation\": \"ITALIA\",\n            \"cardSubjectId\": \"117975817\"\n        },\n        \"position\": {\n            \"typeCode\": \"1\",\n            \"typeDescription\": \"I\",\n            \"positionId\": \"9000008\",\n            \"positionAbi\": \"03395\",\n            \"positionKeySION\": \"033959000008\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"validityState\": \"V\",\n            \"conditionTypeCode\": \"0\",\n            \"conditionTypeDescription\": \"ORDINARIO\",\n            \"flagExtendendCredit\": \"N\",\n            \"iban\": \"IT11E0339512900123456789012\",\n            \"bankAccountId\": \"123456789012\",\n            \"bankAccountType\": \"CO\",\n            \"sourceSubsystem\": \"C\",\n            \"homeAddressPostalCode\": \"20145\",\n            \"homeAddressStreet\": \"GIARDINI GUASTALLA 8\",\n            \"homeAddressCountryCode\": null,\n            \"homeAddressCity\": \"MILANO\",\n            \"homeAddressAdministrativeArea\": \"MI\",\n            \"accountholderName\": \"ABIBO BRAMBILLA\",\n            \"vatNumber\": null,\n            \"positionSubjectId\": \"117975817\",\n            \"agencyCode\": \"00001\"\n        }\n    }\n}"
+						},
+						{
+							"name": "Template response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) technical code of the application calling the service.",
+										"key": "MT_APPLICATION",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) channel code of the request - [WEB, MOB, BAT] ",
+										"key": "MT_CHANNEL",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) user identifier of the request (username , userid , ...)",
+										"key": "MT_USER",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Company Group identification code.",
+										"key": "MT_COMPANY_GROUP",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Company code.",
+										"key": "MT_COMPANY",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Partner belonging to the company. It describe a subset of NEXI customer related to the specified partner.",
+										"key": "MT_PARTNER",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Random unique identification code of the request set by the client. Example UUID [8119c0ce-17f2-11e8-accf-0ed5f89f718b]",
+										"key": "MT_REQUEST_ID",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Random unique identification code identifying a single session of the client. Example JSESSIONID [b272023f-05ca-44cb-96cd-6d72c72d03f9]",
+										"key": "MT_SESSION_ID",
+										"value": "minim dolore"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"cardId\": {\n        \"bin\": \"eu\",\n        \"processor\": \"S\",\n        \"tail\": \"irure velit nisi consectetur\",\n        \"type\": \"PAN\",\n        \"value\": \"proident dolor do m\"\n    },\n    \"mobilePhone\": {\n        \"mobilePhoneNumber\": \"laborum\",\n        \"carrier\": \"qui fugiat minim labore\",\n        \"countryAlphaTwoCode\": \"IT\",\n        \"mobilePhonePrefix\": \"+39\"\n    },\n    \"updateSystems\": [\n        \"SMS\",\n        \"SMS\"\n    ],\n    \"acs\": {\n        \"issuerCode\": \"fugiat nulla\",\n        \"notificationChannel3DSecure\": \"EMAIL\",\n        \"abi\": \"aliqua anim\",\n        \"channel\": \"Duis\",\n        \"fiscalCode\": \"sclrcs95e15l407h\",\n        \"identifyingPhrase3DSecure\": \"et sint dolor Ut\",\n        \"ownerName\": \"minim id labore\",\n        \"templateId\": \"inc\",\n        \"templateSMS\": \"ad labore\",\n        \"unlockRequest\": \"culpa\"\n    },\n    \"customerData\": {\n        \"birthCity\": \"MI\",\n        \"birthDate\": \"2000-10-02\",\n        \"birthNation\": \"Italy\",\n        \"birthPlace\": \"Sesto San Giovanni\",\n        \"fiscalCode\": \"RSSMRA81M18D121R\",\n        \"flagPositionOwner\": \"S\",\n        \"heading\": \"Mario Rossi\",\n        \"name\": \"Mario\",\n        \"sex\": \"M\",\n        \"surname\": \"Rossi\"\n    },\n    \"disablePropagation\": false,\n    \"sms\": {\n        \"alertThreshold\": {\n            \"currency\": \"EUR\",\n            \"value\": 23.78\n        },\n        \"flagAlertThreshold\": \"cillum sunt velit laboris\",\n        \"availabilityThreshold\": {\n            \"currency\": \"EUR\",\n            \"value\": 23.78\n        },\n        \"flagAvailabilityBS\": \"sit\",\n        \"flagAvailabilityPull\": \"et nisi aliquip reprehenderit\",\n        \"flagAvailabilityThreshold\": \"velit Lorem cupidatat tempor dolore\",\n        \"flagCharity\": \"in quis adipisicing ani\",\n        \"flagPayment\": \"amet pariatur\",\n        \"flagWelcome\": \"esse amet cillum exercitation\",\n        \"profileType\": \"ipsum nulla reprehenderit\",\n        \"sourceCode\": \"labore ad\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/subscribe",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"subscribe"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"result\": {\n  \"code\": \"dolore ex incididunt in\",\n  \"description\": \"success\",\n  \"infos\": [\n   {\n    \"code\": \"laborum qui esse eiusmod dolore\",\n    \"description\": \"success\",\n    \"source\": \"ipsum ut\"\n   },\n   {\n    \"code\": \"pariatur\",\n    \"description\": \"success\",\n    \"source\": \"dolore elit nulla\"\n   }\n  ]\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "Validate mobile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"class PhoneNumberValidator {",
+									"  constructor() {",
+									"    this.libraryURL =",
+									"      'https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.10.38/libphonenumber-js.min.js'",
+									"    this.libraryLoaded = false",
+									"  }",
+									"",
+									"  // Method to fetch the libphonenumber-js library",
+									"  fetchLibPhoneNumberJS(callback) {",
+									"    if (this.libraryLoaded) {",
+									"      // If the library is already loaded, proceed with the callback immediately",
+									"      callback()",
+									"    } else {",
+									"      pm.sendRequest(this.libraryURL, (error, response) => {",
+									"        if (error || response.code !== 200) {",
+									"          console.error('Failed to fetch libphonenumber-js:', error || `Status code: ${response.code}`)",
+									"          throw new Error('Failed to fetch libphonenumber-js')",
+									"        }",
+									"",
+									"        // Extract the library content from the response",
+									"        const libraryContent = response.text()",
+									"",
+									"        // Execute the library content to load the libphonenumber-js functions",
+									"        eval(libraryContent)",
+									"        this.libraryLoaded = true",
+									"",
+									"        // Continue with the main callback function (phone number validation in this case)",
+									"        callback()",
+									"      })",
+									"    }",
+									"  }",
+									"",
+									"  // Helper method to validate a phone number using libphonenumber-js logic",
+									"  isValidPhoneNumber(phoneNumber, regionCode) {",
+									"    try {",
+									"      const numericPhoneNumber = phoneNumber",
+									"",
+									"      // Parse the phone number and check if it's valid for the given region",
+									"      const parsedPhoneNumber = this.libphonenumber.parsePhoneNumber(numericPhoneNumber, regionCode)",
+									"      return this.libphonenumber.isValidNumber(parsedPhoneNumber)",
+									"    } catch (error) {",
+									"      console.error('Error while validating phone number:', error.message)",
+									"      return false",
+									"    }",
+									"  }",
+									"",
+									"  // Helper method to validate a mobile phone number",
+									"  isValidMobilePhoneNumber(phoneNumber, regionCode) {",
+									"    try {",
+									"      const numericPhoneNumber = phoneNumber",
+									"",
+									"      // Parse the phone number and check if it's a possible mobile number",
+									"      const parsedPhoneNumber = this.libphonenumber.parsePhoneNumberFromString(numericPhoneNumber, regionCode)",
+									"      return parsedPhoneNumber ? parsedPhoneNumber.isPossible() && parsedPhoneNumber.getType() === 'MOBILE' : false",
+									"    } catch (error) {",
+									"      console.error('Error while validating phone number:', error.message)",
+									"      return false",
+									"    }",
+									"  }",
+									"}",
+									"",
+									"const phoneNumberValidator = new PhoneNumberValidator()",
+									"",
+									"const phoneNumberToValidate = pm.collectionVariables.get('mobile')",
+									"const regionCode = pm.collectionVariables.get('localeCode')",
+									"",
+									"// Fetch the libphonenumber-js library and then perform the validation",
+									"phoneNumberValidator.fetchLibPhoneNumberJS(() => { ",
+									"    const phoneNumberToValidate = pm.collectionVariables.get('mobile')",
+									"    const regionCode = pm.collectionVariables.get('localeCode')",
+									"",
+									"    const isValid = phoneNumberValidator.isValidMobilePhoneNumber(phoneNumberToValidate, regionCode)",
+									"    ",
+									"    const countryCode = pm.collectionVariables.get('localeCode')",
+									"    const phoneNumberLabel = `Mobile phone number \"${phoneNumberToValidate}\"`",
+									"    ",
+									"    console.info(`Checking the \"${countryCode}\" ${phoneNumberLabel}...`)",
+									"    ",
+									"    if (isValid) {",
+									"        console.info(`${phoneNumberLabel} is valid.`)",
+									"    } else {",
+									"        console.error(`FATAL: ${phoneNumberLabel} is not valid`)",
+									"        postman.setNextRequest(null)",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const list = JSON.parse(pm.collectionVariables.get(\"primaryContactDestinationList\")) || []",
+									"if (list.length > 0) {",
+									"    postman.setNextRequest(\"Start loop contact list\")",
+									"} else {",
+									"    console.info(\"End of input mobile data reached.\")",
+									"    postman.setNextRequest(\"Validate date range\")",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "10 - Validate INPUT Date fields",
+			"item": [
+				{
+					"name": "Validate date range",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.info('Validate Date fields')",
+									"",
+									"const moment = require('moment')",
+									"",
+									"function convertDateWithDefaultHour(parsedDate) {",
+									"    if (parsedDate.format(\"HH:mm:ss\") === \"00:00:00\") {",
+									"        // If the parsed time is 00:00:00, it's a date-only format",
+									"        return parsedDate.format(\"YYYY-MM-DD\") + \"T00:00:00Z\"",
+									"    } else {",
+									"        return parsedDate.toISOString()",
+									"    }",
+									"}",
+									"",
+									"function convertToISO8601(dateString) {",
+									"    const supportedDateFormats = JSON.parse(pm.collectionVariables.get(\"supportedDateFormats\").replace(/\\n/g, ''))",
+									"",
+									"    let isoString = null",
+									"",
+									"    supportedDateFormats.some(format => {",
+									"        const parsedDate = moment(dateString, format, true)",
+									"        if (parsedDate.isValid()) {",
+									"            isoString = convertDateWithDefaultHour(parsedDate)",
+									"            return true // Break out of the loop",
+									"        }",
+									"        return false",
+									"    })",
+									"",
+									"    return isoString",
+									"}",
+									"",
+									"function validateAndLogDate(dateVariableName) {",
+									"    const eventDate = pm.collectionVariables.get(dateVariableName)",
+									"    const isoDate = convertToISO8601(eventDate)",
+									"",
+									"    if (isoDate) {",
+									"        return `\"${isoDate}\" is valid!`",
+									"    } else {",
+									"        console.error(`FATAL: \"${eventDate}\" is not a valid date format!`)",
+									"        return `\"${eventDate}\" is not valid!`",
+									"        postman.setNextRequest(null)",
+									"    }",
+									"}",
+									"",
+									"console.info(`eventDateFrom: ${validateAndLogDate(\"eventDateFrom\")}`)",
+									"console.info(`eventDateTo: ${validateAndLogDate(\"eventDateTo\")}`)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "25 - Set JWT Token",
+			"item": [
+				{
+					"name": "Generate JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Use arrow functions for test functions",
+									"pm.test(\"Successful POST request\", () => {",
+									"    // Use array includes method for multiple code validation",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202])",
+									"})",
+									"",
+									"// Use destructuring to extract 'access_token' from the response",
+									"const { access_token } = JSON.parse(responseBody)",
+									"",
+									"pm.test(\"Response should contain 'access_token'\", () => {",
+									"    // Use response object directly instead of responseBody",
+									"    pm.expect(access_token).to.exist",
+									"})",
+									"",
+									"// Use pm.variables instead of pm.collectionVariables",
+									"pm.collectionVariables.set(\"jwtToken\", access_token)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{titolariClientId}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{titolariClientSecret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{jwtTokenServer}}/oauth/v2/token",
+							"host": [
+								"{{jwtTokenServer}}"
+							],
+							"path": [
+								"oauth",
+								"v2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "40 - Get sent messages list",
+			"item": [
+				{
+					"name": "preset variables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"primaryContactDestinationList\",",
+									"    pm.collectionVariables.get(\"primaryContactDestinationSourceList\"))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start loop contact messages list",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const list = JSON.parse(pm.collectionVariables.get(\"primaryContactDestinationList\")) || []",
+									"",
+									"const mobile = list.shift()",
+									"pm.collectionVariables.set(\"mobile\", mobile)",
+									"pm.collectionVariables.set(\"primaryContactDestinationList\", JSON.stringify(list))",
+									"",
+									"console.info(`Processing mobile: ${pm.collectionVariables.get(\"mobile\")}`)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						},
+						"description": "Lets subscribe card to one or more services."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) technical code of the application calling the service.",
+										"key": "MT_APPLICATION",
+										"value": "{{MT_APPLICATION}}"
+									},
+									{
+										"description": "(Required) channel code of the request - [WEB, MOB, BAT] ",
+										"key": "MT_CHANNEL",
+										"value": "{{MT_CHANNEL}}"
+									},
+									{
+										"description": "(Required) user identifier of the request (username , userid , ...)",
+										"key": "MT_USER",
+										"value": "{{MT_USER}}"
+									},
+									{
+										"description": "(Required) Company Group identification code.",
+										"key": "MT_COMPANY_GROUP",
+										"value": "{{MT_COMPANY_GROUP}}"
+									},
+									{
+										"description": "(Required) Company code.",
+										"key": "MT_COMPANY",
+										"value": "{{MT_COMPANY}}"
+									},
+									{
+										"description": "(Required) Partner belonging to the company. It describe a subset of NEXI customer related to the specified partner.",
+										"key": "MT_PARTNER",
+										"value": "{{MT_PARTNER}}"
+									},
+									{
+										"description": "(Required) Random unique identification code of the request set by the client. Example UUID [8119c0ce-17f2-11e8-accf-0ed5f89f718b]",
+										"key": "MT_REQUEST_ID",
+										"value": "{{MT_REQUEST_ID}}"
+									},
+									{
+										"description": "(Required) Random unique identification code identifying a single session of the client. Example JSESSIONID [b272023f-05ca-44cb-96cd-6d72c72d03f9]",
+										"key": "MT_SESSION_ID",
+										"value": "{{MT_SESSION_ID}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"cardId\": {\n        \"type\": \"PAN\",\n        \"value\": 4532200085801459\n    },\n    \"skipCustomerCertifiedData\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/issuing/cards/v1/getCard",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"issuing",
+										"cards",
+										"v1",
+										"getCard"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"result\": {\n        \"code\": \"0\",\n        \"description\": \"OK\"\n    },\n    \"card\": {\n        \"card\": {\n            \"cardId\": {\n                \"value\": \"4532200085801459\",\n                \"type\": \"PAN\",\n                \"processor\": \"S\",\n                \"bin\": \"453220\",\n                \"tail\": \"1459\"\n            },\n            \"productKey\": {\n                \"abi\": \"03395\",\n                \"affinity\": \"40\",\n                \"plastic\": \"00\",\n                \"productType\": \"CRE\",\n                \"circuitCode\": \"V\"\n            },\n            \"bankName\": \"BANCA INTERPROVINCIALE\",\n            \"productId\": \"033954000VC\",\n            \"productCode\": \"4000\",\n            \"productDescription\": \"BUSINESS CARTA BUSINESS\",\n            \"prepaidVendor\": null,\n            \"circuitDetail\": \"VISA\",\n            \"emissionTypeCode\": \"NU\",\n            \"emissionTypeDescription\": \"NUOVA\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"offlineBlockDescription\": null,\n            \"validityStartDate\": \"2018-12-21\",\n            \"expiringDate\": \"2026-03-31\",\n            \"validityState\": \"V\",\n            \"expenseLimit\": {\n                \"value\": 10000,\n                \"currency\": \"EUR\"\n            },\n            \"expenseLimit2ndLine\": null,\n            \"expenseLimit3ndLine\": null,\n            \"ibanDebit\": null,\n            \"downOptionMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"downOptionDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingMonthlyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"velocitySpendingDailyLimit\": {\n                \"value\": 0,\n                \"currency\": \"EUR\"\n            },\n            \"flagBancomat\": \"N\",\n            \"flagChip\": \"S\",\n            \"flagContactless\": \"S\",\n            \"flagDebit\": \"N\",\n            \"flagFamiliar\": \"N\",\n            \"flagHCE\": \"N\",\n            \"flagIndividualBilling\": \"N\",\n            \"flagDirectIssuing\": \"N\",\n            \"flagMultifunction\": \"N\",\n            \"flagNFC\": \"N\",\n            \"flagPrepaid\": \"N\",\n            \"flagPrepaidNameless\": \"N\",\n            \"flagPrepaidVirtual\": \"N\",\n            \"paymentType\": \"S\",\n            \"cardIdHCE\": null,\n            \"cardIncremental\": \"1\",\n            \"anagraphicIncremental\": \"1\",\n            \"distributorBank\": null,\n            \"flagActivationRequired\": \"N\",\n            \"prepaidRechargeIBAN\": null,\n            \"contractType\": \"C\",\n            \"equensAccountId\": null,\n            \"cardRelationType\": null,\n            \"flagAnonymous\": \"N\",\n            \"tags\": [],\n            \"renewalPresent\": \"N\",\n            \"renewalShipped\": \"N\"\n        },\n        \"customerData\": {\n            \"name\": \"BRAMBILLA\",\n            \"surname\": \"ABIBO\",\n            \"heading\": \"ABIBO BRAMBILLA\",\n            \"fiscalCode\": \"BRMBBA85S01F205R\",\n            \"flagPositionOwner\": \"S\",\n            \"sex\": \"M\",\n            \"birthDate\": \"1985-11-01\",\n            \"birthPlace\": \"MILANO\",\n            \"birthCity\": \"MI\",\n            \"birthNation\": \"ITALIA\",\n            \"cardSubjectId\": \"117975817\"\n        },\n        \"position\": {\n            \"typeCode\": \"1\",\n            \"typeDescription\": \"I\",\n            \"positionId\": \"9000008\",\n            \"positionAbi\": \"03395\",\n            \"positionKeySION\": \"033959000008\",\n            \"offlineBlockDate\": null,\n            \"offlineBlockType\": null,\n            \"validityState\": \"V\",\n            \"conditionTypeCode\": \"0\",\n            \"conditionTypeDescription\": \"ORDINARIO\",\n            \"flagExtendendCredit\": \"N\",\n            \"iban\": \"IT11E0339512900123456789012\",\n            \"bankAccountId\": \"123456789012\",\n            \"bankAccountType\": \"CO\",\n            \"sourceSubsystem\": \"C\",\n            \"homeAddressPostalCode\": \"20145\",\n            \"homeAddressStreet\": \"GIARDINI GUASTALLA 8\",\n            \"homeAddressCountryCode\": null,\n            \"homeAddressCity\": \"MILANO\",\n            \"homeAddressAdministrativeArea\": \"MI\",\n            \"accountholderName\": \"ABIBO BRAMBILLA\",\n            \"vatNumber\": null,\n            \"positionSubjectId\": \"117975817\",\n            \"agencyCode\": \"00001\"\n        }\n    }\n}"
+						},
+						{
+							"name": "Template response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) technical code of the application calling the service.",
+										"key": "MT_APPLICATION",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) channel code of the request - [WEB, MOB, BAT] ",
+										"key": "MT_CHANNEL",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) user identifier of the request (username , userid , ...)",
+										"key": "MT_USER",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Company Group identification code.",
+										"key": "MT_COMPANY_GROUP",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Company code.",
+										"key": "MT_COMPANY",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Partner belonging to the company. It describe a subset of NEXI customer related to the specified partner.",
+										"key": "MT_PARTNER",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Random unique identification code of the request set by the client. Example UUID [8119c0ce-17f2-11e8-accf-0ed5f89f718b]",
+										"key": "MT_REQUEST_ID",
+										"value": "minim dolore"
+									},
+									{
+										"description": "(Required) Random unique identification code identifying a single session of the client. Example JSESSIONID [b272023f-05ca-44cb-96cd-6d72c72d03f9]",
+										"key": "MT_SESSION_ID",
+										"value": "minim dolore"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"cardId\": {\n        \"bin\": \"eu\",\n        \"processor\": \"S\",\n        \"tail\": \"irure velit nisi consectetur\",\n        \"type\": \"PAN\",\n        \"value\": \"proident dolor do m\"\n    },\n    \"mobilePhone\": {\n        \"mobilePhoneNumber\": \"laborum\",\n        \"carrier\": \"qui fugiat minim labore\",\n        \"countryAlphaTwoCode\": \"IT\",\n        \"mobilePhonePrefix\": \"+39\"\n    },\n    \"updateSystems\": [\n        \"SMS\",\n        \"SMS\"\n    ],\n    \"acs\": {\n        \"issuerCode\": \"fugiat nulla\",\n        \"notificationChannel3DSecure\": \"EMAIL\",\n        \"abi\": \"aliqua anim\",\n        \"channel\": \"Duis\",\n        \"fiscalCode\": \"sclrcs95e15l407h\",\n        \"identifyingPhrase3DSecure\": \"et sint dolor Ut\",\n        \"ownerName\": \"minim id labore\",\n        \"templateId\": \"inc\",\n        \"templateSMS\": \"ad labore\",\n        \"unlockRequest\": \"culpa\"\n    },\n    \"customerData\": {\n        \"birthCity\": \"MI\",\n        \"birthDate\": \"2000-10-02\",\n        \"birthNation\": \"Italy\",\n        \"birthPlace\": \"Sesto San Giovanni\",\n        \"fiscalCode\": \"RSSMRA81M18D121R\",\n        \"flagPositionOwner\": \"S\",\n        \"heading\": \"Mario Rossi\",\n        \"name\": \"Mario\",\n        \"sex\": \"M\",\n        \"surname\": \"Rossi\"\n    },\n    \"disablePropagation\": false,\n    \"sms\": {\n        \"alertThreshold\": {\n            \"currency\": \"EUR\",\n            \"value\": 23.78\n        },\n        \"flagAlertThreshold\": \"cillum sunt velit laboris\",\n        \"availabilityThreshold\": {\n            \"currency\": \"EUR\",\n            \"value\": 23.78\n        },\n        \"flagAvailabilityBS\": \"sit\",\n        \"flagAvailabilityPull\": \"et nisi aliquip reprehenderit\",\n        \"flagAvailabilityThreshold\": \"velit Lorem cupidatat tempor dolore\",\n        \"flagCharity\": \"in quis adipisicing ani\",\n        \"flagPayment\": \"amet pariatur\",\n        \"flagWelcome\": \"esse amet cillum exercitation\",\n        \"profileType\": \"ipsum nulla reprehenderit\",\n        \"sourceCode\": \"labore ad\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/subscribe",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"subscribe"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"result\": {\n  \"code\": \"dolore ex incididunt in\",\n  \"description\": \"success\",\n  \"infos\": [\n   {\n    \"code\": \"laborum qui esse eiusmod dolore\",\n    \"description\": \"success\",\n    \"source\": \"ipsum ut\"\n   },\n   {\n    \"code\": \"pariatur\",\n    \"description\": \"success\",\n    \"source\": \"dolore elit nulla\"\n   }\n  ]\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Overview Sent Messages List",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202])",
+									"})",
+									"",
+									"const response = pm.response.json()",
+									"",
+									"// Extract the sentMessagesList array or use an empty array",
+									"const sentMessagesList = response.sentMessagesList || []",
+									"const totalPages = response.paginationOut ? response.paginationOut.totalPages : 1",
+									"",
+									"if (sentMessagesList && sentMessagesList.length > 0) {",
+									"    // sentMessagesList is not empty, you can work with it",
+									"    pm.collectionVariables.set(\"sentMessagesList\", JSON.stringify(sentMessagesList))",
+									"    pm.collectionVariables.set(\"totalPages\", totalPages)",
+									"    console.info(`Found ${sentMessagesList.length} messages and total pages ${totalPages} for mobile \"${pm.collectionVariables.get(\"mobile\")}\"`)",
+									"} else {",
+									"    // sentMessagesList is either not present or is empty",
+									"    console.warn('sentMessagesList is empty or not present')",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "MT_APPLICATION",
+								"value": "{{MT_APPLICATION}}",
+								"type": "text"
+							},
+							{
+								"key": "MT_CHANNEL",
+								"value": "{{MT_CHANNEL}}",
+								"type": "text"
+							},
+							{
+								"key": "MT_USER",
+								"value": "{{MT_USER}}",
+								"type": "text"
+							},
+							{
+								"key": "MT_COMPANY",
+								"value": "{{MT_COMPANY}}",
+								"type": "text"
+							},
+							{
+								"key": "MT_COMPANY_GROUP",
+								"value": "{{MT_COMPANY_GROUP}}",
+								"type": "text"
+							},
+							{
+								"key": "MT_PARTNER",
+								"value": "{{MT_PARTNER}}",
+								"type": "text"
+							},
+							{
+								"key": "MT_REQUEST_ID",
+								"value": "{{MT_REQUEST_ID}}",
+								"type": "text"
+							},
+							{
+								"key": "MT_SESSION_ID",
+								"value": "{{MT_SESSION_ID}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"filter\": {\r\n        \"primaryContactDestinationList\": [\"{{mobile}}\"],\r\n        \"localeCode\": \"{{localeCode}}\",\r\n        \"eventDateFrom\": \"{{eventDateFrom}}\",\r\n        \"eventDateTo\": \"{{eventDateTo}}\",\r\n        \"sourceList\": [\r\n            \"NEW_ACS_MC\",\r\n            \"NEW_ACS_MPS\",\r\n            \"NEW_GP_MC\",\r\n            \"NEW_GP_MPS\",\r\n            \"OLD_GP_MC\",\r\n            \"OLD_GP_MPS\",\r\n            \"OLD_ACS_GP\",\r\n            \"OLD_ACS_MPS\"\r\n        ]\r\n    },\r\n    \"paginationIn\": {\r\n        \"pageNumber\": {{pageNumber}},\r\n        \"pageLength\": 10\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/mega/statements/v1/getOverviewSentMessagesList",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mega",
+								"statements",
+								"v1",
+								"getOverviewSentMessagesList"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "default model",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) technical code of the application calling the service.  'Possible values - [Card Holder Portal (CH)]'",
+										"key": "MT_APPLICATION",
+										"value": "<string>"
+									},
+									{
+										"description": "(Required) user identifier of the request (username , userid , ...)",
+										"key": "MT_USER",
+										"value": "<string>"
+									},
+									{
+										"description": "(Required) channel code of the request - [WEB, MOB] ",
+										"key": "MT_CHANNEL",
+										"value": "<string>"
+									},
+									{
+										"description": "(Required) Company Group identification code. Possible values - [NEXI]",
+										"key": "MT_COMPANY_GROUP",
+										"value": "<string>"
+									},
+									{
+										"description": "(Required) Company code. Possible values - [NEXI]",
+										"key": "MT_COMPANY",
+										"value": "<string>"
+									},
+									{
+										"description": "(Required) Random unique identification code of the request set by the client. Example UUID [8119c0ce-17f2-11e8-accf-0ed5f89f718b]",
+										"key": "MT_REQUEST_ID",
+										"value": "<string>"
+									},
+									{
+										"description": "(Required) Partner belonging to the company. It describe a subset of NEXI customer related to the specified partner. Possible values - [NEXI]",
+										"key": "MT_PARTNER",
+										"value": "<string>"
+									},
+									{
+										"description": "(Required) Random unique identification code identifying a single session of the client. Example JSESSIONID [b272023f-05ca-44cb-96cd-6d72c72d03f9]",
+										"key": "MT_SESSION_ID",
+										"value": "<string>"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"filter\": {\n    \"primaryContactDestinationList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"localeCode\": \"<string>\",\n    \"eventDateFrom\": \"<dateTime>\",\n    \"eventDateTo\": \"<dateTime>\",\n    \"sourceList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"companyGroupsList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"companiesList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"vendorsList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"destinationChannelsList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"sentStatusList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"requestStatusList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"messageStatusList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"deliveryReportLogStatusList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"deliveryReportStatusList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"messageTemplateGroupCodesList\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"messageTemplateCodesList\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"paginationIn\": {\n    \"pageNumber\": \"<integer>\",\n    \"pageLength\": \"<integer>\"\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/getOverviewSentMessagesList",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"getOverviewSentMessagesList"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "content-length",
+									"value": "82"
+								},
+								{
+									"key": "date",
+									"value": "Mon, 21 Aug 2023 13:30:29 GMT"
+								},
+								{
+									"key": "server",
+									"value": "istio-envoy"
+								},
+								{
+									"key": "x-envoy-upstream-service-time",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"result\": {\n        \"code\": \"E9040NOAUTH\",\n        \"description\": \"Authorization validation failed\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "90 - Report",
+			"item": [
+				{
+					"name": "Write Result report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const result = JSON.parse(pm.environment.get(\"RESULT\"))",
+									"const mobileToUpdate = pm.collectionVariables.get(\"mobile\")",
+									"const sentMessagesListToUpdate = JSON.parse(pm.collectionVariables.get(\"sentMessagesList\"))",
+									"",
+									"const existingEntry = result.find(entry => entry.mobile === mobileToUpdate)",
+									"",
+									"if (existingEntry) {",
+									"    existingEntry.sentMessagesList.push(...sentMessagesListToUpdate)",
+									"} else {",
+									"    result.push({",
+									"        mobile: mobileToUpdate,",
+									"        sentMessagesList: sentMessagesListToUpdate",
+									"    })",
+									"}",
+									"",
+									"// Test and set collection variables",
+									"pm.test(`Store mobile \"${mobileToUpdate}\" messages into Result`, () => {",
+									"    pm.expect(JSON.stringify(result)).to.include(mobileToUpdate)",
+									"})",
+									"",
+									"pm.environment.set(\"RESULT\", JSON.stringify(result, null, 2))",
+
+
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check remaining pages",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.info(\"Check remaining pages\")",
+									"",
+									"const totalPages = pm.collectionVariables.get(\"totalPages\")",
+									"const pageNumber = pm.collectionVariables.get(\"pageNumber\")",
+									"",
+									"if(pageNumber < totalPages) {",
+									"    pm.collectionVariables.set(\"pageNumber\", pageNumber + 1)",
+									"    console.info(`Processing page ${pageNumber}/${totalPages}`)",
+									"    postman.setNextRequest(\"Get Overview Sent Messages List\")",
+									"}",
+									"else {",
+									"    console.info(\"No more pages to process.\")",
+									"    postman.setNextRequest(\"Set next request\")",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set next request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.info(\"Set next request\")",
+									"",
+									"const list = JSON.parse(pm.collectionVariables.get(\"primaryContactDestinationList\")) || []",
+									"",
+									"console.info(`Processing mobile: ${pm.collectionVariables.get(\"mobile\")}`)",
+									"",
+									"if (list.length > 0) {",
+									"    postman.setNextRequest(\"Start loop contact messages list\")",
+									"} else {",
+									"    if (!list) {",
+									"        console.error(\"FATAL: No mobile list found. Aborting!\")",
+									"    } else {",
+									"        console.info(\"End of input data reached.\")",
+									"    }",
+									"    ",
+									"    postman.setNextRequest(null)",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.google.it",
+							"protocol": "http",
+							"host": [
+								"www",
+								"google",
+								"it"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwtToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "INPUT_primaryContactDestinationList",
+			"value": "+393939453034,+393939453034",
+			"type": "string"
+		},
+		{
+			"key": "INPUT_eventDateFrom",
+			"value": "2023-07-21T08:10:47+02:00",
+			"type": "string"
+		},
+		{
+			"key": "INPUT_eventDateTo",
+			"value": "2023-08-07T17:20:47+02:00",
+			"type": "string"
+		},
+		{
+			"key": "INPUT_localeCode",
+			"value": "it-IT",
+			"type": "string"
+		},
+		{
+			"key": "RESULT",
+			"value": "[]",
+			"type": "string"
+		},
+		{
+			"key": "baseUrl",
+			"value": "{{smsMegaServer}}/mt-services"
+		},
+		{
+			"key": "MT_APPLICATION",
+			"value": "{{MT_APPLICATION_ENV}}"
+		},
+		{
+			"key": "MT_CHANNEL",
+			"value": "{{MT_CHANNEL_ENV}}"
+		},
+		{
+			"key": "MT_COMPANY",
+			"value": "{{MT_COMPANY_ENV}}"
+		},
+		{
+			"key": "MT_COMPANY_GROUP",
+			"value": "{{MT_COMPANY_GROUP_ENV}}"
+		},
+		{
+			"key": "MT_PARTNER",
+			"value": "{{MT_PARTNER_ENV}}"
+		},
+		{
+			"key": "MT_REQUEST_ID",
+			"value": "{{MT_REQUEST_ID_ENV}}"
+		},
+		{
+			"key": "MT_SESSION_ID",
+			"value": "{{MT_SESSION_ID_ENV}}"
+		},
+		{
+			"key": "jwtToken",
+			"value": ""
+		},
+		{
+			"key": "primaryContactDestinationList",
+			"value": ""
+		},
+		{
+			"key": "eventDateFrom",
+			"value": ""
+		},
+		{
+			"key": "eventDateTo",
+			"value": ""
+		},
+		{
+			"key": "inputFields",
+			"value": ""
+		},
+		{
+			"key": "localeCode",
+			"value": ""
+		},
+		{
+			"key": "arrayRegex",
+			"value": "[\\s,;|\\n]+",
+			"type": "string"
+		},
+		{
+			"key": "supportedDateFormats",
+			"value": "[\"YYYY-MM-DDTHH:mm:ssZ\",\"YYYY-MM-DD HH:mm:ss\",\"MM/DD/YYYY HH:mm:ss\",\"YYYY-MM-DD\",\"MM/DD/YYYY\"]",
+			"type": "string"
+		},
+		{
+			"key": "primaryContactDestinationSourceList",
+			"value": ""
+		},
+		{
+			"key": "mobile",
+			"value": ""
+		},
+		{
+			"key": "pageNumber",
+			"value": ""
+		},
+		{
+			"key": "sentMessagesList",
+			"value": ""
+		},
+		{
+			"key": "totalPages",
+			"value": ""
+		}
+	]
+}
