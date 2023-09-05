@@ -39,6 +39,5 @@ fs  versione 0.0.2
 6.  Clonare il progetto sulla vostra macchina locale con il comando:
 # git clone https://github.com/YariCagnazzi/Nexi_Project.git
 
-7. Per poter avviare ed eseguire il progetto da CLI:
-# node index.js
+7. Per poter eseguire il progetto assicuratevi che nel file .BAT sia impostato il percorso corretto sul vostro PC , quindi  avviate effettuando un doppio click sul file stesso
 
