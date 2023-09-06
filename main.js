@@ -54,7 +54,7 @@ function runRockman(collections, environments) {
 
 
 
-runRockman('collections', 'environment');
+runRockman('collections', 'environments');
 
 
 
