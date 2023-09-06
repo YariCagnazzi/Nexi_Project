@@ -58,16 +58,6 @@ async function interactiveData(collectionName, environmentName) {
                 type: 'input',
                 name: 'value',
                 message: `Inserisci il ${answer.dataType} (separati da virgola se più di uno):`,
-                validate: input => {
-                  if (answer.dataType === 'PAN') {
-                    const pans = input.split(',').map(pan => pan.trim());
-                    return pans.every(pan => /^\d{16}$/.test(pan)) || 'Ogni PAN deve contenere esattamente 16 cifre';
-                  } else if (answer.dataType === 'Codice Fiscale') {
-                    const codiciFiscali = input.split(',').map(cf => cf.trim());
-                    return codiciFiscali.every(cf => /^[A-Z0-9]{16}$/.test(cf)) || 'Ogni Codice Fiscale deve contenere esattamente 16 caratteri alfanumerici';
-                  }
-                  return true;
-                },
               },
             ]);
       
