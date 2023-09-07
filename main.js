@@ -29,8 +29,8 @@ class JSONCollectionReader {
 /**
  * Questa è una procedura che è il punto principale di eseczuzione.
  *
- * @param {string} collections - Il primo numero da sommare.
- * @param {string} environments - Il secondo numero da sommare.
+ * @param {string} collections - Lista di collections.
+ * @param {string} environments - Lista dei environments.
  * @returns { } no ritorna nulla
  */
 
@@ -58,4 +58,4 @@ runRockman('collections', 'environments');
 
 
 
-
+module.exports = { JSONCollectionReader };
