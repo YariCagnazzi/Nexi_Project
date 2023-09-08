@@ -15,9 +15,6 @@ async function interactiveData(collectionName, environmentName) {
 
   const data = [];
 
-  if(collectionName.startsWith('[BONIFICA] [INT STG] [14] - Bonifica.postman_collection')
-    || collectionName.startsWith('[BONIFICA] [INT STG] [14]  - Bonifica+Subscribe+RANDOM mobiles.postman_collection')  ) {
-  
         while (true) {
           const answer = await inquirer.prompt([
             {
@@ -74,7 +71,6 @@ async function interactiveData(collectionName, environmentName) {
         runNewman.runNewman(collectionName, environmentName , data );
 
         return;
-      } 
 
       }// fine interactiveData
 
