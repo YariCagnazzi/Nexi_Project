@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const runNewman = require('./run-newman');
-const { DataManipulation } = require('./dataUtility');
 
 
 /**
@@ -12,10 +11,9 @@ const { DataManipulation } = require('./dataUtility');
  */ 
 
 async function interactiveData(collectionName, environmentName) {
-
   const data = [];
   const dataHistory = []; // Create an array to store data history
-   
+
   while (true) {
     const answer = await inquirer.prompt([
       {
@@ -32,149 +30,138 @@ async function interactiveData(collectionName, environmentName) {
       console.log('Storico dei dati inseriti:\n', JSON.stringify(dataHistory, null, 2));
       continue; // Skip the rest of the loop and go back to the beginning
     }
-  
-    if (answer.dataType === 'Inserisci') {     
-     
-     //inizio funzione inserimento
-    
-     const insertDataType = await inquirer.prompt([
-      {
-        type: 'list',
-        name: 'dataType',
-        message: 'Seleziona il tipo di dato da inserire:',
-        choices: ['PAN', 'Codice Fiscale', 'Tipo Servizio', 'Tipo Posizione'],
-      },
-    ]);
 
-    if (insertDataType.dataType === 'Tipo Servizio') {
-      const serviceTypes = await inquirer.prompt([
+    if (answer.dataType === 'Inserisci') {
+      //inizio inserimento
+      const insertDataType = await inquirer.prompt([
         {
-          type: 'checkbox',
-          name: 'values',
-          message: 'Seleziona il tipo di servizio (SMS e/o ACS):',
-          choices: ['sms', 'acs'],
+          type: 'list',
+          name: 'dataType',
+          message: 'Seleziona il tipo di dato da inserire:',
+          choices: ['PAN', 'Codice Fiscale', 'Tipo Servizio', 'Tipo Posizione'],
         },
       ]);
 
-      // Unisci gli elementi dell'array usando "\n" come separatore
-      const formattedServiceTypes = serviceTypes.values.join('\n');
+      if (insertDataType.dataType === 'Tipo Servizio') {
+        const serviceTypes = await inquirer.prompt([
+          {
+            type: 'checkbox',
+            name: 'values',
+            message: 'Seleziona il tipo di servizio (SMS e/o ACS):',
+            choices: ['sms', 'acs'],
+          },
+        ]);
 
-      data.push({ key: 'INPUT_serviceList', value: formattedServiceTypes });
-    } else if (insertDataType.dataType === 'Tipo Posizione') {
-      const positionTypes = await inquirer.prompt([
-        {
-          type: 'checkbox',
-          name: 'values',
-          message: 'Seleziona il tipo di posizione (1 e/o 4):',
-          choices: ['1', '4'],
-        },
-      ]);
-      data.push({ key: 'INPUT_positionType', value: JSON.stringify(positionTypes.values) });
-    } else {
-      const inputData = await inquirer.prompt([
-        {
-          type: 'input',
-          name: 'value',
-          message: `Inserisci il ${insertDataType.dataType} (separati da virgola se più di uno):`,
-        },
-      ]);
+        const formattedServiceTypes = serviceTypes.values.join('\n');
 
-      const key = insertDataType.dataType === 'Codice Fiscale' ? 'INPUT_fcList' : `INPUT_${insertDataType.dataType.toLowerCase()}List`;
-      const formattedInput = inputData.value.split(',').map(value => value.trim()).join(', ');
-      data.push({ key, value: formattedInput });
-      // Store the inserted data in the history
-      dataHistory.push({ operation: 'Inserisci', data: { key, value: formattedInput } });
-    }
-      //fine funzione inserimento
-      
+        data.push({ key: 'INPUT_serviceList', value: formattedServiceTypes });
+      } else if (insertDataType.dataType === 'Tipo Posizione') {
+        const positionTypes = await inquirer.prompt([
+          {
+            type: 'checkbox',
+            name: 'values',
+            message: 'Seleziona il tipo di posizione (1 e/o 4):',
+            choices: ['1', '4'],
+          },
+        ]);
+
+        data.push({ key: 'INPUT_positionType', value: JSON.stringify(positionTypes.values) });
+      } else {
+        const inputData = await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'value',
+            message: `Inserisci il ${insertDataType.dataType} (separati da virgola se più di uno):`,
+          },
+        ]);
+
+        const key = insertDataType.dataType === 'Codice Fiscale' ? 'INPUT_fcList' : `INPUT_${insertDataType.dataType.toLowerCase()}List`;
+        const formattedInput = inputData.value.split(',').map(value => value.trim()).join(', ');
+
+        data.push({ key, value: formattedInput });
+
+        dataHistory.push({ operation: 'Inserisci', data: { key, value: formattedInput } });
+      }
+      // fine inserimento
     } else if (answer.dataType === 'Cancella') {
-  //inizio funzione cancellazione
-  const deleteDataType = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'dataType',
-      message: 'Seleziona il tipo di dato da cui cancellare un valore:',
-      choices: data.map(item => item.key),
-    },
-  ]);
 
-  // Trova l'indice dei dati da cui rimuovere il valore
-  const dataIndex = data.findIndex(item => item.key === deleteDataType.dataType);
+      //inizio cancellazione
+      const deleteDataType = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'dataType',
+          message: 'Seleziona il tipo di dato da cui cancellare un valore:',
+          choices: data.map(item => item.key),
+        },
+      ]);
 
-  if (dataIndex !== -1) {
-    const selectedData = data[dataIndex];
+      const dataIndex = data.findIndex(item => item.key === deleteDataType.dataType);
 
-    // Prompt per selezionare il valore da rimuovere
-    const removeValue = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'removedValue',
-        message: `Inserisci il valore da rimuovere da '${selectedData.key}':`,
-      },
-    ]);
+      if (dataIndex !== -1) {
+        const selectedData = data[dataIndex];
 
-    // Rimuovi il valore dall'array 'value'
-    const values = selectedData.value.split(',').map(value => value.trim());
-    const removedValue = removeValue.removedValue.trim();
+        const removeValue = await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'removedValue',
+            message: `Inserisci il valore da rimuovere da '${selectedData.key}':`,
+          },
+        ]);
 
-    const updatedValues = values.filter(value => value !== removedValue);
+        const values = selectedData.value.split(',').map(value => value.trim());
+        const removedValue = removeValue.removedValue.trim();
 
-    selectedData.value = updatedValues.join(', ');
+        const updatedValues = values.filter(value => value !== removedValue);
 
-    console.log(`Valore rimosso da '${selectedData.key}': ${removedValue}`);
-  } else {
-    console.log('Nessun dato corrispondente trovato.');
-  }
-  //fine cancellazione
-  
+        selectedData.value = updatedValues.join(', ');
+
+        console.log(`Valore rimosso da '${selectedData.key}': ${removedValue}`);
+      } else {
+        console.log('Nessun dato corrispondente trovato.');
+      }
+      //fine cancellazione
     } else if (answer.dataType === 'Modifica') {
 
-   //inizio modifica    
- 
-  const modifyDataType = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'dataType',
-      message: 'Seleziona il tipo di dato da modificare:',
-      choices: data.map(item => item.key),
-    },
-  ]);
+      //inizio modifica
+      const modifyDataType = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'dataType',
+          message: 'Seleziona il tipo di dato da modificare:',
+          choices: data.map(item => item.key),
+        },
+      ]);
 
-  // Find the index of the data to modify
-  const modifyIndex = data.findIndex(item => item.key === modifyDataType.dataType);
+      const modifyIndex = data.findIndex(item => item.key === modifyDataType.dataType);
+      if (modifyIndex !== -1) {
+        const modifyData = data[modifyIndex];
+        const modifyInput = await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'value',
+            message: `Modifica il valore di ${modifyData.key} (separati da virgola se più di uno):`,
+            default: modifyData.value,
+          },
+        ]);
 
-  if (modifyIndex !== -1) {
-    const modifyData = data[modifyIndex];
-    const modifyInput = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'value',
-        message: `Modifica il valore di ${modifyData.key} (separati da virgola se più di uno):`,
-       default: modifyData.value
-      },
-    ]);
+        const formattedInput = modifyInput.value.split(',').map(value => value.trim()).join(', ');
+        data[modifyIndex].value = formattedInput;
 
-    const formattedInput = modifyInput.value.split(',').map(value => value.trim()).join(', ');
-    data[modifyIndex].value = formattedInput;
-
-    // Store the modified data in the history
-    dataHistory.push({ operation: 'Modifica', data: { key: modifyData.key, value: formattedInput } });
-    console.log(`Dato modificato: ${modifyData.key} - ${formattedInput}`);
-  } else {
-    console.log('Nessun dato corrispondente trovato.');
-  } 
-     //fine modifica
+        dataHistory.push({ operation: 'Modifica', data: { key: modifyData.key, value: formattedInput } });
+        console.log(`Dato modificato: ${modifyData.key} - ${formattedInput}`);
+      } else {
+        console.log('Nessun dato corrispondente trovato.');
+      }
+      //fine modifica
     }
   }
 
   console.log('Dati inseriti:', JSON.stringify(data, null, 2));
 
-  // richiamo la funzione Newman
+  // Call the Newman function
   runNewman.runNewman(collectionName, environmentName, data);
 
   return;
 }
 
-
-
-      module.exports = { interactiveData };
+  module.exports = { interactiveData };
