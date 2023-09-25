@@ -1,54 +1,50 @@
-const fs = require('fs');
+const inquirer = require('inquirer');
 
+// Funzione per ottenere le variabili di input dall'oggetto collection  
+function getInputVariables(collection) {
+  const inputVariables = {};
 
-function getInputVariables(collectionName) {
-    const baseCollection = './collections/';
-    const collectionFilePath = `${baseCollection}${collectionName}`;
-    console.info(collectionFilePath);
-     
-    try {
-      const collection = JSON.parse(fs.readFileSync(collectionFilePath, 'utf8'));
-      const inputVariables = [];
-  
-      if (collection) {
-        collection.variable.forEach((item) => { // Itera sulla collezione stessa
-          if (item.key && item.key.startsWith("INPUT")) {
-            inputVariables.push(item.key);
-          }
-        });
+  if (collection && collection.variable) {
+    collection.variable.forEach((item) => {
+      if (item.key && item.key.startsWith("INPUT_")) {
+        inputVariables[item.key] = item.value;
       }
-  
-      return inputVariables;
-    } catch (error) {
-      console.error("Errore durante il parsing del file JSON:", error);
-      return [];
-    }
-  };
- 
-  
-  function checkSelectedCollection(collectionName) {
-    const baseCollection = './collections/';
-    const collectionFilePath = `${baseCollection}${collectionName}`;
-    console.info(collectionFilePath);
-  
-    // recupera i dati di INPUT
-    const requiredKeys = getInputVariables(collectionName);
-  
-    try {
-        const collection = JSON.parse(fs.readFileSync(collectionFilePath, 'utf8'));
-  
-        if (requiredKeys.every(key => collection.variable.some(variable => variable.key === key))) {
-          startDataInsertion();
-            
-        } else {
-            console.error("Una o più variabili richieste sono mancanti.");
-        }
-    } catch (error) {
-        console.error("Errore durante la lettura o il parsing del file della collezione:", error);
-    }
-  };
-  
- 
+    });
+  }
+
+  return inputVariables;
+}
+
+//funzione per setttare i valori di input aggiornando l'oggetto collection
+function setInputVariables(collection, requiredKeys) {
+  collection.variable = Object.keys(requiredKeys).map((key) => ({
+    key,
+    value: requiredKeys[key],
+  }));
+}
 
 
-  module.exports = {checkSelectedCollection};
+// Funzione per ottenere i valori delle variabili di input dall'utente
+async function checkSelectedCollection(collection) {
+  const requiredKeys = getInputVariables(collection);
+
+  const questions = Object.keys(requiredKeys).map((key) => ({
+    type: 'input',
+    name: key,
+    message: `Inserisci il valore per ${key}:`,
+  }));
+
+  const answers = await inquirer.prompt(questions);
+
+  // Aggiorna i valori delle variabili di input con le risposte dell'utente
+  Object.keys(answers).forEach((key) => {
+    requiredKeys[key] = answers[key];
+  });
+
+  setInputVariables(collection, requiredKeys);
+// console.info(collection);
+  return ;
+}
+
+
+module.exports = { checkSelectedCollection };
