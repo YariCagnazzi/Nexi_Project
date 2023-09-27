@@ -55,7 +55,7 @@ async function checkSelectedCollection(collection, environment) {
   }
 }
 
-// Procedura per rimuovere uno o più valori delle variabili di input dall'utente
+// Funzione per rimuovere uno o più valori delle variabili di input dall'utente
 async function removeValues(collection) {
   const inputVariables = getInputVariables(collection);
 
@@ -87,4 +87,52 @@ async function removeValues(collection) {
   return ;
 }
 
-module.exports = { checkSelectedCollection, removeValues };
+// Procedura per modificare uno o più valori delle variabili di input dall'utente
+async function modifyValues(collection) {
+  const inputVariables = getInputVariables(collection);
+
+  if (Object.keys(inputVariables).length === 0) {
+    console.log('Nessuna variabile di input trovata nella collecion.');
+    return ;
+  }
+
+  const modifyDataType = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'dataType',
+      message: 'Seleziona il tipo di dati da modificare:',
+      choices: Object.keys(inputVariables),
+    },
+  ]);
+
+  const dataTypeKey = modifyDataType.dataType;
+  const oldValue = inputVariables[dataTypeKey];
+
+  const modifyInput = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'value',
+      message: `Modificare il valore di ${dataTypeKey} (separare più valori con virgole):`,
+      default: oldValue,
+    },
+  ]);
+
+  const formattedInput = modifyInput.value.split(',').map(value => value.trim()).join(',');
+
+  if (oldValue !== formattedInput) {
+    console.log(`Valore di ${dataTypeKey} modificato da "${oldValue}" a "${formattedInput}".`);
+    collection.variable.forEach((item) => {
+      if (item.key === dataTypeKey) {
+        item.value = formattedInput;
+      }
+    });
+  } else {
+    console.log(`Valore di ${dataTypeKey} invariato.`);
+  }
+  console.log(collection);
+  return ;
+}
+
+
+
+module.exports = { checkSelectedCollection, removeValues, modifyValues };
