@@ -1,84 +1,64 @@
 const newman = require('newman');
-const fs = require('fs');
-
 /**
- * Funzione per aggiornare i valori delle variabili nella collezione.
+ * Esegui la collezione con Newman
  *
- * @param {string} collectionFilePath - percorso del file della collezione
- * @param {Array} newValues - nuovi valori da aggiornare
+ * @param {Object} collection - Oggetto che rappresenta la collezione
+ * @param {Object} environment - Oggetto che rappresenta l'ambiente
  */
-function updateCollectionValues(collectionFilePath, newValues) {
-  // Leggi la collezione dal file o da una fonte
-  const collection = JSON.parse(fs.readFileSync(collectionFilePath, 'utf8'));
-
-  // Aggiorna i valori desiderati con i nuovi valori forniti
-  for (const newValue of newValues) {
-    const itemToUpdate = collection.variable.find(item => item.key === newValue.key);
-    if (itemToUpdate) {
-      if (itemToUpdate.value === ' ') {
-        itemToUpdate.value = newValue.value;
-      } else {
-        itemToUpdate.value += `, ${newValue.value}`;
-      }
-    }
+async function runNewman(collection, environment) {
+  try {
+    console.log('----------------Running collection----------');
+    const summary = await executeCollection(collection, environment);
+    handleCollectionSummary(summary);
+  } catch (error) {
+    console.error('Errore durante l\'esecuzione della collection:', error);
   }
-
-  // Converti la collezione aggiornata in formato JSON
-  const updatedCollectionJSON = JSON.stringify(collection, null, 2);
-
-  // Scrivi il file JSON aggiornato
-  fs.writeFileSync(collectionFilePath, updatedCollectionJSON, 'utf-8');
 }
 
 /**
- * Funzione per eseguire una collezione con Newman.
+ * Esegui la collezione e restituisci un riepilogo
  *
- * @param {string} collectionName - nome della collezione
- * @param {string} environmentName - nome dell'ambiente
- * @param {Array} data - dati di input per l'aggiornamento della collezione
+ * @param {Object} collection - Oggetto che rappresenta la collezione
+ * @param {Object} environment - Oggetto che rappresenta l'ambiente
+ * @returns {Promise<Object>} - Riepilogo dell'esecuzione della collezione
  */
-function runNewman(collectionName, environmentName, data) {
-  const baseCollection = './collections/';
-  const baseEnv = './environments/';
-
-  // Costruisci il percorso completo della collezione
-  const collectionFilePath = `${baseCollection}${collectionName}`;
-  console.info(collectionFilePath);
-
-  // Costruisci il percorso completo dell'ambiente
-  const environmentFilePath = `${baseEnv}${environmentName}`;
-  console.log(environmentFilePath);
-
-  // Aggiorna la collezione con i dati di input
-  updateCollectionValues(collectionFilePath, data);
-
-  console.log('----------------Running collection----------');
-
-  newman.run({
-    // Imposta la collezione
-    collection: collectionFilePath,
-    // Imposta le variabili d'ambiente
-    environment: environmentFilePath,
-    // Disabilita la verifica SSL
-    insecure: true,
-  }).on('start', function (err, args) {
-    console.log('Running a collection...');
-  }).on('done', function (err, summary) {
-    if (err || summary.error) {
-      console.error('Collection run encountered an error.');
-    } else {
-      console.info(summary.environment.name);
-      // Recupero variabile RESULT in INTEGRATION e STAGING
-      console.info('SUCCESS: ' + summary.environment.values.members[27].value);
-
-      // Recupero degli eventuali errori e/o asserzioni
-      summary.run.failures.forEach((err, index) => {
-        console.error(`****** ERROR ****** ${index}: ${JSON.stringify(err.error.message)} IN ${JSON.stringify(err.parent.name)}`);
-      });
-
-      console.log('Collection run completed.');
-    }
+function executeCollection(collection, environment) {
+  return new Promise((resolve, reject) => {
+    newman.run({
+      collection: collection,
+      environment: environment,
+      insecure: true,
+    }, (err, summary) => {
+      if (err || summary.error) {
+        reject(err || summary.error);
+      } else {
+        resolve(summary);
+      }
+    });
   });
+}
+
+/**
+ * Gestisci il riepilogo dell'esecuzione della collezione
+ *
+ * @param {Object} summary - Riepilogo dell'esecuzione della collezione
+ */
+function handleCollectionSummary(summary) {
+  console.info(summary.environment.name);
+
+  const resultVariable = summary.environment.values.members.find(variable => variable.key === 'RESULT');
+  if (resultVariable) {
+    const result = resultVariable.value;
+    console.info('SUCCESS: ' + result);
+  } else {
+    console.error('Variabile "RESULT" non trovata nell\'ambiente.');
+  }
+
+  summary.run.failures.forEach((err, index) => {
+    console.error(`****** ERRORE ****** ${index}: ${JSON.stringify(err.error.message)} IN ${JSON.stringify(err.parent.name)}`);
+  });
+
+  console.log('Esecuzione della collection completata.');
 }
 
 module.exports = { runNewman };
