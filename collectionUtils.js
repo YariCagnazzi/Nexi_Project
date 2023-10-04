@@ -1,8 +1,24 @@
 const inquirer = require('inquirer');
-const CodiceFiscaleUtils = require('@marketto/codice-fiscale-utils');
 
 // Costante per il prefisso delle variabili di input
 const INPUT_VARIABLE_PREFIX = "INPUT_";
+
+
+//definisco i dati di input con i rispettivi valri di default
+const DEFAULT_VALUES = {
+  INPUT_fcList: "",
+  INPUT_panList: "",
+  INPUT_pivaList: "",
+  INPUT_positionType: "[\"1\",\"4\"]",
+  INPUT_serviceList: "sms\nacs",
+  INPUT_organization: "NEXI",
+  INPUT_profileType: "NEXI",
+  INPUT_username: "CO07991",
+  INPUT_password: "8X8@7FU4x8",
+  INPUT_type: "Valid values:\n\nPORTALE_TITOLARI, PORTALE_SELFPOINTONLINE_DB,PORTALE_YAP,PORTALE_AZIENDE,PORTALE_IBK_NOMEBANCA,PORTALE_SISERVIZI,PORTALE_MAGENTO,PORTALE_PLATEA,PORTALE_MPOS",
+  INPUT_passwordLength: "12"
+  // Aggiungi altre variabili di input con i rispettivi valori di default qui
+};
 
 class CollectionUtils {
   constructor(collection, environment) {
@@ -10,63 +26,72 @@ class CollectionUtils {
     this.environment = environment;
   }
 
-  // Funzione per ottenere le variabili di input dall'oggetto collection
-  getInputVariables() {
-    const inputVariables = {};
 
-    if (this.collection && this.collection.variable) {
-      this.collection.variable.forEach((item) => {
-        if (item.key && item.key.startsWith(INPUT_VARIABLE_PREFIX)) {
-          inputVariables[item.key] = item.value;
-        }
+getInputVariables() {
+  const inputVariables = {};
+  if (this.collection && this.collection.variable) {
+    this.collection.variable.forEach((item) => {
+      if (item.key && item.key.startsWith(INPUT_VARIABLE_PREFIX)) {
+        inputVariables[item.key] = item.value || DEFAULT_VALUES[item.key] || "";
+      }
+    });
+  }
+  return inputVariables;
+}
+
+
+setInputVariables(requiredKeys) {
+  const collectionUpdate = this.collection.variable.filter(item => item.key && !item.key.startsWith(INPUT_VARIABLE_PREFIX));
+  Object.keys(requiredKeys).forEach((key) => {
+    if (key.startsWith(INPUT_VARIABLE_PREFIX)) {
+      collectionUpdate.push({
+        key,
+        value: requiredKeys[key],
       });
     }
+  });
+  this.collection.variable = collectionUpdate;
+  return this.collection;
+}
 
-    return inputVariables;
+
+  //funzione restituisce i valori di default che corrisponde ai dati di input
+  getDefaultValues(requiredKeys) {
+    const defaultValues = {};
+    for (const key in requiredKeys) {
+      defaultValues[key] = DEFAULT_VALUES[key] || "";
+    }
+    return defaultValues;
   }
 
-  // Funzione per impostare i valori di input aggiornando l'oggetto collection
-  setInputVariables(requiredKeys) {
-    this.collection.variable = Object.keys(requiredKeys).map((key) => ({
-      key,
-      value: requiredKeys[key],
-    }));
 
-    return this.collection;
-  }
-  
-  // Funzione per ottenere i valori delle variabili di input dall'utente
+  //Procedura per inserire uno o più valori delle variabili di input dall'utente
   async checkSelectedCollection() {
-    const requiredKeys = this.getInputVariables();
-
-    const questions = Object.keys(requiredKeys).map((key) => ({
-      type: 'input',
-      name: key,
-      message: `Inserisci il valore per ${key} (separati da virgola se più di uno):`,
-    }));
-
     try {
+      const inputVariables = this.getInputVariables();
+      const defaultValues = this.getDefaultValues(inputVariables);
+
+      const questions = Object.keys(inputVariables).map((key) => ({
+        type: 'input',
+        name: key,
+        message: `Inserisci il valore per ${key} (separati da virgola se più di uno):`,
+        default: defaultValues[key],
+      }));
+
       const answers = await inquirer.prompt(questions);
 
-      // Aggiorna i valori delle variabili di input con le risposte dell'utente
-      Object.keys(answers).forEach((key) => {
-        requiredKeys[key] = answers[key];
-      });
+      const updatedVariables = { ...inputVariables, ...answers };
+      const collectionUpdate = this.setInputVariables(updatedVariables);
 
-      const collectionUpdate = this.setInputVariables(requiredKeys);
+      console.log(JSON.stringify(collectionUpdate, null, 2));
 
-      console.log(collectionUpdate);
-      console.log(this.environment);
-
-      // Ritorna gli oggetti collectionUpdate e environment
-      return ;
     } catch (error) {
       console.error("Errore durante l'interazione con l'utente:", error);
     }
-  }  
-
+  }
  
 
+ 
 // Funzione per rimuovere uno o più valori delle variabili di input dall'utente
 async removeValues() {
   const inputVariables = this.getInputVariables();
@@ -95,7 +120,7 @@ async removeValues() {
     }
   });
 
-  console.log(this.collection);
+  console.log(JSON.stringify(this.collection, null, 2));
 }
 
 
@@ -142,7 +167,7 @@ async removeValues() {
       console.log(`Valore di ${dataTypeKey} invariato.`);
     }
 
-    console.log(this.collection);
+    console.log(JSON.stringify(this.collection, null, 2));
   }
 
 
