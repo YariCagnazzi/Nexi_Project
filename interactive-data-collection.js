@@ -11,17 +11,17 @@ const { Collection, Environment } = require('./BaseClass');
  * @param {Environment} environmentData - Dati dell'environment
  * @returns {void} Non ritorna nulla
  */
-
 async function performOperation(dataType, collectionData, environmentData) {
+  const utils = new CollectionUtils(collectionData, environmentData);
   switch (dataType) {
     case 'Inserisci':
-      await new CollectionUtils(collectionData, environmentData).checkSelectedCollection();
+      await utils.checkSelectedCollection();
       break;
     case 'Cancella':
-      await new CollectionUtils(collectionData, environmentData).removeValues();
+      await utils.removeValues();
       break;
     case 'Modifica':
-      await new CollectionUtils(collectionData, environmentData).modifyValues();
+      await utils.modifyValues();
       break;
     default:
       // Se il dataType non corrisponde a nessun caso, non fare nulla 
@@ -36,14 +36,12 @@ async function performOperation(dataType, collectionData, environmentData) {
  * @param {string} environmentName - Nome dell'environment
  * @returns {void} Non ritorna nulla
  */
-
-
 async function interactiveData(collectionName, environmentName) {
   const collectionData = new Collection(collectionName).getData();
   const environmentData = new Environment(environmentName).getData();
 
   while (true) {
-    const answer = await inquirer.prompt([
+    const { dataType } = await inquirer.prompt([
       {
         type: 'list',
         name: 'dataType',
@@ -52,11 +50,11 @@ async function interactiveData(collectionName, environmentName) {
       },
     ]);
 
-    if (answer.dataType === 'Fine') {
+    if (dataType === 'Fine') {
       break;
     }
 
-    await performOperation(answer.dataType, collectionData, environmentData);
+    await performOperation(dataType, collectionData, environmentData);
   }
 
   newman.runNewman(collectionData, environmentData);
