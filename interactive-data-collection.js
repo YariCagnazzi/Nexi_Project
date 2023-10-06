@@ -1,7 +1,8 @@
 const inquirer = require('inquirer');
 const { CollectionUtils } = require('./collectionUtils');
 const newman = require('./run-newman');
-const { Collection, Environment } = require('./BaseClass');
+const { Collection } = require('./Collection');
+const { Environment } = require('./Environment');
 
 /**
  * Esegue un'operazione interattiva basata sul tipo di dato selezionato.

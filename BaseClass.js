@@ -36,17 +36,4 @@ class BaseClass {
 }
 
 
-class Collection extends BaseClass {
-  constructor(collectionFile) {
-    super('./collections/', collectionFile);
-  }
-}
-
-
-class Environment extends BaseClass {
-  constructor(collectionFile) {
-    super('./environments/', collectionFile);
-  }
-}
-
-module.exports={Collection, Environment};
+module.exports={BaseClass};
