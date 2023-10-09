@@ -49,7 +49,7 @@ function handleCollectionSummary(summary) {
   const resultVariable = summary.environment.values.members.find(variable => variable.key === 'RESULT');
   if (resultVariable) {
     const result = resultVariable.value;
-    console.info('SUCCESS: ' + result);
+    console.info(result);
   } else {
     console.error('Variabile "RESULT" non trovata nell\'ambiente.');
   }
