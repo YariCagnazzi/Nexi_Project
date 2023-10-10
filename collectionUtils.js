@@ -1,24 +1,5 @@
 const inquirer = require('inquirer');
 
-// Costante per il prefisso delle variabili di input
-const INPUT_VARIABLE_PREFIX = "INPUT_";
-
-
-//definisco i dati di input con i rispettivi valri di default
-const DEFAULT_VALUES = {
-  INPUT_fcList: "",
-  INPUT_panList: "",
-  INPUT_pivaList: "",
-  INPUT_positionType: "[\"1\",\"4\"]",
-  INPUT_serviceList: "sms\nacs",
-  INPUT_organization: "NEXI",
-  INPUT_profileType: "NEXI",
-  INPUT_username: "CO07991",
-  INPUT_password: "8X8@7FU4x8",
-  INPUT_type: "Valid values:\n\nPORTALE_TITOLARI, PORTALE_SELFPOINTONLINE_DB,PORTALE_YAP,PORTALE_AZIENDE,PORTALE_IBK_NOMEBANCA,PORTALE_SISERVIZI,PORTALE_MAGENTO,PORTALE_PLATEA,PORTALE_MPOS",
-  INPUT_passwordLength: "12"
-  // Aggiungi altre variabili di input con i rispettivi valori di default qui
-};
 
 class CollectionUtils {
   constructor(collection, environment) {
@@ -31,8 +12,8 @@ getInputVariables() {
   const inputVariables = {};
   if (this.collection && this.collection.variable) {
     this.collection.variable.forEach((item) => {
-      if (item.key && item.key.startsWith(INPUT_VARIABLE_PREFIX)) {
-        inputVariables[item.key] = item.value || DEFAULT_VALUES[item.key] || "";
+      if (item.key && item.key.startsWith("INPUT_")) {
+        inputVariables[item.key] = item.value || "";
       }
     });
   }
@@ -41,9 +22,9 @@ getInputVariables() {
 
 
 setInputVariables(requiredKeys) {
-  const collectionUpdate = this.collection.variable.filter(item => item.key && !item.key.startsWith(INPUT_VARIABLE_PREFIX));
+  const collectionUpdate = this.collection.variable.filter(item => item.key && !item.key.startsWith("INPUT_"));
   Object.keys(requiredKeys).forEach((key) => {
-    if (key.startsWith(INPUT_VARIABLE_PREFIX)) {
+    if (key.startsWith("INPUT_")) {
       collectionUpdate.push({
         key,
         value: requiredKeys[key],
@@ -55,73 +36,93 @@ setInputVariables(requiredKeys) {
 }
 
 
-  //funzione restituisce i valori di default che corrisponde ai dati di input
-  getDefaultValues(requiredKeys) {
-    const defaultValues = {};
-    for (const key in requiredKeys) {
-      defaultValues[key] = DEFAULT_VALUES[key] || "";
-    }
-    return defaultValues;
-  }
-
-
-  //Procedura per inserire uno o più valori delle variabili di input dall'utente
   async checkSelectedCollection() {
     try {
       const inputVariables = this.getInputVariables();
-      const defaultValues = this.getDefaultValues(inputVariables);
-
+  
       const questions = Object.keys(inputVariables).map((key) => ({
         type: 'input',
         name: key,
         message: `Inserisci il valore per ${key} (separati da virgola se più di uno):`,
-        default: defaultValues[key],
+        default: inputVariables[key],
+        transformer: (input) => input.split('\n').map(line => line.trim()).join(', ')
       }));
-
+  
       const answers = await inquirer.prompt(questions);
-
+  
+      // Aggiorna le variabili di input con le risposte dell'utente
       const updatedVariables = { ...inputVariables, ...answers };
+  
+      // Aggiorna l'oggetto `collection` con le nuove variabili di input
       const collectionUpdate = this.setInputVariables(updatedVariables);
-
-      console.log(JSON.stringify(collectionUpdate, null, 2));
-
+  
+      // Fai qualcosa con `collectionUpdate` se necessario
+      // console.log(JSON.stringify(collectionUpdate, null, 2));
+  
     } catch (error) {
       console.error("Errore durante l'interazione con l'utente:", error);
     }
   }
- 
 
- 
-// Funzione per rimuovere uno o più valori delle variabili di input dall'utente
-async removeValues() {
+  
+
+async showInputList() {
   const inputVariables = this.getInputVariables();
-
-  for (const key in inputVariables) {
-    const removeValue = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'removedValues',
-        message: `Inserisci il valore da rimuovere da '${key}' (separati da virgola se più di uno):`,
-      },
-    ]);
-
-    const valuesToRemove = removeValue.removedValues.split(',').map(value => value.trim());
-    const values = inputVariables[key].split(',').map(value => value.trim());
-
-    const updatedValues = values.filter(value => !valuesToRemove.includes(value));
-
-    inputVariables[key] = updatedValues.join(', ');
-  }
-
-  // Aggiorna i valori nell'oggetto originale collection
-  this.collection.variable.forEach((item) => {
-    if (item.key && item.key in inputVariables) {
-      item.value = inputVariables[item.key];
-    }
+  console.log('Lista di input inseriti:');
+  Object.keys(inputVariables).forEach((key, index) => {
+    console.log(`${index + 1}. ${key}: ${inputVariables[key]}`);
   });
-
-  console.log(JSON.stringify(this.collection, null, 2));
 }
+
+async selectInputToDelete() {
+  const inputVariables = this.getInputVariables();
+  const inputKeys = Object.keys(inputVariables);
+  const userInput = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'selectedInput',
+      message: 'Seleziona il tipo di dati da cancellare:',
+      choices: inputKeys,
+    },
+  ]);
+  return userInput.selectedInput;
+}
+
+
+async confirmDeletion() {
+  const answer = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'confirmation',
+      message: 'Sei sicuro di voler cancellare questo input?',
+      default: false,
+    },
+  ]);
+  return answer.confirmation;
+}
+
+
+
+async removeValues() {
+  await this.showInputList(); // Mostra la lista di input inseriti
+    const selectedInput = await this.selectInputToDelete(); // L'utente seleziona l'input da cancellare
+    const confirmed = await this.confirmDeletion(); // Richiede conferma all'utente
+
+    if (confirmed) {
+      // Cancella il contenuto dell'input selezionato
+      this.collection.variable.forEach((item) => {
+        if (item.key === selectedInput) {
+          item.value = "";
+        }
+      });
+
+     //console.log(JSON.stringify(this.collection, null, 2));
+
+      console.log(`Contenuto di '${selectedInput}' è stato cancellato.`);
+    } else {
+      console.log('Cancellazione annullata.');
+    }
+  }
 
 
   // Procedura per modificare uno o più valori delle variabili di input dall'utente
@@ -167,7 +168,7 @@ async removeValues() {
       console.log(`Valore di ${dataTypeKey} invariato.`);
     }
 
-    console.log(JSON.stringify(this.collection, null, 2));
+  // console.log(JSON.stringify(this.collection, null, 2));
   }
 
 
