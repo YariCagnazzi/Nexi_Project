@@ -27,6 +27,9 @@ async function performOperation(dataType, collectionData, environmentData) {
     case 'Modifica':
       await utils.modifyValues();
       break;
+    case 'Reset input':
+      await utils.resetValues();
+      break;
     default:
       // Se il dataType non corrisponde a nessun caso, non fare nulla 
       break;
@@ -50,7 +53,7 @@ async function interactiveData(collectionName, environmentName) {
         type: 'list',
         name: 'dataType',
         message: 'Seleziona cosa vuoi effettuare tra inserire, cancellare o modificare:',
-        choices: ['Mostra','Inserisci', 'Cancella', 'Modifica', 'Fine'],
+        choices: ['Mostra','Inserisci', 'Cancella', 'Modifica', 'Reset input', 'Fine'],
       },
     ]);
 

@@ -101,6 +101,19 @@ async confirmDeletion() {
   return answer.confirmation;
 }
 
+async confirmDeletionAllInputs() {
+  const userInput = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'confirmation',
+      message: 'Vuoi davvero cancellare il contenuto di tutti gli input ?',
+      default: false,
+    },
+  ]);
+
+  return userInput.confirmation;
+}
+
 
 
 async removeValues() {
@@ -172,6 +185,24 @@ async removeValues() {
   }
 
 
+  async resetValues() {
+    const confirmed = await this.confirmDeletionAllInputs(); // Richiede conferma all'utente per cancellare tutti gli input
+  
+    if (confirmed) {
+      this.collection.variable.forEach((item) => {
+        // Verifica se la chiave inizia con "INPUT_"
+        if (item.key.startsWith("INPUT_")) {
+          item.value = "";
+        }
+      });
+  
+      //console.log(JSON.stringify(this.collection, null, 2));
+  
+      console.log("Contenuto degli input è stato cancellato.");
+    } else {
+      console.log('Cancellazione degli input annullata.');
+    }
+  }
 
 }
 module.exports = {CollectionUtils};
