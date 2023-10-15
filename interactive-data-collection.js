@@ -15,6 +15,9 @@ const { Environment } = require('./Environment');
 async function performOperation(dataType, collectionData, environmentData) {
   const utils = new CollectionUtils(collectionData, environmentData);
   switch (dataType) {
+    case 'Mostra':
+      await utils.showInputList();
+      break;
     case 'Inserisci':
       await utils.checkSelectedCollection();
       break;
@@ -47,7 +50,7 @@ async function interactiveData(collectionName, environmentName) {
         type: 'list',
         name: 'dataType',
         message: 'Seleziona cosa vuoi effettuare tra inserire, cancellare o modificare:',
-        choices: ['Inserisci', 'Cancella', 'Modifica', 'Fine'],
+        choices: ['Mostra','Inserisci', 'Cancella', 'Modifica', 'Fine'],
       },
     ]);
 
