@@ -152,7 +152,7 @@ async removeValues() {
 
   // Procedura per modificare uno o più valori delle variabili di input dall'utente
   async modifyValues() {
-    const inputVariables = this.getInputVariables();
+    await this.showInputList(); // Mostra la lista di input inseriti
 
     if (Object.keys(inputVariables).length === 0) {
       console.log('Nessuna variabile di input trovata nella collecion.');

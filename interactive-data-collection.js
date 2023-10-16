@@ -18,18 +18,18 @@ async function performOperation(dataType, collectionData, environmentData) {
     case 'Mostra':
       await utils.showInputList();
       break;
-    case 'Inserisci':
-      await utils.checkSelectedCollection();
-      break;
-    case 'Cancella':
-      await utils.removeValues();
-      break;
     case 'Modifica':
       await utils.modifyValues();
+      break;  
+    case 'Elimina':
+      await utils.removeValues();
       break;
     case 'Reset input':
       await utils.resetValues();
       break;
+    case 'Aggiungi':
+      await utils.checkSelectedCollection();
+      break;    
     case 'Termina':
       await utils.exit();
       break;
@@ -56,7 +56,7 @@ async function interactiveData(collectionName, environmentName) {
         type: 'list',
         name: 'dataType',
         message: 'Seleziona cosa vuoi effettuare tra inserire, cancellare o modificare:',
-        choices: ['Mostra','Inserisci', 'Cancella', 'Modifica', 'Reset input', 'Termina'],
+        choices: ['Mostra', 'Modifica', 'Elimina', 'Reset input','Aggiungi', 'Esegui', 'Termina'],
       },
     ]);
 /*
@@ -67,7 +67,7 @@ async function interactiveData(collectionName, environmentName) {
     await performOperation(dataType, collectionData, environmentData);
   }
 
-  newman.runNewman(collectionData, environmentData);
+  //newman.runNewman(collectionData, environmentData);
 }
 
 module.exports = { interactiveData };
