@@ -114,6 +114,18 @@ async confirmDeletionAllInputs() {
   return userInput.confirmation;
 }
 
+async confirmExit() {
+  const answer = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'confirmation',
+      message: 'Sei sicuro di voler terminare?',
+      default: false,
+    },
+  ]);
+  return answer.confirmation;
+}
+
 
 
 async removeValues() {
@@ -201,6 +213,17 @@ async removeValues() {
       console.log("Contenuto degli input è stato cancellato.");
     } else {
       console.log('Cancellazione degli input annullata.');
+    }
+  }
+
+  async exit() {
+    const confirmed = await this.confirmExit();
+    if (confirmed) {
+      console.log('Terminazione del programma...');
+      process.exit(0); // Codice di uscita 0 indica una terminazione corretta
+    } else {
+      console.log('Seleziona un\'altra operazione.');
+      // Continua con la logica di flusso del programma per selezionare un'altra collection o eseguire altre operazioni
     }
   }
 
