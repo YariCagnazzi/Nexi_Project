@@ -127,7 +127,7 @@ async confirmExit() {
 }
 
 
-
+  // Procedura per eliminare uno o più valori delle variabili di input dall'utente
 async removeValues() {
   await this.showInputList(); // Mostra la lista di input inseriti
     const selectedInput = await this.selectInputToDelete(); // L'utente seleziona l'input da cancellare
@@ -153,6 +153,7 @@ async removeValues() {
   // Procedura per modificare uno o più valori delle variabili di input dall'utente
   async modifyValues() {
     await this.showInputList(); // Mostra la lista di input inseriti
+    const inputVariables = this.getInputVariables();
 
     if (Object.keys(inputVariables).length === 0) {
       console.log('Nessuna variabile di input trovata nella collecion.');
@@ -196,7 +197,7 @@ async removeValues() {
   // console.log(JSON.stringify(this.collection, null, 2));
   }
 
-
+  // Procedura per eliminare tutte le variabili di input dall'utente
   async resetValues() {
     const confirmed = await this.confirmDeletionAllInputs(); // Richiede conferma all'utente per cancellare tutti gli input
   

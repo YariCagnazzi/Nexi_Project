@@ -31,7 +31,7 @@ async function performOperation(dataType, collectionData, environmentData) {
       await utils.checkSelectedCollection();
       break;    
     case 'Esegui':
-      newman.runNewman(collectionData, environmentData);
+      await newman.runNewman(collectionData, environmentData);
       break;  
     case 'Termina':
       await utils.exit();
