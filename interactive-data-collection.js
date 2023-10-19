@@ -32,7 +32,31 @@ async function performOperation(dataType, collectionData, environmentData) {
       break;    
     case 'Esegui':
       await newman.runNewman(collectionData, environmentData);
-      break;  
+      const { afterExecutionChoice } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'afterExecutionChoice',
+          message: 'Cosa vuoi fare dopo l\'esecuzione della collection?',
+          choices: ['Esegui un\'altra collection', 'Riesegui la collection', 'Termina'],
+        },
+      ]);
+      switch (afterExecutionChoice) {
+        case 'Esegui un\'altra collection':
+          // Aggiungi la logica per eseguire un'altra collection
+          // Ad esempio, richiedi il nome della nuova collection e dell'environment
+          // e chiama la funzione interactiveData con i nuovi dati.
+          break;
+        case 'Riesegui la collection':
+          await newman.runNewman(collectionData, environmentData);
+          break;
+        case 'Termina':
+          await utils.exit();
+          break;
+        default:
+          // Se la scelta non corrisponde a nessun caso, non fare nulla 
+          break;
+      }
+      break;
     case 'Termina':
       await utils.exit();
       break;
@@ -59,18 +83,12 @@ async function interactiveData(collectionName, environmentName) {
         type: 'list',
         name: 'dataType',
         message: 'Seleziona cosa vuoi effettuare tra Mostra, Modifica, Elimina, Reset input, Aggiungi, Esegui e Termina:',
-        choices: ['Mostra', 'Modifica', 'Elimina', 'Reset input','Aggiungi', 'Esegui', 'Termina'],
+        choices: ['Mostra', 'Modifica', 'Elimina', 'Reset input', 'Aggiungi', 'Esegui', 'Termina'],
       },
     ]);
-/*
-    if (dataType === 'Termina') {
-      break;
-    }
-*/
+
     await performOperation(dataType, collectionData, environmentData);
   }
-
-  //newman.runNewman(collectionData, environmentData);
 }
 
 module.exports = { interactiveData };
