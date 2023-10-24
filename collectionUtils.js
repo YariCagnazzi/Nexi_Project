@@ -38,6 +38,7 @@ setInputVariables(requiredKeys) {
 
   async checkSelectedCollection() {
     try {
+      await this.showInputList(); // Mostra la lista di input inseriti
       const inputVariables = this.getInputVariables();
   
       const questions = Object.keys(inputVariables).map((key) => ({
@@ -45,7 +46,7 @@ setInputVariables(requiredKeys) {
         name: key,
         message: `Inserisci il valore per ${key} (separati da virgola se più di uno):`,
         default: inputVariables[key],
-        transformer: (input) => input.split('\n').map(line => line.trim()).join(', ')
+       // transformer: (input) => input.split('\n').map(line => line.trim()).join(', ')
       }));
   
       const answers = await inquirer.prompt(questions);
