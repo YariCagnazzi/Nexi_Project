@@ -1,29 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const funzioni = require('./funzioni');
-
-
-//classe per gestire le cartelle in ingresso
-class JSONCollectionReader {
-    constructor(folderPath) {
-        this.folderPath = folderPath;
-    }
-   
-    readFolder() {
-        const collectionFiles = [];
-        const filenames = fs.readdirSync(this.folderPath);
-    
-        for (const filename of filenames) {
-            if (filename.endsWith('.json') || filename.endsWith('.postman_collection')) {
-                collectionFiles.push(filename);
-            }
-        }
-         
-        return collectionFiles;
-    }
-    
-};
-
+const {JSONCollectionReader} = require('./JSONCollectionReader');
 
 
 /**
@@ -31,7 +9,7 @@ class JSONCollectionReader {
  *
  * @param {string} collections - Lista di collections.
  * @param {string} environments - Lista dei environments.
- * @returns { } no ritorna nulla
+ * @returns { } non ritorna nulla
  */
 
 //**** */ punto di accesso principale di esecuzione *************//
@@ -58,4 +36,4 @@ runRockman('collections', 'environments');
 
 
 
-module.exports = { JSONCollectionReader };
+

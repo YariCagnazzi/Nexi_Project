@@ -1,34 +1,8 @@
 const inquirer = require('inquirer');
-const { CollectionUtils } = require('./collectionUtils');
-const newman = require('./run-newman');
 const { Collection } = require('./Collection');
 const { Environment } = require('./Environment');
+const conOp = require('./collectionOperations');
 
-/**
- * Esegue un'operazione interattiva basata sul tipo di dato selezionato.
- *
- * @param {string} dataType - Tipo di operazione da eseguire (Inserisci, Cancella, Modifica, Fine)
- * @param {Collection} collectionData - Dati della collection
- * @param {Environment} environmentData - Dati dell'environment
- * @returns {void} Non ritorna nulla
- */
-async function performOperation(dataType, collectionData, environmentData) {
-  const utils = new CollectionUtils(collectionData, environmentData);
-  switch (dataType) {
-    case 'Inserisci':
-      await utils.checkSelectedCollection();
-      break;
-    case 'Cancella':
-      await utils.removeValues();
-      break;
-    case 'Modifica':
-      await utils.modifyValues();
-      break;
-    default:
-      // Se il dataType non corrisponde a nessun caso, non fare nulla 
-      break;
-  }
-}
 
 /**
  * Conduce un'interazione interattiva con l'utente per inserire, cancellare o modificare dati dinamicamente.
@@ -46,19 +20,13 @@ async function interactiveData(collectionName, environmentName) {
       {
         type: 'list',
         name: 'dataType',
-        message: 'Seleziona cosa vuoi effettuare tra inserire, cancellare o modificare:',
-        choices: ['Inserisci', 'Cancella', 'Modifica', 'Fine'],
+        message: 'Seleziona cosa vuoi effettuare tra Mostra, Modifica, Elimina, Reset input, Aggiungi, Esegui e Termina:',
+        choices: ['Mostra', 'Modifica', 'Elimina', 'Reset input', 'Aggiungi', 'Esegui', 'Termina'],
       },
     ]);
 
-    if (dataType === 'Fine') {
-      break;
-    }
-
-    await performOperation(dataType, collectionData, environmentData);
+    await conOp.performOperation(dataType, collectionData, environmentData);
   }
-
-  newman.runNewman(collectionData, environmentData);
 }
 
 module.exports = { interactiveData };

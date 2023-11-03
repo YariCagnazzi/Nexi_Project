@@ -38,6 +38,7 @@ setInputVariables(requiredKeys) {
 
   async checkSelectedCollection() {
     try {
+      await this.showInputList(); // Mostra la lista di input inseriti
       const inputVariables = this.getInputVariables();
   
       const questions = Object.keys(inputVariables).map((key) => ({
@@ -101,8 +102,33 @@ async confirmDeletion() {
   return answer.confirmation;
 }
 
+async confirmDeletionAllInputs() {
+  const userInput = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'confirmation',
+      message: 'Vuoi davvero cancellare il contenuto di tutti gli input ?',
+      default: false,
+    },
+  ]);
+
+  return userInput.confirmation;
+}
+
+async confirmExit() {
+  const answer = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'confirmation',
+      message: 'Sei sicuro di voler terminare?',
+      default: false,
+    },
+  ]);
+  return answer.confirmation;
+}
 
 
+  // Procedura per eliminare uno o più valori delle variabili di input dall'utente
 async removeValues() {
   await this.showInputList(); // Mostra la lista di input inseriti
     const selectedInput = await this.selectInputToDelete(); // L'utente seleziona l'input da cancellare
@@ -127,6 +153,7 @@ async removeValues() {
 
   // Procedura per modificare uno o più valori delle variabili di input dall'utente
   async modifyValues() {
+    await this.showInputList(); // Mostra la lista di input inseriti
     const inputVariables = this.getInputVariables();
 
     if (Object.keys(inputVariables).length === 0) {
@@ -171,7 +198,36 @@ async removeValues() {
   // console.log(JSON.stringify(this.collection, null, 2));
   }
 
+  // Procedura per eliminare tutte le variabili di input dall'utente
+  async resetValues() {
+    const confirmed = await this.confirmDeletionAllInputs(); // Richiede conferma all'utente per cancellare tutti gli input
+  
+    if (confirmed) {
+      this.collection.variable.forEach((item) => {
+        // Verifica se la chiave inizia con "INPUT_"
+        if (item.key.startsWith("INPUT_")) {
+          item.value = "";
+        }
+      });
+  
+      //console.log(JSON.stringify(this.collection, null, 2));
+  
+      console.log("Contenuto degli input è stato cancellato.");
+    } else {
+      console.log('Cancellazione degli input annullata.');
+    }
+  }
 
+  async exit() {
+    const confirmed = await this.confirmExit();
+    if (confirmed) {
+      console.log('Terminazione del programma...');
+      process.exit(0); // Codice di uscita 0 indica una terminazione corretta
+    } else {
+      console.log('Seleziona un\'altra operazione.');
+      // Continua con la logica di flusso del programma per selezionare un'altra collection o eseguire altre operazioni
+    }
+  }
 
 }
 module.exports = {CollectionUtils};
