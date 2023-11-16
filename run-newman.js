@@ -28,6 +28,7 @@ function executeCollection(collection, environment) {
       collection: collection,
       environment: environment,
       insecure: true,
+      timeout: 6000 // Imposta il timeout a 6 secondi
     }, (err, summary) => {
       if (err || summary.error) {
         reject(err || summary.error);
