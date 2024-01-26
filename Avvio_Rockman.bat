@@ -1,7 +1,7 @@
 @echo off
 
 :loop
-node "C:\Users\ycagnazzi\Desktop\richieste_query\Nexi_Project\main.js"
+node "C:\Users\ycagnazzi\Desktop\richieste_query\Nexi_Project\rockman.js"
 set /p "choice=Vuoi uscire? (y/n): "
 
 if /i "%choice%"=="y" (
@@ -26,4 +26,4 @@ exit /b 0
 
 :exit
 echo Uscita confermata. Arrivederci!
-pause
+pause 
