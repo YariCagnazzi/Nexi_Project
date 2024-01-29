@@ -2,12 +2,20 @@ const inquirer = require('inquirer');
 
 
 class CollectionUtils {
+   /**
+   * Constructor for CollectionUtils class.
+   * @param {Object} collection - The collection object.
+   * @param {string} environment - The environment associated with the collection.
+   */
   constructor(collection, environment) {
     this.collection = collection;
     this.environment = environment;
   }
 
-
+ /**
+   * Retrieves input variables from the collection.
+   * @returns {Object} - A dictionary containing input variables.
+  */
 getInputVariables() {
   const inputVariables = {};
   if (this.collection && this.collection.variable) {
@@ -20,7 +28,11 @@ getInputVariables() {
   return inputVariables;
 }
 
-
+/**
+   * Sets input variables in the collection based on the required keys.
+   * @param {Object} requiredKeys - A dictionary containing required input variables.
+   * @returns {Object} - The updated collection object.
+  */
 setInputVariables(requiredKeys) {
   const collectionUpdate = this.collection.variable.filter(item => item.key && !item.key.startsWith("INPUT_"));
   Object.keys(requiredKeys).forEach((key) => {
@@ -35,7 +47,9 @@ setInputVariables(requiredKeys) {
   return this.collection;
 }
 
-
+    /**
+   * Checks the selected collection, prompts the user to input values for variables, and updates the collection accordingly.
+   */
   async checkSelectedCollection() {
     try {
       await this.showInputList(); // Mostra la lista di input inseriti
@@ -66,7 +80,9 @@ setInputVariables(requiredKeys) {
   }
 
   
-
+ /**
+   * Displays a list of input variables that have been entered by the user.
+   */
 async showInputList() {
   const inputVariables = this.getInputVariables();
   console.log('Lista di input inseriti:');
@@ -75,6 +91,10 @@ async showInputList() {
   });
 }
 
+/**
+   * Prompts the user to select an input variable for deletion.
+   * @returns {string} - The selected input variable to delete.
+   */
 async selectInputToDelete() {
   const inputVariables = this.getInputVariables();
   const inputKeys = Object.keys(inputVariables);
@@ -89,7 +109,10 @@ async selectInputToDelete() {
   return userInput.selectedInput;
 }
 
-
+ /**
+   * Prompts the user for confirmation before deleting an input variable.
+   * @returns {boolean} - True if the user confirms deletion, false otherwise.
+   */
 async confirmDeletion() {
   const answer = await inquirer.prompt([
     {
@@ -102,6 +125,10 @@ async confirmDeletion() {
   return answer.confirmation;
 }
 
+  /**
+   * Prompts the user for confirmation before deleting all input variables.
+   * @returns {boolean} - True if the user confirms deletion, false otherwise.
+   */
 async confirmDeletionAllInputs() {
   const userInput = await inquirer.prompt([
     {
@@ -115,6 +142,10 @@ async confirmDeletionAllInputs() {
   return userInput.confirmation;
 }
 
+ /**
+   * Prompts the user for confirmation before exiting the program.
+   * @returns {boolean} - True if the user confirms exit, false otherwise.
+   */
 async confirmExit() {
   const answer = await inquirer.prompt([
     {
@@ -127,8 +158,9 @@ async confirmExit() {
   return answer.confirmation;
 }
 
-
-  // Procedura per eliminare uno o più valori delle variabili di input dall'utente
+ /**
+   * Removes the values of a selected input variable after user confirmation.
+   */
 async removeValues() {
   await this.showInputList(); // Mostra la lista di input inseriti
     const selectedInput = await this.selectInputToDelete(); // L'utente seleziona l'input da cancellare
@@ -151,7 +183,9 @@ async removeValues() {
   }
 
 
-  // Procedura per modificare uno o più valori delle variabili di input dall'utente
+   /**
+   * Modifies the values of a selected input variable after user confirmation.
+   */
   async modifyValues() {
     await this.showInputList(); // Mostra la lista di input inseriti
     const inputVariables = this.getInputVariables();
@@ -198,7 +232,9 @@ async removeValues() {
   // console.log(JSON.stringify(this.collection, null, 2));
   }
 
-  // Procedura per eliminare tutte le variabili di input dall'utente
+    /**
+   * Resets all input values in the collection after user confirmation.
+   */
   async resetValues() {
     const confirmed = await this.confirmDeletionAllInputs(); // Richiede conferma all'utente per cancellare tutti gli input
   
@@ -217,7 +253,11 @@ async removeValues() {
       console.log('Cancellazione degli input annullata.');
     }
   }
-
+  
+  /**
+   * Exits the program after user confirmation.
+   * @returns {void} - The function terminates the program or continues with the program's flow based on user input.
+   */
   async exit() {
     const confirmed = await this.confirmExit();
     if (confirmed) {
