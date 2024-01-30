@@ -2,6 +2,8 @@ const inquirer = require('inquirer');
 
 
 class CollectionUtils {
+
+  static inputDefaultVariable = {}; // Proprietà statica per memorizzare i valori di default
    /**
    * Constructor for CollectionUtils class.
    * @param {Object} collection - The collection object.
@@ -25,7 +27,15 @@ getInputVariables() {
       }
     });
   }
+
+  // Salva i valori di default  
+  CollectionUtils.inputDefaultVariable = { ...CollectionUtils.inputDefaultVariable, ...inputVariables };
   return inputVariables;
+}
+
+// Metodo statico per recuperare i valori di default salvati
+static getDefaultInputVariables() {
+  return CollectionUtils.inputDefaultVariable;
 }
 
 /**
@@ -249,6 +259,9 @@ async removeValues() {
       //console.log(JSON.stringify(this.collection, null, 2));
   
       console.log("Contenuto degli input è stato cancellato.");
+      CollectionUtils.inputDefaultVariable = CollectionUtils.getDefaultInputVariables();
+      //console.log(JSON.stringify(CollectionUtils.inputDefaultVariable));
+
     } else {
       console.log('Cancellazione degli input annullata.');
     }
