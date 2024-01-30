@@ -86,6 +86,7 @@ class RockmanView {
         await this.executeCollection(collectionData, environmentData);
         break;
       case 'Torna Indietro':
+        await this.showMainMenu();
         break;
       default:
         // Do nothing for unrecognized choices
