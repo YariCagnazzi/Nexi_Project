@@ -274,7 +274,7 @@ async removeValues() {
   async exit() {
     const confirmed = await this.confirmExit();
     if (confirmed) {
-      console.log('Terminazione del programma...');
+      console.log('Stai per uscire dal Programma...');
       process.exit(0); // Codice di uscita 0 indica una terminazione corretta
     } else {
       console.log('Seleziona un\'altra operazione.');
