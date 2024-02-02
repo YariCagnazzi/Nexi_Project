@@ -6,7 +6,7 @@ const { JSONCollectionReader } = require('./JSONCollectionReader');
 const newman = require('./run-newman');
 
 class RockmanView {
-  static menuOptions = ['Mostra', 'Modifica', 'Elimina', 'Reset input', 'Aggiungi', 'Esegui', 'Termina'];
+  static menuOptions = ['Mostra', 'Modifica', 'Elimina', 'Reset input', 'Aggiungi', 'Esegui', 'Torna Indietro', 'Termina'];
   static subMenuOptions = ['Esegui un\'altra collection', 'Riesegui la collection', 'Torna Indietro'];
 
   constructor(controller) {
@@ -121,6 +121,9 @@ class RockmanView {
         case 'Esegui':
           await this.executeCollection(collectionData, environmentData);
           break;
+        case 'Torna Indietro':
+          await this.showMainMenu();
+          break;  
         case 'Termina':
           await utils.exit();
           break;
@@ -161,6 +164,9 @@ class RockmanView {
       case 'Aggiungi':
         await utils.checkSelectedCollection();
         break;
+      case 'Torna Indietro':
+        await this.showMainMenu();
+        break;  
       default:
         // Handle unsupported data operation
         break;
@@ -188,7 +194,7 @@ class RockmanView {
         {
           type: 'list',
           name: 'dataType',
-          message: 'Seleziona cosa vuoi effettuare tra Mostra, Modifica, Elimina, Reset input, Aggiungi, Esegui e Termina:',
+          message: 'Seleziona cosa vuoi effettuare tra Mostra, Modifica, Elimina, Reset input, Aggiungi, Esegui, Torna Indietro e Termina:',
           choices: RockmanView.menuOptions,
         },
       ]);
