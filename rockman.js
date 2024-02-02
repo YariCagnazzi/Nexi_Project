@@ -1,4 +1,4 @@
-const RockmanModel = require('./rockmanModel');
+const RockmanModel = require('./models/rockmanModel');
 const RockmanView = require('./rockmanView');
 const RockmanController = require('./rockmanController');
 

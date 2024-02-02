@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
-const { Collection } = require('./Collection');
-const { Environment } = require('./Environment');
+const { Collection } = require('./models/Collection');
+const { Environment } = require('./models/Environment');
 const { CollectionUtils } = require('./collectionUtils');
 const { JSONCollectionReader } = require('./JSONCollectionReader');
 const newman = require('./run-newman');
