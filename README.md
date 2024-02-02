@@ -14,6 +14,7 @@ The goal of the project is to execute Nexi's Postman collections using the Newma
 - Newman version 5.3.2
 - Inquirer version 9.2.10
 - fs version 0.0.2
+- path 0.12.7
 
 ## Installation
 
@@ -38,13 +39,17 @@ The goal of the project is to execute Nexi's Postman collections using the Newma
     ```
     npm install -g fs
     ```
+6. Install the path library:
+    ```
+    npm install -g path
+    ```    
 
-6. Download the project to your local machine:
+8. Download the project to your local machine:
    
   The project is available on GitHub at [https://github.com/YariCagnazzi/Nexi_Project.git](https://github.com/YariCagnazzi/Nexi_Project.git).
 
 
-7. To execute the project, ensure that the correct path is set in the .BAT file on your PC. Then, launch it by double-clicking on the file.
+9. To execute the project, ensure that the correct path is set in the .BAT file on your PC. Then, launch it by double-clicking on the file.
 
 **Note:** The provided information is based on the latest available details and may be subject to changes. Refer to official documentation for the most accurate and up-to-date information.
 
