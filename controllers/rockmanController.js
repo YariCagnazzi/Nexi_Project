@@ -1,4 +1,4 @@
-const RockmanView = require('../rockmanView');
+const RockmanView = require('../prompts/rockmanView');
 
 
 class RockmanController {

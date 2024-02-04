@@ -1,8 +1,8 @@
 const inquirer = require('inquirer');
-const { Collection } = require('./models/Collection');
-const { Environment } = require('./models/Environment');
-const { CollectionUtils } = require('./collectionUtils');
-const { JSONCollectionReader } = require('./controllers/JSONCollectionReader');
+const { Collection } = require('../models/Collection');
+const { Environment } = require('../models/Environment');
+const { CollectionUtils } = require('../collectionUtils');
+const { JSONCollectionReader } = require('../controllers/JSONCollectionReader');
 const newman = require('./run-newman');
 
 class RockmanView {
