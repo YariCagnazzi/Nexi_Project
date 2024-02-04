@@ -1,4 +1,4 @@
-const { JSONCollectionReader } = require('../JSONCollectionReader');
+const { JSONCollectionReader } = require('../controllers/JSONCollectionReader');
 
 /**
  * RockmanModel class represents a model that manages collections and environments.

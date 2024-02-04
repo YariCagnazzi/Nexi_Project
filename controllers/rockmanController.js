@@ -1,4 +1,4 @@
-const RockmanView = require('./rockmanView');
+const RockmanView = require('../rockmanView');
 
 
 class RockmanController {

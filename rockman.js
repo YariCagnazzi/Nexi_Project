@@ -1,6 +1,6 @@
-const RockmanModel = require('./models/rockmanModel');
+const RockmanModel = require('./models/RockmanModel');
 const RockmanView = require('./rockmanView');
-const RockmanController = require('./rockmanController');
+const RockmanController = require('./controllers/rockmanController');
 
 // Create instances of the model, controller, and view
 const model = new RockmanModel('collections', 'environments');
