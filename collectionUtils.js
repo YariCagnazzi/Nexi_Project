@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 
-
 class CollectionUtils {
 
   static inputDefaultVariable = {}; // Proprietà statica per memorizzare i valori di default
@@ -57,6 +56,26 @@ setInputVariables(requiredKeys) {
   return this.collection;
 }
 
+/**
+ * Restores default input variables in the collection.
+ * @returns {void}
+ */
+restoreDefaultVariables() {
+  if (this.collection && this.collection.variable) {
+    this.collection.variable.forEach((item) => {
+      if (item.key && item.key.startsWith("INPUT_")) {
+        const defaultKey = item.key;
+        if (
+          CollectionUtils.inputDefaultVariable.hasOwnProperty(defaultKey) &&
+          (item.value === null || item.value === undefined || item.value === "")
+        ) {
+          item.value = CollectionUtils.inputDefaultVariable[defaultKey];
+        }
+      }
+    });
+  }
+}
+
     /**
    * Checks the selected collection, prompts the user to input values for variables, and updates the collection accordingly.
    */
@@ -88,8 +107,8 @@ setInputVariables(requiredKeys) {
       console.error("Errore durante l'interazione con l'utente:", error);
     }
   }
+ 
 
-  
  /**
    * Displays a list of input variables that have been entered by the user.
    */
@@ -259,8 +278,12 @@ async removeValues() {
       //console.log(JSON.stringify(this.collection, null, 2));
   
       console.log("Contenuto degli input è stato cancellato.");
-      CollectionUtils.inputDefaultVariable = CollectionUtils.getDefaultInputVariables();
+       // Reset the default input variables using the current input variables
+      console.log(JSON.stringify(CollectionUtils.inputDefaultVariable));
+       // Ripristina i valori predefiniti nella collezione
+      this.restoreDefaultVariables();
       //console.log(JSON.stringify(CollectionUtils.inputDefaultVariable));
+
 
     } else {
       console.log('Cancellazione degli input annullata.');
