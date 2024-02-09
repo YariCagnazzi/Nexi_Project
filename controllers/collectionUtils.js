@@ -1,8 +1,9 @@
 const inquirer = require('inquirer');
+const { CustomClass } = require('./ClassCustom');
 
 class CollectionUtils {
 
-  static inputDefaultVariable = {}; // Proprietà statica per memorizzare i valori di default
+
    /**
    * Constructor for CollectionUtils class.
    * @param {Object} collection - The collection object.
@@ -11,6 +12,8 @@ class CollectionUtils {
   constructor(collection, environment) {
     this.collection = collection;
     this.environment = environment;
+    this.inputDefault = {};
+    this.costVars = new CustomClass();
   }
 
  /**
@@ -26,16 +29,12 @@ getInputVariables() {
       }
     });
   }
-
-  // Salva i valori di default  
-  CollectionUtils.inputDefaultVariable = { ...CollectionUtils.inputDefaultVariable, ...inputVariables };
+   // Salva i valori di default
+   CustomClass.inputDefault = { ...inputVariables };
+  //this.costVars.setInputVariables(inputVariables);
   return inputVariables;
 }
 
-// Metodo statico per recuperare i valori di default salvati
-static getDefaultInputVariables() {
-  return CollectionUtils.inputDefaultVariable;
-}
 
 /**
    * Sets input variables in the collection based on the required keys.
@@ -65,11 +64,11 @@ restoreDefaultVariables() {
     this.collection.variable.forEach((item) => {
       if (item.key && item.key.startsWith("INPUT_")) {
         const defaultKey = item.key;
-        if (
-          CollectionUtils.inputDefaultVariable.hasOwnProperty(defaultKey) &&
-          (item.value === null || item.value === undefined || item.value === "")
-        ) {
-          item.value = CollectionUtils.inputDefaultVariable[defaultKey];
+        if (CustomClass.inputDefault.hasOwnProperty(defaultKey)) {
+          // Aggiungi il controllo per verificare se il valore è nullo
+          if (item.value !== null) {
+            item.value = CustomClass.inputDefault[defaultKey];
+          }
         }
       }
     });
@@ -278,11 +277,12 @@ async removeValues() {
       //console.log(JSON.stringify(this.collection, null, 2));
   
       console.log("Contenuto degli input è stato cancellato.");
-       // Reset the default input variables using the current input variables
-      console.log(JSON.stringify(CollectionUtils.inputDefaultVariable));
-       // Ripristina i valori predefiniti nella collezione
+      // Reset the default input variables using the current input variables
+      //this.inputDefaultValues = this.costVars.getInputDefault();
+      this.inputDefaultValues = CustomClass.getDefault();
       this.restoreDefaultVariables();
-      //console.log(JSON.stringify(CollectionUtils.inputDefaultVariable));
+      // Puoi ora utilizzare this.inputDefaultValues nel modo desiderato.
+      //console.log(JSON.stringify(this.inputDefaultValues));
 
 
     } else {
