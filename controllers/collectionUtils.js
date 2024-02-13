@@ -35,6 +35,21 @@ getInputVariables() {
   return inputVariables;
 }
 
+getInputDefaultVariables() {
+  const defaultValues = {};
+  if (this.collection && this.collection.variable) {
+    this.collection.variable.forEach((item) => {
+      if (item.key && item.key.startsWith("INPUT_")) {
+        defaultValues[item.key] = item.value || "";
+      }
+    });
+  }
+   // Salva i valori di default
+   CustomClass.inputDefault = { ...defaultValues };
+  //this.costVars.setInputVariables(inputVariables);
+  return defaultValues;
+}
+
 
 /**
    * Sets input variables in the collection based on the required keys.
@@ -56,26 +71,61 @@ setInputVariables(requiredKeys) {
 }
 
 /**
- * Restores default input variables in the collection.
+ * Restores default input variables in the collection based on the provided default values.
+ * @param {Object} inputDefaultValues - A dictionary containing default input values.
  * @returns {void}
  */
-restoreDefaultVariables() {
-  if (this.collection && this.collection.variable) {
+
+restoreDefaultVariables(inputDefaultValues) {
+  if (this.collection && this.collection.variable && inputDefaultValues) {
     this.collection.variable.forEach((item) => {
       if (item.key && item.key.startsWith("INPUT_")) {
         const defaultKey = item.key;
-        if (CustomClass.inputDefault.hasOwnProperty(defaultKey)) {
-          // Aggiungi il controllo per verificare se il valore è nullo
-          if (item.value !== null) {
-            item.value = CustomClass.inputDefault[defaultKey];
-          }
+        if (inputDefaultValues.hasOwnProperty(defaultKey)) {
+          item.value = inputDefaultValues[defaultKey];
         }
       }
     });
   }
 }
 
-    /**
+/*
+restoreDefaultVariables(inputDefaultValues) {
+  
+  if (this.collection && this.collection.variable && inputDefaultValues) {
+    let hasNullZeroValue = false;
+
+    this.collection.variable.forEach((item) => {
+      if (item.key && item.key.startsWith("INPUT_")) {
+        const defaultKey = item.key;
+
+        if (inputDefaultValues.hasOwnProperty(defaultKey)) {
+          item.value = inputDefaultValues[defaultKey];
+
+          // Check if the value is null or zero
+          if (item.value === null || item.value === 0) {
+            hasNullZeroValue = true;
+          }
+        }
+      }
+    });
+
+    // If at least one INPUT_ has a null or zero value, update all with inputDefaultValues
+    if (hasNullZeroValue) {
+      this.collection.variable.forEach((item) => {
+        if (item.key && item.key.startsWith("INPUT_")) {
+          const defaultKey = item.key;
+          if (inputDefaultValues.hasOwnProperty(defaultKey)) {
+            item.value = inputDefaultValues[defaultKey];
+          }
+        }
+      });
+    }
+  }
+}
+*/
+
+/**
    * Checks the selected collection, prompts the user to input values for variables, and updates the collection accordingly.
    */
   async checkSelectedCollection() {
@@ -280,7 +330,9 @@ async removeValues() {
       // Reset the default input variables using the current input variables
       //this.inputDefaultValues = this.costVars.getInputDefault();
       this.inputDefaultValues = CustomClass.getDefault();
-      this.restoreDefaultVariables();
+      //this.defaultValues = this.getInputDefaultVariables();
+      console.log(this.inputDefaultValues);
+      this.restoreDefaultVariables(this.inputDefaultValues);
       // Puoi ora utilizzare this.inputDefaultValues nel modo desiderato.
       //console.log(JSON.stringify(this.inputDefaultValues));
 
