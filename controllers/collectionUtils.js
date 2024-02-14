@@ -331,7 +331,7 @@ async removeValues() {
       //this.inputDefaultValues = this.costVars.getInputDefault();
       this.inputDefaultValues = CustomClass.getDefault();
       //this.defaultValues = this.getInputDefaultVariables();
-      console.log(this.inputDefaultValues);
+      //console.log(this.inputDefaultValues);
       this.restoreDefaultVariables(this.inputDefaultValues);
       // Puoi ora utilizzare this.inputDefaultValues nel modo desiderato.
       //console.log(JSON.stringify(this.inputDefaultValues));
