@@ -7,7 +7,7 @@ const newman = require('./run-newman');
 
 class RockmanView {
   static menuOptions = ['Mostra', 'Modifica', 'Elimina', 'Reset input', 'Aggiungi', 'Esegui', 'Torna Indietro', 'Termina'];
-  static subMenuOptions = ['Esegui un\'altra collection', 'Riesegui la collection'];
+  static subMenuOptions = ['Esegui un\'altra collection', 'Riesegui la collection', 'Torna Indietro'];
 
   constructor(controller) {
     this.controller = controller;
@@ -85,6 +85,7 @@ class RockmanView {
       case 'Riesegui la collection':
         await this.executeCollection(collectionData, environmentData);
         break;
+      case 'Torna Indietro':  
       default:
         // Do nothing for unrecognized choices
         break;
