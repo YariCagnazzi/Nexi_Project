@@ -36,7 +36,7 @@ getInputVariables() {
 }
 
 getInputDefaultVariables() {
-  const defaultValues = {};
+
   if (this.collection && this.collection.variable) {
     this.collection.variable.forEach((item) => {
       if (item.key && item.key.startsWith("INPUT_")) {
@@ -44,8 +44,9 @@ getInputDefaultVariables() {
       }
     });
   }
-   // Salva i valori di default
-   CustomClass.inputDefault = { ...defaultValues };
+
+  // Salva i valori di default nella variabile statica inputDefault
+  CustomClass.inputDefault = { ...defaultValues };
   //this.costVars.setInputVariables(inputVariables);
   return defaultValues;
 }
@@ -128,35 +129,103 @@ restoreDefaultVariables(inputDefaultValues) {
 /**
    * Checks the selected collection, prompts the user to input values for variables, and updates the collection accordingly.
    */
-  async checkSelectedCollection() {
-    try {
-      await this.showInputList(); // Mostra la lista di input inseriti
-      const inputVariables = this.getInputVariables();
-  
-      const questions = Object.keys(inputVariables).map((key) => ({
-        type: 'input',
-        name: key,
-        message: `Inserisci il valore per ${key} (separati da virgola se più di uno):`,
-        default: inputVariables[key],
-        transformer: (input) => input.split('\n').map(line => line.trim()).join(', ')
-      }));
-  
-      const answers = await inquirer.prompt(questions);
-  
-      // Aggiorna le variabili di input con le risposte dell'utente
-      const updatedVariables = { ...inputVariables, ...answers };
-  
-      // Aggiorna l'oggetto `collection` con le nuove variabili di input
-      const collectionUpdate = this.setInputVariables(updatedVariables);
-  
-      // Fai qualcosa con `collectionUpdate` se necessario
-      // console.log(JSON.stringify(collectionUpdate, null, 2));
-  
-    } catch (error) {
-      console.error("Errore durante l'interazione con l'utente:", error);
+  /*  
+async checkSelectedCollection() {
+  try {
+    await this.showInputList(); // Mostra la lista di input inseriti
+    const inputVariables = this.getInputVariables();
+    const deafults = this.getInputDefaultVariables();
+    //console.log(deafults);
+
+    const questions = Object.keys(inputVariables).map((key) => ({
+      type: 'input',
+      name: key,
+      message: `Inserisci il valore per ${key} (separati da virgola se più di uno):`,
+      default: inputVariables[key],
+      transformer: (input) => input.split('\n').map(line => line.trim()).join(', ')
+    }));
+
+    const answers = await inquirer.prompt(questions);
+
+
+    console.log(inputVariables);
+    console.log(answers);
+    // Aggiorna le variabili di input con le risposte dell'utente
+    const updatedVariables = { ...inputVariables, ...answers };
+
+    console.log(updatedVariables);
+
+    // Aggiorna l'oggetto `collection` con le nuove variabili di input
+    const collectionUpdate = this.setInputVariables(updatedVariables);
+
+    // Fai qualcosa con `collectionUpdate` se necessario
+    // console.log(JSON.stringify(collectionUpdate, null, 2));
+
+  } catch (error) {
+    console.error("Errore durante l'interazione con l'utente:", error);
+  }
+}
+*/
+
+
+/**
+ * Merges input variables and user answers, deduplicating values.
+ * @param {Object} inputVariables - An object containing input variables.
+ * @param {Object} answers - An object containing answers provided by the user.
+ * @returns {Object} - Merged object with deduplicated values.
+ */
+mergeVariables = (inputVariables, answers) => {
+  const mergedVariables = {};
+
+  for (const key in inputVariables) {
+    if (answers.hasOwnProperty(key)) {
+      const inputValue = inputVariables[key].split('\n').map(line => line.trim());
+      const answerValue = answers[key].split('\n').map(line => line.trim());
+     // Unisci i valori senza duplicati
+     const mergedValue = [...new Set([...inputValue, ...answerValue])];
+     mergedVariables[key] = mergedValue.join('\n');
+    } else {
+      mergedVariables[key] = inputVariables[key];
     }
   }
- 
+
+  return mergedVariables;
+};
+
+/**
+   * Checks the selected collection, prompts the user to input values for variables, and updates the collection accordingly.
+  */
+async checkSelectedCollection() {
+  try {
+    await this.showInputList();
+    const inputVariables = this.getInputVariables();
+
+    const questions = Object.keys(inputVariables).map((key) => ({
+      type: 'input',
+      name: key,
+      message: `Inserisci il valore per ${key} (separati da virgola se più di uno):`,
+      default: inputVariables[key],
+      transformer: (input) => input.split('\n').map(line => line.trim()).join(', ')
+    }));
+
+    const answers = await inquirer.prompt(questions);
+
+    //console.log('inputVariables:', inputVariables);
+    //console.log('answers:', answers);
+
+    const mergedVariables = this.mergeVariables(inputVariables, answers);
+
+    //console.log('mergedVariables:', mergedVariables);
+
+    const collectionUpdate = this.setInputVariables(mergedVariables);
+
+    // Fai qualcosa con `collectionUpdate` se necessario
+    //console.log(JSON.stringify(collectionUpdate, null, 2));
+
+  } catch (error) {
+    console.error("Errore durante l'interazione con l'utente:", error);
+  }
+}
 
  /**
    * Displays a list of input variables that have been entered by the user.
