@@ -76,7 +76,7 @@ setInputVariables(requiredKeys) {
  * @param {Object} inputDefaultValues - A dictionary containing default input values.
  * @returns {void}
  */
-
+/*
 restoreDefaultVariables(inputDefaultValues) {
   if (this.collection && this.collection.variable && inputDefaultValues) {
     this.collection.variable.forEach((item) => {
@@ -89,8 +89,8 @@ restoreDefaultVariables(inputDefaultValues) {
     });
   }
 }
+*/
 
-/*
 restoreDefaultVariables(inputDefaultValues) {
   
   if (this.collection && this.collection.variable && inputDefaultValues) {
@@ -124,7 +124,6 @@ restoreDefaultVariables(inputDefaultValues) {
     }
   }
 }
-*/
 
 /**
    * Checks the selected collection, prompts the user to input values for variables, and updates the collection accordingly.
