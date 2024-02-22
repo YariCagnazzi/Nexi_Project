@@ -1,12 +1,12 @@
 const inquirer = require('inquirer');
-const { CustomClass } = require('./ClassCustom');
 
 class CollectionUtils {
 
 
   static inputDefault = {};
 
- // static isInputVariablesInitialized = false;
+  static firstTime = true;
+
    /**
    * Constructor for CollectionUtils class.
    * @param {Object} collection - The collection object.
@@ -15,8 +15,6 @@ class CollectionUtils {
   constructor(collection, environment) {
     this.collection = collection;
     this.environment = environment;
-    //this.inputDefault = {};
-    //this.costVars = new CustomClass();
   }
 
  /**
@@ -32,34 +30,36 @@ getInputVariables() {
       }
     });
   }
-   // Salva i valori di default
-   CollectionUtils.inputDefault = { ...inputVariables };
-  //this.costVars.setInputVariables(inputVariables);
+
+  // Salva i valori di default solo alla prima chiamata
+  if (CollectionUtils.firstTime) {
+    CollectionUtils.inputDefault = { ...inputVariables };
+    CollectionUtils.firstTime = false;
+  }
+
   return inputVariables;
 }
 
-
 /*
-getInputVariables() {
-  if (!CollectionUtils.isInputVariablesInitialized) {
-    // First invocation, call getInputDefaultVariables and return defaultValues
-    CollectionUtils.isInputVariablesInitialized = true;
-    return this.getInputDefaultVariables();
-  }
+getInputDefaultVariables() {
+  const inputDefaultVariables = {};
 
-  const inputVariables = {};
   if (this.collection && this.collection.variable) {
     this.collection.variable.forEach((item) => {
       if (item.key && item.key.startsWith("INPUT_")) {
-        inputVariables[item.key] = item.value || "";
+        inputDefaultVariables[item.key] = item.value || "";
       }
     });
   }
 
-  // Save input variables
-  CollectionUtils.inputDefault = { ...inputVariables };
+  // Salva i valori di default solo alla prima chiamata
+  if (CollectionUtils.firstTime) {
+    CollectionUtils.inputDefault = { ...inputDefaultVariables };
+    CollectionUtils.firstTime = false;
+  }
 
-  return inputVariables;
+  //this.costVars.setInputVariables(inputDefaultVariables);
+  return CollectionUtils.inputDefault;
 }
 */
 
@@ -67,22 +67,6 @@ static getDefault() {
   return CollectionUtils.inputDefault;
 }
 
-/*
-getInputDefaultVariables() {
-  const defaultValues = {};
-  if (this.collection && this.collection.variable) {
-    this.collection.variable.forEach((item) => {
-      if (item.key && item.key.startsWith("INPUT_")) {
-        defaultValues[item.key] = item.value || "";
-      }
-    });
-  }
-
-  // Save default values in the static inputDefault variable
-  CollectionUtils.inputDefault = { ...defaultValues };
-  return defaultValues;
-}
-*/
 
 /**
    * Sets input variables in the collection based on the required keys.
@@ -108,7 +92,6 @@ setInputVariables(requiredKeys) {
  * @param {Object} inputDefaultValues - A dictionary containing default input values.
  * @returns {void}
  */
-
 restoreDefaultVariables(inputDefaultValues) {
   const collectionUpdate = this.collection.variable.filter(item => item.key && !item.key.startsWith("INPUT_"));
   Object.keys(inputDefaultValues).forEach((key) => {
@@ -123,42 +106,6 @@ restoreDefaultVariables(inputDefaultValues) {
   return this.collection;
 }
 
-
-/*
-restoreDefaultVariables(inputDefaultValues) {
-  
-  if (this.collection && this.collection.variable && inputDefaultValues) {
-    let hasNullZeroValue = false;
-
-    this.collection.variable.forEach((item) => {
-      if (item.key && item.key.startsWith("INPUT_")) {
-        const defaultKey = item.key;
-
-        if (inputDefaultValues.hasOwnProperty(defaultKey)) {
-          item.value = inputDefaultValues[defaultKey];
-
-          // Check if the value is null or zero
-          if (item.value === null || item.value === 0) {
-            hasNullZeroValue = true;
-          }
-        }
-      }
-    });
-
-    // If at least one INPUT_ has a null or zero value, update all with inputDefaultValues
-    if (hasNullZeroValue) {
-      this.collection.variable.forEach((item) => {
-        if (item.key && item.key.startsWith("INPUT_")) {
-          const defaultKey = item.key;
-          if (inputDefaultValues.hasOwnProperty(defaultKey)) {
-            item.value = inputDefaultValues[defaultKey];
-          }
-        }
-      });
-    }
-  }
-}
-*/
 
 /**
    * Checks the selected collection, prompts the user to input values for variables, and updates the collection accordingly.
@@ -253,7 +200,6 @@ async checkSelectedCollection() {
 
     const collectionUpdate = this.setInputVariables(mergedVariables);
 
-    // Fai qualcosa con `collectionUpdate` se necessario
     //console.log(JSON.stringify(collectionUpdate, null, 2));
 
   } catch (error) {
@@ -420,10 +366,8 @@ async removeValues() {
     const confirmed = await this.confirmDeletionAllInputs(); // Richiede conferma all'utente per cancellare tutti gli input
   
     if (confirmed) {
-
-      //const inputVariables = this.getInputVariables();
-      //CollectionUtils.inputDefault = CollectionUtils.getDefault();
-      //console.log(CollectionUtils.getDefault());
+     
+      // Reset the default input variables using the current input variables
       this.restoreDefaultVariables(CollectionUtils.inputDefault);
       /*
       this.collection.variable.forEach((item) => {
@@ -437,16 +381,8 @@ async removeValues() {
       //console.log(JSON.stringify(this.collection, null, 2));
   
       console.log("Contenuto degli input è stato cancellato.");
-      // Reset the default input variables using the current input variables
-      //this.inputDefaultValues = this.costVars.getInputDefault();
-      //this.inputDefaultValues = CustomClass.getDefault();
-      //this.defaultValues = this.getInputDefaultVariables();
-      //console.log(this.inputDefaultValues);
-      //this.restoreDefaultVariables(this.inputDefaultValues);
-      // Puoi ora utilizzare this.inputDefaultValues nel modo desiderato.
-      //console.log(JSON.stringify(this.inputDefaultValues));
-
-
+      
+     
     } else {
       console.log('Cancellazione degli input annullata.');
     }
